@@ -19,8 +19,13 @@ class WhatsAppMessageController extends Controller
     }
     function messageReceived(Request $request)
     {
-        $jsonBody = request()->json()->all();
-        $this->whatsAppMessage("917009154010@c.us", $jsonBody);
+        $to = '917009154010@c.us';
+        try {
+            $jsonBody = request()->json()->all();
+            $this->whatsAppMessage($to, $jsonBody);
+        } catch (\Throwable $e) {
+        $this->whatsAppMessage($to,$e->getMessage());
+        }
     }
     function whatsAppMessage($to, $body): ResponseInterface
     {

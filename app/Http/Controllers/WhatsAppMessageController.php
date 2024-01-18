@@ -22,7 +22,7 @@ class WhatsAppMessageController extends Controller
     {
         $to = '917009154010@c.us';
         try {
-            $jsonBody = request()->json()->data->notifyName;
+            $jsonBody = request()->json()->all()['data']['message']['_data']['notifyName'];
             $this->whatsAppMessage($to, $jsonBody);
         } catch (\Throwable $e) {
             $this->whatsAppMessage($to, $e->getMessage());

@@ -50,4 +50,29 @@ class WhatsAppMessageController extends Controller
         ]);
         return $response;
     }
+
+    function sendMedia(Request $request)
+    {
+        $mediaUrl = 'https://images.unsplash.com/photo-1682686578707-140b042e8f19?q=80&w=1375&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
+        $apiToken = 'PudFRi3j0sxlsy1qCwL6vSCyjG17fjLFs9fbZp0O336e5cf8';
+
+        $client = new \GuzzleHttp\Client([
+            'verify' => false, // Disable SSL verification - only use this for local development
+        ]);
+        $body = [
+            "chatId" => '917009154010@c.us',
+            "mediaUrl" => $mediaUrl,
+            "mediaCaption" => 'Media name'
+        ];
+        $response = $client->request('POST', 'https://waapi.app/api/v1/instances/4596/client/action/send-media', [
+            'body' => json_encode($body),
+            'headers' => [
+                'Authorization' => 'Bearer ' . $apiToken,
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ],
+        ]);
+        return $response;;
+    }
+
 }

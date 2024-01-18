@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/sendMessage', [WhatsAppMessageController::class, 'sendMessage']);
-Route::get('/messageReceived', [WhatsAppMessageController::class, 'messageReceived']);
+Route::post('/messageReceived', [WhatsAppMessageController::class, 'messageReceived']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

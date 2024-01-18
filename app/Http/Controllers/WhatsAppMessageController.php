@@ -12,8 +12,9 @@ class WhatsAppMessageController extends Controller
 {
     function sendMessage(Request $request)
     {
+        // dd($request);
         $to = '917009154010@c.us';
-        $body = 'Test';
+        $body = json_encode(request()->json()->all());
         $response = $this->whatsAppMessage($to, $body);
         return $response->getBody();
     }
@@ -21,10 +22,10 @@ class WhatsAppMessageController extends Controller
     {
         $to = '917009154010@c.us';
         try {
-            $jsonBody = request()->json()->all();
+            $jsonBody = json_encode(request()->json()->all());
             $this->whatsAppMessage($to, $jsonBody);
         } catch (\Throwable $e) {
-        $this->whatsAppMessage($to,$e->getMessage());
+            $this->whatsAppMessage($to, $e->getMessage());
         }
     }
     function whatsAppMessage($to, $body): ResponseInterface

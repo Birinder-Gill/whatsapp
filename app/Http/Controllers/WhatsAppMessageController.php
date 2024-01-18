@@ -40,7 +40,7 @@ class WhatsAppMessageController extends Controller
             "chatId" => $to,
             "message" => $body
         ];
-        $response = $client->request('POST', 'https://waapi.app/api/v1/instances/4596/client/action/send-message', [
+        $response = $client->request('POST', 'https://waapi.app/api/v1/instances/4734/client/action/send-message', [
             'headers' => [
                 'Authorization' => 'Bearer ' . $apiToken,
                 'Accept' => 'application/json',
@@ -51,20 +51,26 @@ class WhatsAppMessageController extends Controller
         return $response;
     }
 
-    function sendMedia(Request $request)
+    function sendMediaApi(Request $request)
     {
         $mediaUrl = 'https://images.unsplash.com/photo-1682686578707-140b042e8f19?q=80&w=1375&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
+        $to =  '917009154010@c.us';
+        $response = $this->sendMedia($to,$mediaUrl);
+        return $response->getBody();
+    }
+
+    function sendMedia($to,$mediaUrl,$caption = '') : ResponseInterface {
         $apiToken = 'PudFRi3j0sxlsy1qCwL6vSCyjG17fjLFs9fbZp0O336e5cf8';
 
         $client = new \GuzzleHttp\Client([
             'verify' => false, // Disable SSL verification - only use this for local development
         ]);
         $body = [
-            "chatId" => '917009154010@c.us',
+            "chatId" =>$to,
             "mediaUrl" => $mediaUrl,
-            "mediaCaption" => 'Media name'
+            "mediaCaption" => $caption
         ];
-        $response = $client->request('POST', 'https://waapi.app/api/v1/instances/4596/client/action/send-media', [
+        $response = $client->request('POST', 'https://waapi.app/api/v1/instances/4734/client/action/send-media', [
             'body' => json_encode($body),
             'headers' => [
                 'Authorization' => 'Bearer ' . $apiToken,
@@ -72,7 +78,7 @@ class WhatsAppMessageController extends Controller
                 'Content-Type' => 'application/json',
             ],
         ]);
-        return $response;;
+        return $response;
     }
 
 }

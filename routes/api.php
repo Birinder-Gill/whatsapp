@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/sendMedia', [WhatsAppMessageController::class, 'sendMediaApi']);
 Route::get('/sendMessage', [WhatsAppMessageController::class, 'sendMessage']);
 Route::post('/messageReceived', [WhatsAppMessageController::class, 'messageReceived']);
 

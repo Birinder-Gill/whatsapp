@@ -26,7 +26,7 @@ class WhatsAppMessageController extends Controller
        return $response->getBody();
     }
     function messageReceived(Request $request) {
-            dd($request);
+            $this->sendMessage($request);
 
     }
 }

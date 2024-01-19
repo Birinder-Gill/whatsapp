@@ -36,7 +36,6 @@ class WhatsAppMessageController extends Controller
                 यदि आप एक खरीददारी करना चाहते हैं, तो बस "Interested" कहें, और हम आपको प्रक्रिया के माध्यम से मार्गदर्शन करेंगे। यह शानदार टूल अब एक सीमित समय के लिए 990 रुपये में उपलब्ध है। अगर आपके पास कोई सवाल है, तो WhatsApp पर यहां पूछें।`;
                 $this->whatsAppMessage($to, $toSend);
             }
-            $this->whatsAppMessage($to, $toSend);
         } catch (\Throwable $e) {
             $this->whatsAppMessage($to, $e->getMessage());
         }

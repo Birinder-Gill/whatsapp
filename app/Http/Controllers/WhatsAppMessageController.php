@@ -27,7 +27,7 @@ class WhatsAppMessageController extends Controller
             $personName = $data['notifyName'];
             $message = $data['body'];
             if (str_contains($message, 'info')) {
-                $toSend = $personName.`, Thank you for your interest in our Eye Loupe Magnifier lens for jewelers! Our LED magnifying glass is great for looking closely at jewelry details, helping jewelers see small things better, like gemstones and delicate pieces.
+                $toSend = `$personName, Thank you for your interest in our Eye Loupe Magnifier lens for jewelers! Our LED magnifying glass is great for looking closely at jewelry details, helping jewelers see small things better, like gemstones and delicate pieces.
 
                 If you want to buy one, just say "Interested," and we'll guide you through the process. This fantastic tool is currently available at a discounted price of 990 rupees for a limited time. If you have any questions, feel free to ask here on WhatsApp.
 

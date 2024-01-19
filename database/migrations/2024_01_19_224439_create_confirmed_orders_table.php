@@ -13,14 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('whats_app_messages', function (Blueprint $table) {
+        Schema::create('confirmed_orders', function (Blueprint $table) {
             $table->id();
-            $table->string("from");
-            $table->string("displayName");
-            $table->string("to");
-            $table->integer("counter");
-            $table->string("messageText");
-            $table->string("messageId");
             $table->timestamps();
         });
     }
@@ -32,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('whats_app_messages');
+        Schema::dropIfExists('confirmed_orders');
     }
 };

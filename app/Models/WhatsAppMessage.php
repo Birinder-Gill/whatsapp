@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class WhatsAppMessage extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'from',
+        'displayName',
+        'to',
+        'counter',
+        'messageText',
+        'messageId'
+
+    ];
 }

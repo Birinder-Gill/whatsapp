@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\MessageAnalysisService;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -10,39 +11,126 @@ use Psr\Http\Message\ResponseInterface;
 
 class WhatsAppMessageController extends Controller
 {
+    protected $to = '917009154010@c.us';
+    protected $maService;
+
+    public function __construct(MessageAnalysisService $maService)
+    {
+        $this->maService = $maService;
+    }
+
+
+
+
     function sendMessage(Request $request)
     {
-        // dd($request);
-        $to = '917009154010@c.us';
-        $body = json_encode(request()->json()->all());
-        $response = $this->whatsAppMessage($to, $body);
+
+        $body = "asda";
+        $response = $this->whatsAppMessage($this->to, $body);
         return $response->getBody();
     }
     function messageReceived(Request $request)
     {
-        $to = '917009154010@c.us';
         try {
-
             $data = request()->json()->all()['data']['message']['_data'];
-            $personName = $data['notifyName'];
             $message = $data['body'];
-            if (str_contains($message, 'info')) {
-                $toSend = "Hi, ".$personName.", \nThank you for your interest in our Eye Loupe Magnifier lens for jewelers! Our LED magnifying glass is great for looking closely at jewelry details, helping jewelers see small things better, like gemstones and delicate pieces.
+            $personName = $data['notifyName'];
+            $from = $data['from'];
+            $messageNumber = detectManualMessage($from, $message);
+            $logArray = [
+                'from' => $from,
+                'displayName' => $personName,
+                'to' => $data['to'],
+                'counter' => $messageNumber + 1,
+                'messageText' => $message,
+                'messageId' => $data['id']['id'],
+            ];
+
+            if ($messageNumber > -1) {
+                incrementCounter($logArray);
+                if ($messageNumber === 0) {
+                    $this->sendFirstMessage($personName); //TODO:: CHANGE IT TO MEDIA WITH CAPTION
+                }
+                if ($messageNumber === 1) {
+                    if ($this->maService->askingForPrice($message)) {
+                        $this->sendDiscountedPriceMessage($from);
+                    } else {
+                        $discussingPrice = $this->maService->discussingPrice($message);
+                        if ($discussingPrice) {
+                            if ($discussingPrice === 1) {
+                                //If user is saying price is high as compared to other ads or platforms.
+                                //Probably no answer. We don't do minta.
+                            }
+                            if ($discussingPrice === 2) {
+                                //User generally thinks price is high for this product.
+                                //We say every product is available in different qualities.
+
+                            }
+                            if ($discussingPrice === 3) {
+                                //If user wants to make bulk order and is asking for wholesale price.
+                                //Maybe can be taken to call.
+                            }
+                        } else {
+                            if ($this->maService->userReadyToOrder($message)) {
+                                //Order confirmation
+                                $this->sendOrderConfirmation($from,$personName,$messageNumber);
+                            } else {
+                                $query = $this->maService->queryDetection($message);
+
+                            }
+                        }
+                    }
+                }
+                if ($messageNumber >= 2) {
+                    if ($this->maService->userReadyToOrder($message)) {
+                        //Order confirmation
+                        $this->sendOrderConfirmation($from,$personName,$messageNumber);
+                    } else {
+                        $query = $this->maService->queryDetection($message);
+                    }
+                }
+            }
+        } catch (\Throwable $e) {
+            $this->whatsAppMessage($this->to, $e->getMessage());
+        }
+    }
+
+    function sendOrderConfirmation($from,$personName,$messageNumber)
+    {
+        //TODO: STORE THE PERSON'S ID AND ORDER PLACED
+
+        $this->whatsAppMessage($this->to, orderConfirmation());
+    }
+    function sendDiscountedPriceMessage($from)
+    {
+
+        $toSend = ""; //TODO:: MAKE A DISCOUNTED PRICE METHOD
+        $this->whatsAppMessage($this->to, $toSend);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    function sendFirstMessage($personName)
+    {
+        $toSend = "Hi, " . $personName . ", \nThank you for your interest in our Eye Loupe Magnifier lens for jewelers! Our LED magnifying glass is great for looking closely at jewelry details, helping jewelers see small things better, like gemstones and delicate pieces.
 
 If you want to buy one, just say \"Interested,\" and we'll guide you through the process. This fantastic tool is currently available at a discounted price of 990 rupees for a limited time. If you have any questions, feel free to ask here on WhatsApp.
 
 हमारे Eye Loupe Magnifier लेंस के लिए आपकी रुचि के लिए धन्यवाद! हमारा LED magnifying glass ज्वेलरी के छोटे विवरणों को ध्यान से देखने के लिए बहुत उपयुक्त है, जो ज्वेलर्स को जेमस्टोन्स और नाजुक टुकड़ों को बेहतर तरीके से देखने में मदद करता है।
 
 यदि आप एक खरीददारी करना चाहते हैं, तो बस \"Interested\" कहें, और हम आपको प्रक्रिया के माध्यम से मार्गदर्शन करेंगे। यह शानदार टूल अब एक सीमित समय के लिए 990 रुपये में उपलब्ध है। अगर आपके पास कोई सवाल है, तो WhatsApp पर यहां पूछें।";
-                $this->whatsAppMessage($to, $toSend);
-            }
-        } catch (\Throwable $e) {
-            $this->whatsAppMessage($to, $e->getMessage());
-        }
+        $this->whatsAppMessage($this->to, $toSend);
     }
-
-
-
 
 
 

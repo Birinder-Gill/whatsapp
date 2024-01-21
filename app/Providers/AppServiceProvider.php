@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use App\Services\MessageAnalysisService;
+use App\Services\MessageSendingService;
+use App\Services\ReplyCreationService;
+use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -17,6 +20,13 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(MessageAnalysisService::class, function ($app) {
             return new MessageAnalysisService();
         });
+        $this->app->bind(ReplyCreationService::class, function ($app) {
+            return new ReplyCreationService($this->app->make(Request::class));
+        });
+        $this->app->bind(MessageSendingService::class, function ($app) {
+            return new MessageSendingService($this->app->make(ReplyCreationService::class));
+        });
+
     }
     /**
      * Bootstrap any application services.

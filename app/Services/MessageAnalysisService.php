@@ -4,9 +4,6 @@ namespace App\Services;
 
 class MessageAnalysisService
 {
-
-
-
     function askingForPrice($message): bool
     {
         return isAskingForPrice($message);

@@ -43,7 +43,6 @@ class MessageSendingService
     {
         $apiToken = 'PudFRi3j0sxlsy1qCwL6vSCyjG17fjLFs9fbZp0O336e5cf8';
         $to = $this->rcService->getFrom();
-
         $client = new \GuzzleHttp\Client([
             'verify' => false, // Disable SSL verification - only use this for local development
         ]);

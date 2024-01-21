@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//REQUEST GOES TO SERVICE CONSTRUCTOR THAN TO MIDDLEWARE.
 Route::middleware([LanguageDetection::class])->group(function (){
     Route::get('/sendMedia', [WhatsAppMessageController::class, 'sendMediaApi']);
     Route::get('/sendMessage', [WhatsAppMessageController::class, 'sendMessage']);

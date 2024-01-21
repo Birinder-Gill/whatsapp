@@ -10,10 +10,11 @@ class ReplyCreationService
 
     public function __construct(Request $request)
     {
-        $this->from =  request()->json()->all()['data']['message']['_data'];
+        // $this->from =  request()->json()->all()['data']['message']['_data'];
     }
     function getFrom()
     {
-        return $this->from;
+        return "917009154010@c.us";
+        // return $this->from;
     }
 }

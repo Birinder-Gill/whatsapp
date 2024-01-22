@@ -5,10 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\MessageAnalysisService;
 use App\Services\MessageSendingService;
 use Illuminate\Http\Request;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
-use PhpParser\Node\Expr\Cast\Object_;
-use Psr\Http\Message\ResponseInterface;
+
 
 class WhatsAppMessageController extends Controller
 {
@@ -22,16 +19,32 @@ class WhatsAppMessageController extends Controller
         $this->msService = $msService;
     }
 
+    function isAskingForPrice(Request $request) {
+        // Normalize the input
+       // Normalize text for case-insensitivity and basic cleaning:
+    $normalized = strtolower(trim(preg_replace('/[^a-z0-9\s]/i', '', $request->query('line'))));
 
+    // Keywords related to price, including common misspellings and Hinglish variations:
+    $priceKeywords = [
+        'price', 'prac', 'praice', 'prise', 'prc',
+        'rate', 'ret', 'raet', 'reet',
+        'kitna', 'kitne', 'keemat', 'dam', 'muly', 'mahnga', 'sasta'
+    ];
 
-
+    // Check for direct matches or partial matches with wildcards:
+    dd(preg_match('/\b(' . implode('|', $priceKeywords) . ')\b/i', $normalized) ||
+           preg_match('/\b(' . implode('|', $priceKeywords) . ')\w*\b/i', $normalized));
+    }
     function sendMessage(Request $request)
     {
+        // dd($this->msService->getReq()->all());
 
         $body = "fudu bc";
-        $response = $this->msService->sendWhatsAppMessage($body);
+        $response = $this->msService->sendTestMessage($body);
         return $response->getBody();
     }
+
+
     function messageReceived(Request $request)
     {
         return;
@@ -53,34 +66,22 @@ class WhatsAppMessageController extends Controller
             if ($messageNumber > -1) {
                 incrementCounter($logArray);
                 if ($messageNumber === 0) {
-                    $this->sendFirstMessage($personName); //TODO:: CHANGE IT TO MEDIA WITH CAPTION
+                    $this->msService->sendFirstMessage($personName); //TODO:: CHANGE IT TO MEDIA WITH CAPTION
                 }
                 if ($messageNumber === 1) {
                     if ($this->maService->askingForPrice($message)) {
-                        $this->sendDiscountedPriceMessage($from);
+                        $this->sendDiscountedPriceMessage();
                     } else {
                         $discussingPrice = $this->maService->discussingPrice($message);
                         if ($discussingPrice) {
-                            if ($discussingPrice === 1) {
-                                //If user is saying price is high as compared to other ads or platforms.
-                                //Probably no answer. We don't do minta.
-
-                            }
-                            if ($discussingPrice === 2) {
-                                //User generally thinks price is high for this product.
-                                //We say every product is available in different qualities.
-
-                            }
-                            if ($discussingPrice === 3) {
-                                //If user wants to make bulk order and is asking for wholesale price.
-                                //Maybe can be taken to call.
-                            }
+                            $this->msService->answerPriceDiscussion($discussingPrice);
                         } else {
                             if ($this->maService->userReadyToOrder($message)) {
                                 //Order confirmation
                                 $this->sendOrderConfirmation($from, $personName, $messageNumber);
                             } else {
                                 $query = $this->maService->queryDetection($message);
+                                $this->msService->giveQueryResponse($query);
                             }
                         }
                     }
@@ -95,7 +96,7 @@ class WhatsAppMessageController extends Controller
                 }
             }
         } catch (\Throwable $e) {
-            $this->msService->sendWhatsAppMessage($e->getMessage());
+            logError($e);
         }
     }
 
@@ -103,13 +104,11 @@ class WhatsAppMessageController extends Controller
     {
         //TODO: STORE THE PERSON'S ID AND ORDER PLACED
 
-        $this->msService->sendWhatsAppMessage(orderConfirmation());
+        $this->msService->sendOrderConfirmation();
     }
-    function sendDiscountedPriceMessage($from)
+    function sendDiscountedPriceMessage()
     {
-
-        $toSend = ""; //TODO:: MAKE A DISCOUNTED PRICE METHOD
-        $this->msService->sendWhatsAppMessage($toSend);
+        $this->msService->sendDiscountedPriceMessage();
     }
 
 
@@ -124,17 +123,7 @@ class WhatsAppMessageController extends Controller
 
 
 
-    function sendFirstMessage($personName)
-    {
-        $toSend = "Hi, " . $personName . ", \nThank you for your interest in our Eye Loupe Magnifier lens for jewelers! Our LED magnifying glass is great for looking closely at jewelry details, helping jewelers see small things better, like gemstones and delicate pieces.
 
-If you want to buy one, just say \"Interested,\" and we'll guide you through the process. This fantastic tool is currently available at a discounted price of 990 rupees for a limited time. If you have any questions, feel free to ask here on WhatsApp.
-
-हमारे Eye Loupe Magnifier लेंस के लिए आपकी रुचि के लिए धन्यवाद! हमारा LED magnifying glass ज्वेलरी के छोटे विवरणों को ध्यान से देखने के लिए बहुत उपयुक्त है, जो ज्वेलर्स को जेमस्टोन्स और नाजुक टुकड़ों को बेहतर तरीके से देखने में मदद करता है।
-
-यदि आप एक खरीददारी करना चाहते हैं, तो बस \"Interested\" कहें, और हम आपको प्रक्रिया के माध्यम से मार्गदर्शन करेंगे। यह शानदार टूल अब एक सीमित समय के लिए 990 रुपये में उपलब्ध है। अगर आपके पास कोई सवाल है, तो WhatsApp पर यहां पूछें।";
-        $this->msService->sendWhatsAppMessage($toSend);
-    }
 
 
 
@@ -143,7 +132,7 @@ If you want to buy one, just say \"Interested,\" and we'll guide you through the
         $mediaUrl = 'https://drive.google.com/file/d/1sP3zfH4nIznkGX65Jtbh6WhQd1X0WWPS/view?usp=sharing';
         // $mediaUrl = 'https://images.unsplash.com/photo-1682686578707-140b042e8f19?q=80&w=1375&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
         $to =  '917009154010@c.us';
-        $response = $this->msService->sendWhatsappMedia($mediaUrl);
+        $response = $this->msService->sendTestMedia($mediaUrl);
         return $response->getBody();
     }
 }

@@ -1,0 +1,31 @@
+<?php
+
+namespace App\Enums;
+
+enum PriceQuery: string
+{
+    case HIGH_AS_COMPARED = 'HIGH_AS_COMPARED';
+    case HIGH_IN_GENERAL = 'HIGH_IN_GENERAL';
+    case WHOLESALE = 'WHOLESALE';
+}
+
+enum UserLanguage: string
+{
+    case HINDI = 'HINDI';
+    case HINGLISH = 'HINGLISH';
+    case ENGLISH = 'ENGLISH';
+}
+
+enum GeneralQuery: string
+{
+    case ADDRESS = 'ADDRESS';
+    case MORE_DETAILS = 'MORE_DETAILS';
+    case USE_CASE = 'USE_CASE';
+    case DELIVERY_WAY = 'DELIVERY_WAY';
+    case DELIVERY_TIME = 'DELIVERY_TIME';
+    case PINCODE_AVAILABILITY = 'PINCODE_AVAILABILITY';
+    case FOLLOW_UP_GIVEN_BY_USER = 'FOLLOW_UP_GIVEN_BY_USER';
+    case OK = 'OK';
+}
+
+

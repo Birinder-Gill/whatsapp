@@ -27,7 +27,9 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-            "app/Helpers/messageDetectionHelper.php"
+            "app/Helpers/messageDetectionHelper.php",
+            "app/Helpers/loggingHelper.php",
+            "app/Helpers/makeReplyHelper.php"
         ]
     },
     "autoload-dev": {

@@ -2,63 +2,62 @@
 
 namespace App\Services;
 
+use App\Enums\GeneralQuery;
+use App\Enums\PriceQuery;
 use Psr\Http\Message\ResponseInterface;
 
 class MessageSendingService
 {
 
     protected ReplyCreationService $rcService;
+    protected WhatsAppApiService $waService;
 
-    public function __construct(ReplyCreationService $rcService)
+    public function __construct(ReplyCreationService $rcService, WhatsAppApiService $waService)
     {
         $this->rcService = $rcService;
+        $this->waService = $waService;
     }
 
-    function sendWhatsAppMessage($body): ResponseInterface
+    function sendFirstMessage($personName): ResponseInterface
     {
-        $apiToken = 'PudFRi3j0sxlsy1qCwL6vSCyjG17fjLFs9fbZp0O336e5cf8';
         $to = $this->rcService->getFrom();
 
-        $client = new \GuzzleHttp\Client([
-            'verify' => false, // Disable SSL verification - only use this for local development
-        ]);
-        $body = [
-            "chatId" => $to,
-            "message" => $body
-        ];
-        $response = $client->request('POST', 'https://waapi.app/api/v1/instances/4734/client/action/send-message', [
-            'headers' => [
-                'Authorization' => 'Bearer ' . $apiToken,
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-            ],
-            'body' => json_encode($body),
-        ]);
-        return $response;
+        $toSend = $this->rcService->getFirstMessage($personName);
+        return $this->waService->sendWhatsAppMessage($to, $toSend);
+    }
+
+    function giveQueryResponse(GeneralQuery $query): ResponseInterface
+    {
+        $response = $this->rcService->getQueryResponse($query);
+        return $this->waService->sendWhatsappMedia($this->rcService->getFrom(),$response);
     }
 
 
-
-    function sendWhatsappMedia($mediaUrl, $caption = ''): ResponseInterface
+    function answerPriceDiscussion(PriceQuery $priceQuery): ResponseInterface
     {
-        $apiToken = 'PudFRi3j0sxlsy1qCwL6vSCyjG17fjLFs9fbZp0O336e5cf8';
-        $to = $this->rcService->getFrom();
-        $client = new \GuzzleHttp\Client([
-            'verify' => false, // Disable SSL verification - only use this for local development
-        ]);
-        $body = [
-            "chatId" => $to,
-            "mediaUrl" => $mediaUrl,
-            "mediaCaption" => $caption
-        ];
-        $response = $client->request('POST', 'https://waapi.app/api/v1/instances/4734/client/action/send-media', [
-            'body' => json_encode($body),
-            'headers' => [
-                'Authorization' => 'Bearer ' . $apiToken,
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-            ],
-        ]);
-        return $response;
+        $response = $this->rcService->getPriceDiscussion($priceQuery);
+        return $this->waService->sendWhatsAppMessage($this->rcService->getFrom(),$response);
+    }
+
+    function sendOrderConfirmation(): ResponseInterface
+    {
+        $message = $this->rcService->createOrderConfirmation();
+        return $this->waService->sendWhatsAppMessage($this->rcService->getFrom(),$message);
+    }
+
+    function sendDiscountedPriceMessage(): ResponseInterface
+    {
+        $message = $this->rcService->getDiscountedPriceMessage();
+        return $this->waService->sendWhatsAppMessage($this->rcService->getFrom(),$message);
+    }
+
+    function sendTestMessage($message): ResponseInterface
+    {
+        return $this->waService->sendWhatsappMedia('917009154010@c.us', $message);
+    }
+
+    function sendTestMedia($mediaUrl, $caption = ''): ResponseInterface
+    {
+        return $this->waService->sendWhatsappMedia('917009154010@c.us', $mediaUrl, $caption);
     }
 }

@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('whats_app_messages', function (Blueprint $table) {
             $table->id();
             $table->string("from");
-            $table->string("displayName");
+            $table->string("displayName")->default("");
             $table->string("to");
             $table->integer("counter");
-            $table->string("messageText");
+            $table->string("messageText")->default('');
             $table->string("messageId");
             $table->timestamps();
         });

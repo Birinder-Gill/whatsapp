@@ -106,8 +106,9 @@ if (!function_exists('askingBulkOrderPrice')) {
     }
 }
 if (!function_exists('isReadyToOrder')) {
-    function isReadyToOrder($message)
-    {
-        return true;
-    }
+
+
+}
+if (!function_exists('isAskingForWholesaleOrBulk')) {
+
 }

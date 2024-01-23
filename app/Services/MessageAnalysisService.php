@@ -45,10 +45,10 @@ class MessageAnalysisService
     function userReadyToOrder($message): bool
     {
 
-        $orderConfirmationKeywords = ['yes', 'ok', 'okay', 'sure', 'definitely', 'absolutely', 'confirm', 'order', 'book', 'haan', 'ha', 'ji', 'thik', 'theek', 'sahi'];
-        $phrases = ['ready to order', 'place order', 'complete order', 'finalize order', 'order karna hai', 'booking kar do', 'order confirm', 'order kar do', 'order book'];
-        return detectMessageMeaning($message, $orderConfirmationKeywords, $phrases , 0);
+        $orderConfirmationKeywords = ['yes', 'ok', 'okay', 'sure', 'definitely', 'absolutely', 'confirm', 'order', 'book', 'haan', 'ha', 'ji', 'thik', 'theek', 'sahi', 'bhej', "Confirm", "Ready", "Proceed", "Agree", "Approve", "Finalize", "Place", "Process", "Okay", "Set", "Confirm", "Haan", "Taiyar", "Kar do", "Manzoori", "Final", "Aage badhao", "Lock", "Sahi", "Haan",];
+        $phrases = ['ready to order', 'place order', 'complete order', 'finalize order', 'order karna hai', 'booking kar do', 'order confirm', 'order kar do', 'order book', "Order confirm kardo.", "Haan, order kar do.", "Maine order confirm kiya.", "Order ko aage badhao.", "Mujhe yeh order chahiye.", "Main is order ke liye taiyar hoon.", "Order final kar do.", "Order ki manzoori de raha hoon.", "Order ko confirm karen.", "Yeh mera order hai, confirm karo.", "Order ko lock kardo.", "Haan, bilkul, order karo.", "Is order ke saath aage badho.", "Order sahi hai, aage badhao.", "Order ke liye haan hai meri taraf se.", "I confirm my order.", "Please confirm my order.", "I want to confirm my order.", "Yes, I'm confirming the order.", "I'm ready to order.", "Please place my order.", "Go ahead with the order.", "I approve the order.", "Proceed with the order.", "I'm okay with the order details.", "I agree to the order terms.", "Let's finalize the order.", "Confirming my purchase.", "I'd like to place an order.", "I'm all set to order.", "Please process my order.", "Ready to proceed with the order.", "Yes, that's my order.",];
 
+        return detectMessageMeaning($message, $orderConfirmationKeywords, $phrases, 0);
     }
     function queryDetection($message): GeneralQuery
     {
@@ -92,7 +92,7 @@ class MessageAnalysisService
             'kis tarah bhejenge'
         ];
 
-        $deliveryTimeKeywords = ['when', 'time', 'long', 'duration', 'receive', 'delivery time', 'kitna samay','kitna time', 'samay', 'kab tak', 'avadhi'];
+        $deliveryTimeKeywords = ['when', 'time', 'long', 'duration', 'receive', 'delivery time', 'kitna samay', 'kitna time', 'samay', 'kab tak', 'avadhi'];
         $deliveryTimePhrases = [
             'how long will it take',
             'delivery duration',
@@ -122,33 +122,33 @@ class MessageAnalysisService
             'thik hai, aage badho'
         ];
 
-        if(detectMessageMeaning($message,$addressKeywords,$addressPhrases)) {
+        if (detectMessageMeaning($message, $addressKeywords, $addressPhrases)) {
             return GeneralQuery::ADDRESS;
             //  Address
         }
-        if(detectMessageMeaning($message,$detailsKeywords,$detailsPhrases)) {
+        if (detectMessageMeaning($message, $detailsKeywords, $detailsPhrases)) {
             return GeneralQuery::MORE_DETAILS;
             //  More details.
         }
-        if(detectMessageMeaning($message,$useCaseKeywords,$useCasePhrases)) {
+        if (detectMessageMeaning($message, $useCaseKeywords, $useCasePhrases)) {
             return GeneralQuery::USE_CASE;
             //  Use case.
         }
-        if(detectMessageMeaning($message,$deliveryMethodKeywords,$deliveryMethodPhrases)) {
+        if (detectMessageMeaning($message, $deliveryMethodKeywords, $deliveryMethodPhrases)) {
             return GeneralQuery::DELIVERY_WAY;
             //  Delivery Way.
         }
-        if(detectMessageMeaning($message,$deliveryTimeKeywords,$deliveryTimePhrases)) {
+        if (detectMessageMeaning($message, $deliveryTimeKeywords, $deliveryTimePhrases)) {
             return GeneralQuery::DELIVERY_TIME;
             //  Delivery time
         }
-        if(detectMessageMeaning($message,$pincodeKeywords,$pincodePhrases)) {
+        if (detectMessageMeaning($message, $pincodeKeywords, $pincodePhrases)) {
             return GeneralQuery::PINCODE_AVAILABILITY;
             //  Pincode availability
         }
 
-        if(detectMessageMeaning($message,$confirmationKeywords,$confirmationPhrases)) {
-           return GeneralQuery::OK;
+        if (detectMessageMeaning($message, $confirmationKeywords, $confirmationPhrases)) {
+            return GeneralQuery::OK;
             //  Follow Up given by user.
         }
         if (userAsksForPincodeAvailability($message)) {

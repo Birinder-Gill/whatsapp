@@ -53,7 +53,7 @@ class WhatsAppMessageController extends Controller
             $message = $data['body'];
             $personName = $data['notifyName'];
             $from = $data['from'];
-            if($from!=='917009154010@c.us')return;
+            if ($from !== '917009154010@c.us') return;
             $messageNumber = detectManualMessage($from, $message);
             $logArray = [
                 'from' => $from,
@@ -97,7 +97,8 @@ class WhatsAppMessageController extends Controller
                 }
             }
         } catch (\Throwable $e) {
-            $this->msService->sendTestMessage($e->getMessage());
+            report($e);
+            // $this->msService->sendTestMessage($e->getMessage());
         }
     }
 

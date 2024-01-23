@@ -90,6 +90,7 @@ class WhatsAppMessageController extends Controller
                 }
                 if ($messageNumber >= 2) {
                     if ($this->maService->userReadyToOrder($message)) {
+                        $this->msService->sendTestMessage("SALDKJSAODJOIASD jiasd");
                         //Order confirmation
                         $this->sendOrderConfirmation($from, $personName, $messageNumber);
                     } else {

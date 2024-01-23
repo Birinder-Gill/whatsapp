@@ -5,9 +5,9 @@ use Psr\Http\Message\ResponseInterface;
 
 class WhatsAppApiService
 {
-    function sendWhatsAppMessage($to,$body): ResponseInterface
+    function sendWhatsAppMessage($to,$body)
     {
-        if($body == '')return null;
+        if($body== ''){return;}
         $apiToken = 'PudFRi3j0sxlsy1qCwL6vSCyjG17fjLFs9fbZp0O336e5cf8';
 
         $client = new \GuzzleHttp\Client([

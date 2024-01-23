@@ -92,7 +92,7 @@ class MessageAnalysisService
             'kis tarah bhejenge'
         ];
 
-        $deliveryTimeKeywords = ['when', 'time', 'long', 'duration', 'receive', 'delivery time', 'kitna samay', 'samay', 'kab tak', 'avadhi'];
+        $deliveryTimeKeywords = ['when', 'time', 'long', 'duration', 'receive', 'delivery time', 'kitna samay','kitna time', 'samay', 'kab tak', 'avadhi'];
         $deliveryTimePhrases = [
             'how long will it take',
             'delivery duration',

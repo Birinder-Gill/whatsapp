@@ -94,6 +94,7 @@ class WhatsAppMessageController extends Controller
                         $this->sendOrderConfirmation($from, $personName, $messageNumber);
                     } else {
                         $query = $this->maService->queryDetection($message);
+                        $this->msService->giveQueryResponse($query);
                     }
                 }
             }

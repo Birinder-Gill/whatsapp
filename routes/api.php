@@ -21,8 +21,8 @@ Route::middleware([LanguageDetection::class])->group(function (){
     Route::get('/sendMedia', [WhatsAppMessageController::class, 'sendMediaApi']);
     Route::get('/test', [WhatsAppMessageController::class, 'isAskingForPrice']);
     Route::get('/sendMessage', [WhatsAppMessageController::class, 'sendMessage']);
-    Route::post('/messageReceived', [WhatsAppMessageController::class, 'messageReceived']);
 });
+Route::post('/messageReceived', [WhatsAppMessageController::class, 'messageReceived']);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

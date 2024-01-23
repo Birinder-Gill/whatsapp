@@ -148,7 +148,7 @@ Custom Print में आपका स्वागत है, ज्वेल�
 
         return match ($language) {
             UserLanguage::HINDI => 'Your order is pending.',
-            UserLanguage::HINGLISH => 'Your order is being confirmed in hinglish.',
+            UserLanguage::HINGLISH => '',
             UserLanguage::ENGLISH => 'Your order has been completed.',
         };
     }

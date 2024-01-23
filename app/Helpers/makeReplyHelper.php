@@ -2,7 +2,7 @@
 
 
 if (!function_exists('detectMessageMeaning')) {
-    function detectMessageMeaning($message, array $keywords, array $phrases = [],$threshold = 2): bool
+    function detectMessageMeaning($message, array $keywords, array $phrases = [],$threshold = 1): bool
     {
         $input = strtolower(trim($message));
         $tokens = preg_split('/\s+/', $input);

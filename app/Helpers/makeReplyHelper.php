@@ -2,7 +2,7 @@
 
 
 if (!function_exists('detectMessageMeaning')) {
-    function detectMessageMeaning($message, array $keywords, array $phrases = []): bool
+    function detectMessageMeaning($message, array $keywords, array $phrases = [],$threshold = 2): bool
     {
         $input = strtolower(trim($message));
         $tokens = preg_split('/\s+/', $input);
@@ -10,7 +10,7 @@ if (!function_exists('detectMessageMeaning')) {
         foreach ($tokens as $token) {
             foreach ($keywords as $keyword) {
                 // Using a fuzzy matching algorithm (like Levenshtein)
-                if (levenshtein($token, $keyword) <= 2) { // Threshold can be adjusted
+                if (levenshtein($token, $keyword) <= $threshold) { // Threshold can be adjusted
                     return true;
                 }
 

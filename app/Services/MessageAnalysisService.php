@@ -47,7 +47,7 @@ class MessageAnalysisService
 
         $orderConfirmationKeywords = ['yes', 'ok', 'okay', 'sure', 'definitely', 'absolutely', 'confirm', 'order', 'book', 'haan', 'ha', 'ji', 'thik', 'theek', 'sahi'];
         $phrases = ['ready to order', 'place order', 'complete order', 'finalize order', 'order karna hai', 'booking kar do', 'order confirm', 'order kar do', 'order book'];
-        return detectMessageMeaning($message, $orderConfirmationKeywords, $phrases);
+        return detectMessageMeaning($message, $orderConfirmationKeywords, $phrases , 0);
 
     }
     function queryDetection($message): GeneralQuery

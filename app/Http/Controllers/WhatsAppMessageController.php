@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\GeneralQuery;
 use App\Services\MessageAnalysisService;
 use App\Services\MessageSendingService;
 use Illuminate\Http\Request;
@@ -39,8 +40,8 @@ class WhatsAppMessageController extends Controller
     function sendMessage(Request $request)
     {
         // dd($this->msService->getReq()->all());
-
-        $body = "fudu bc";
+        $s = GeneralQuery::ADDRESS;
+        $body = "fudu bc ";
         $response = $this->msService->sendTestMessage($body);
         return $response->getBody();
     }

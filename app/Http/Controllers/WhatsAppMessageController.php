@@ -19,21 +19,22 @@ class WhatsAppMessageController extends Controller
         $this->msService = $msService;
     }
 
-    function isAskingForPrice(Request $request) {
+    function isAskingForPrice(Request $request)
+    {
         // Normalize the input
-       // Normalize text for case-insensitivity and basic cleaning:
-    $normalized = strtolower(trim(preg_replace('/[^a-z0-9\s]/i', '', $request->query('line'))));
+        // Normalize text for case-insensitivity and basic cleaning:
+        $normalized = strtolower(trim(preg_replace('/[^a-z0-9\s]/i', '', $request->query('line'))));
 
-    // Keywords related to price, including common misspellings and Hinglish variations:
-    $priceKeywords = [
-        'price', 'prac', 'praice', 'prise', 'prc',
-        'rate', 'ret', 'raet', 'reet',
-        'kitna', 'kitne', 'keemat', 'dam', 'muly', 'mahnga', 'sasta'
-    ];
+        // Keywords related to price, including common misspellings and Hinglish variations:
+        $priceKeywords = [
+            'price', 'prac', 'praice', 'prise', 'prc',
+            'rate', 'ret', 'raet', 'reet',
+            'kitna', 'kitne', 'keemat', 'dam', 'muly', 'mahnga', 'sasta'
+        ];
 
-    // Check for direct matches or partial matches with wildcards:
-    dd(preg_match('/\b(' . implode('|', $priceKeywords) . ')\b/i', $normalized) ||
-           preg_match('/\b(' . implode('|', $priceKeywords) . ')\w*\b/i', $normalized));
+        // Check for direct matches or partial matches with wildcards:
+        dd(preg_match('/\b(' . implode('|', $priceKeywords) . ')\b/i', $normalized) ||
+            preg_match('/\b(' . implode('|', $priceKeywords) . ')\w*\b/i', $normalized));
     }
     function sendMessage(Request $request)
     {
@@ -47,7 +48,6 @@ class WhatsAppMessageController extends Controller
 
     function messageReceived(Request $request)
     {
-        return;
         try {
             $data = request()->json()->all()['data']['message']['_data'];
             $message = $data['body'];

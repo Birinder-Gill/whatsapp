@@ -9,8 +9,6 @@ class MessageAnalysisService
 {
     function askingForPrice($message): bool
     {
-        $input = strtolower(trim($message));
-
         // Common root forms of 'price' and 'rate'
         $keywords = [
             'price', 'prac', 'rate', 'ret', 'cost', 'how much', 'kitna',
@@ -18,148 +16,145 @@ class MessageAnalysisService
             'reet', 'kitne', 'keemat', 'dam', 'muly', 'mahnga', 'sasta'
         ];
 
-        // Tokenize the input into words
-        $tokens = preg_split('/\s+/', $input);
-
-        foreach ($tokens as $token) {
-            foreach ($keywords as $keyword) {
-                // Using a fuzzy matching algorithm (like Levenshtein)
-                if (levenshtein($token, $keyword) <= 2) { // Threshold can be adjusted
-                    return true;
-                }
-
-                // Additional checks can be added here (e.g., regex, other algorithms)
-            }
-        }
-
-        return false;
+        return detectMessageMeaning($message, $keywords);
     }
 
     function discussingPrice($message): PriceQuery
     {
-        // Normalize the input
-        $input = strtolower(trim($message));
-
         // Common keywords or root forms indicating high prices
         $highPriceKeywords = ['expensive', 'costly', 'high', 'too much', 'zada', 'mahanga', 'jyada', 'mehega', 'mehanga'];
 
-        // Tokenize the input into words
-        $tokens = preg_split('/\s+/', $input);
-
-        foreach ($tokens as $token) {
-            foreach ($highPriceKeywords as $keyword) {
-                if (levenshtein($token, $keyword) <= 2) { // Adjust the threshold as needed
-                    return PriceQuery::HIGH_IN_GENERAL;
-                }
-                // Additional checks (like regex patterns) can be added here
-            }
-        }
-
         // Check for common phrases indicating high price complaints
         $phrases = ['price is too high', 'too costly', 'bahut zada', 'bahut mahanga'];
-        foreach ($phrases as $phrase) {
-            if (strpos($input, $phrase) !== false) {
-                return PriceQuery::HIGH_IN_GENERAL;
-            }
+
+        if (detectMessageMeaning($message, $highPriceKeywords, $phrases)) {
+            return PriceQuery::HIGH_IN_GENERAL;
         }
 
         if ($this->isAskingForWholesaleOrBulk($message)) return PriceQuery::WHOLESALE;
-        return false;
+        return PriceQuery::UNKNOWN;
     }
-    function isAskingForWholesaleOrBulk($input)
+
+    function isAskingForWholesaleOrBulk($message)
     {
-        $input = strtolower(trim($input));
         $bulkKeywords = ['wholesale', 'bulk', 'large quantity', 'high quantity', 'badi matra', 'thok', 'jyada maatra'];
-        $tokens = preg_split('/\s+/', $input);
-
-        foreach ($tokens as $token) {
-            foreach ($bulkKeywords as $keyword) {
-                if (levenshtein($token, $keyword) <= 2) {
-                    return true;
-                }
-            }
-        }
-
         $phrases = ['buy in bulk', 'wholesale rate', 'wholesale price', 'bulk order', 'large quantities', 'thok ke rate', 'thok mein', 'jyada maatra mein'];
-        foreach ($phrases as $phrase) {
-            if (strpos($input, $phrase) !== false) {
-                return true;
-            }
-        }
-
-        return false;
+        return detectMessageMeaning($message, $bulkKeywords, $phrases);
     }
+
     function userReadyToOrder($message): bool
     {
-            $input = strtolower(trim($message));
-            $orderConfirmationKeywords = ['yes', 'ok', 'okay', 'sure', 'definitely', 'absolutely', 'confirm', 'order', 'book', 'haan', 'ha', 'ji', 'thik', 'theek', 'sahi'];
-            $tokens = preg_split('/\s+/', $input);
 
-            foreach ($tokens as $token) {
-                foreach ($orderConfirmationKeywords as $keyword) {
-                    if (levenshtein($token, $keyword) <= 2) {
-                        return true;
-                    }
-                }
-            }
-
-            $phrases = ['ready to order', 'place order', 'complete order', 'finalize order', 'order karna hai', 'booking kar do', 'order confirm', 'order kar do', 'order book'];
-            foreach ($phrases as $phrase) {
-                if (strpos($input, $phrase) !== false) {
-                    return true;
-                }
-            }
-
-            return false;
+        $orderConfirmationKeywords = ['yes', 'ok', 'okay', 'sure', 'definitely', 'absolutely', 'confirm', 'order', 'book', 'haan', 'ha', 'ji', 'thik', 'theek', 'sahi'];
+        $phrases = ['ready to order', 'place order', 'complete order', 'finalize order', 'order karna hai', 'booking kar do', 'order confirm', 'order kar do', 'order book'];
+        return detectMessageMeaning($message, $orderConfirmationKeywords, $phrases);
 
     }
     function queryDetection($message): GeneralQuery
     {
         $addressKeywords = ['address', 'location', 'where', 'office', 'store', 'shop', 'pata', 'sthan', 'kaha', 'kahan'];
+        $addressPhrases = [
+            'where are you located',
+            'where is your store',
+            'your office address',
+            'location of shop',
+            'address kya hai',
+            'aapka pata bataye'
+        ];
 
         $detailsKeywords = ['details', 'info', 'information', 'specifications', 'specs', 'detail', 'vivaran', 'jankari', 'soochna'];
+        $detailsPhrases = [
+            'tell me more about',
+            'product details',
+            'more information on',
+            'need more info',
+            'product ki jankari',
+            'vistar se batao'
+        ];
+
         $useCaseKeywords = ['use', 'usage', 'how to use', 'application', 'utility', 'upayog', 'prayog', 'kaise use kare', 'upyogita'];
+        $useCasePhrases = [
+            'how do I use',
+            'how to operate',
+            'usage instructions',
+            'where can I use',
+            'product ka upyog kaise',
+            'isteemal kaise kare'
+        ];
+
         $deliveryMethodKeywords = ['how', 'deliver', 'delivery', 'ship', 'shipping', 'courier', 'reach', 'transport', 'kaise', 'pahuchega', 'bhejna', 'shipment'];
+        $deliveryMethodPhrases = [
+            'how do you deliver',
+            'delivery process',
+            'shipping method',
+            'how will it be sent',
+            'product kaise milega',
+            'kis tarah bhejenge'
+        ];
 
         $deliveryTimeKeywords = ['when', 'time', 'long', 'duration', 'receive', 'delivery time', 'kitna samay', 'samay', 'kab tak', 'avadhi'];
-        $pincodeKeywords = ['pincode', 'postal code', 'zip code', 'serviceable', 'deliverable', 'pin code', 'zipcode', 'area code', 'postal', 'zip'];
-        $confirmationKeywords = ['ok', 'okay', 'yes', 'sure', 'alright', 'fine', 'confirm', 'agreed', 'thik hai', 'haan', 'jee', 'sahi'];
+        $deliveryTimePhrases = [
+            'how long will it take',
+            'delivery duration',
+            'when will I get',
+            'expected delivery time',
+            'kitne din mein milega',
+            'delivery mein kitna samay lagega'
+        ];
 
-        //  TODO: THIS METHOD SHOULD RETURN THE REPLY STRINGS AS PER CONDITION
-        if (userAsksForDemo($message)) {
+        $pincodeKeywords = ['pincode', 'postal code', 'zip code', 'serviceable', 'deliverable', 'pin code', 'zipcode', 'area code', 'postal', 'zip'];
+        $pincodePhrases = [
+            'do you deliver to',
+            'can you ship to',
+            'serviceable pincode',
+            'pincode check',
+            'mere pincode pe delivery',
+            'kya aap is pincode mein bhej sakte hai'
+        ];
+
+        $confirmationKeywords = ['ok', 'okay', 'yes', 'sure', 'alright', 'fine', 'confirm', 'agreed', 'thik hai', 'haan', 'jee', 'sahi'];
+        $confirmationPhrases = [
+            'I agree',
+            'sounds good',
+            'that works for me',
+            'I am fine with that',
+            'mujhe manzoor hai',
+            'thik hai, aage badho'
+        ];
+
+        if(detectMessageMeaning($message,$addressKeywords,$addressPhrases)) {
             return GeneralQuery::ADDRESS;
             //  Address
         }
-        if (userAsksForAddress($message)) {
+        if(detectMessageMeaning($message,$detailsKeywords,$detailsPhrases)) {
             return GeneralQuery::MORE_DETAILS;
             //  More details.
         }
-        if (userAsksForMoreDetails($message)) {
+        if(detectMessageMeaning($message,$useCaseKeywords,$useCasePhrases)) {
             return GeneralQuery::USE_CASE;
             //  Use case.
         }
-        if (userAsksForUseCase($message)) {
+        if(detectMessageMeaning($message,$deliveryMethodKeywords,$deliveryMethodPhrases)) {
             return GeneralQuery::DELIVERY_WAY;
             //  Delivery Way.
         }
-        if (userAsksForDeliveryWay($message)) {
+        if(detectMessageMeaning($message,$deliveryTimeKeywords,$deliveryTimePhrases)) {
             return GeneralQuery::DELIVERY_TIME;
             //  Delivery time
         }
-        if (userAsksForDeliveryTime($message)) {
+        if(detectMessageMeaning($message,$pincodeKeywords,$pincodePhrases)) {
             return GeneralQuery::PINCODE_AVAILABILITY;
             //  Pincode availability
+        }
+
+        if(detectMessageMeaning($message,$confirmationKeywords,$confirmationPhrases)) {
+           return GeneralQuery::OK;
+            //  Follow Up given by user.
         }
         if (userAsksForPincodeAvailability($message)) {
             return GeneralQuery::FOLLOW_UP_GIVEN_BY_USER;
             //  Follow Up given by user.
         }
-        if (userSaysOk($message)) {
-            GeneralQuery::OK;
-            //  Follow Up given by user.
-        }
-        return GeneralQuery::OK;
+        return GeneralQuery::UNKNOWN;
     }
 }
-
-

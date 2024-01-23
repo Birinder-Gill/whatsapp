@@ -21,7 +21,6 @@ class MessageSendingService
     function sendFirstMessage($personName): ResponseInterface
     {
         $to = $this->rcService->getFrom();
-
         $toSend = $this->rcService->getFirstMessage($personName);
         return $this->waService->sendWhatsAppMessage($to, $toSend);
     }

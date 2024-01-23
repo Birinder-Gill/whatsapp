@@ -13,12 +13,12 @@ class ReplyCreationService
 
     public function __construct(Request $request)
     {
-        // $this->from =  request()->json()->all()['data']['message']['_data'];
+        $this->from =  request()->json()->all()['data']['message']['_data'];
     }
     function getFrom()
     {
-        return "917009154010@c.us";
-        // return $this->from;
+        // return "917009154010@c.us";
+        return $this->from;
     }
 
     function getQueryResponse(GeneralQuery $query): string
@@ -38,14 +38,14 @@ class ReplyCreationService
                 };
             case UserLanguage::HINGLISH:
                 return match ($query) {
-                    GeneralQuery::ADDRESS => '',
-                    GeneralQuery::MORE_DETAILS => '',
-                    GeneralQuery::USE_CASE => '',
-                    GeneralQuery::DELIVERY_WAY => '',
-                    GeneralQuery::DELIVERY_TIME => '',
-                    GeneralQuery::PINCODE_AVAILABILITY => '',
-                    GeneralQuery::FOLLOW_UP_GIVEN_BY_USER => '',
-                    GeneralQuery::OK => '',
+                    GeneralQuery::ADDRESS => 'GeneralQuery::ADDRESS',
+                    GeneralQuery::MORE_DETAILS => 'GeneralQuery::MORE_DETAILS',
+                    GeneralQuery::USE_CASE => 'GeneralQuery::USE_CASE',
+                    GeneralQuery::DELIVERY_WAY => 'GeneralQuery::DELIVERY_WAY',
+                    GeneralQuery::DELIVERY_TIME => 'GeneralQuery::DELIVERY_TIME',
+                    GeneralQuery::PINCODE_AVAILABILITY => 'GeneralQuery::PINCODE_AVAILABILITY',
+                    GeneralQuery::FOLLOW_UP_GIVEN_BY_USER => 'GeneralQuery::FOLLOW_UP_GIVEN_BY_USER',
+                    GeneralQuery::OK => 'GeneralQuery::OK',
                 };
             case UserLanguage::ENGLISH:
                 return match ($query) {
@@ -84,9 +84,9 @@ class ReplyCreationService
                 };
             case UserLanguage::HINGLISH:
                 return match ($priceQuery) {
-                    PriceQuery::HIGH_AS_COMPARED => 'Your order is pending.',
-                    PriceQuery::HIGH_IN_GENERAL => 'Your order is being processed.',
-                    PriceQuery::WHOLESALE => 'Your order has been completed.',
+                    PriceQuery::HIGH_AS_COMPARED => 'PriceQuery::HIGH_AS_COMPARED',
+                    PriceQuery::HIGH_IN_GENERAL => 'PriceQuery::HIGH_IN_GENERAL',
+                    PriceQuery::WHOLESALE => 'PriceQuery::WHOLESALE',
                 };
             case UserLanguage::ENGLISH:
                 return match ($priceQuery) {
@@ -103,7 +103,7 @@ class ReplyCreationService
 
         return match ($language) {
             UserLanguage::HINDI => 'Your order is pending.',
-            UserLanguage::HINGLISH => 'Your order is being processed.',
+            UserLanguage::HINGLISH => 'Discounted price of 990 hai .',
             UserLanguage::ENGLISH => 'Your order has been completed.',
         };
     }
@@ -115,7 +115,7 @@ class ReplyCreationService
 
         return match ($language) {
             UserLanguage::HINDI => 'Your order is pending.',
-            UserLanguage::HINGLISH => 'Your order is being processed.',
+            UserLanguage::HINGLISH => 'Your order is being confirmed in hinglish.',
             UserLanguage::ENGLISH => 'Your order has been completed.',
         };
     }

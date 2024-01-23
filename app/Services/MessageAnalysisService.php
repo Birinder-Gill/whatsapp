@@ -83,7 +83,7 @@ class MessageAnalysisService
             'isteemal kaise kare'
         ];
 
-        $deliveryMethodKeywords = ['how', 'deliver', 'delivery', 'ship', 'shipping', 'courier', 'reach', 'transport', 'kaise', 'pahuchega', 'bhejna', 'shipment'];
+        $deliveryMethodKeywords = ['how', 'deliver', 'delivery', 'ship', 'shipping', 'courier', 'reach', 'transport', 'pahuchega', 'bhejna', 'shipment'];
         $deliveryMethodPhrases = [
             'how do you deliver',
             'delivery process',

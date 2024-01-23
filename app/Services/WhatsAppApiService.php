@@ -7,7 +7,9 @@ class WhatsAppApiService
 {
     function sendWhatsAppMessage($to,$body)
     {
-        if($body== ''){return;}
+        if ($body == "") {
+            return;
+        }
         $apiToken = 'PudFRi3j0sxlsy1qCwL6vSCyjG17fjLFs9fbZp0O336e5cf8';
 
         $client = new \GuzzleHttp\Client([
@@ -30,7 +32,7 @@ class WhatsAppApiService
 
 
 
-    function sendWhatsappMedia($to,$mediaUrl, $caption = ''): ResponseInterface
+    function sendWhatsappMedia($to,$mediaUrl, $caption = '')
     {
         $apiToken = 'PudFRi3j0sxlsy1qCwL6vSCyjG17fjLFs9fbZp0O336e5cf8';
         $client = new \GuzzleHttp\Client([

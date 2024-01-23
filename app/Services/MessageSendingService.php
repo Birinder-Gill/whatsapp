@@ -18,7 +18,7 @@ class MessageSendingService
         $this->waService = $waService;
     }
 
-    function sendFirstMessage($personName): ResponseInterface
+    function sendFirstMessage($personName)
     {
         $to = $this->rcService->getFrom();
         $toSend = $this->rcService->getFirstMessage($personName);
@@ -28,7 +28,7 @@ class MessageSendingService
         return $this->waService->sendWhatsAppMedia($to,'https://electricsuitcase.tech/storage/b3.jpeg');
     }
 
-    function giveQueryResponse(GeneralQuery $query): ResponseInterface
+    function giveQueryResponse(GeneralQuery $query)
     {
         if($query == GeneralQuery::PRICE) return $this->sendDiscountedPriceMessage();
         $response = $this->rcService->getQueryResponse($query);
@@ -36,30 +36,30 @@ class MessageSendingService
     }
 
 
-    function answerPriceDiscussion(PriceQuery $priceQuery): ResponseInterface
+    function answerPriceDiscussion(PriceQuery $priceQuery)
     {
         $response = $this->rcService->getPriceDiscussion($priceQuery);
         return $this->waService->sendWhatsAppMessage($this->rcService->getFrom(),$response);
     }
 
-    function sendOrderConfirmation(): ResponseInterface
+    function sendOrderConfirmation()
     {
         $message = $this->rcService->createOrderConfirmation();
         return $this->waService->sendWhatsAppMessage($this->rcService->getFrom(),$message);
     }
 
-    function sendDiscountedPriceMessage(): ResponseInterface
+    function sendDiscountedPriceMessage()
     {
         $message = $this->rcService->getDiscountedPriceMessage();
         return $this->waService->sendWhatsAppMessage($this->rcService->getFrom(),$message);
     }
 
-    function sendTestMessage($message): ResponseInterface
+    function sendTestMessage($message)
     {
         return $this->waService->sendWhatsAppMessage('917009154010@c.us', $message);
     }
 
-    function sendTestMedia($mediaUrl, $caption = ''): ResponseInterface
+    function sendTestMedia($mediaUrl, $caption = '')
     {
         return $this->waService->sendWhatsappMedia('917009154010@c.us', $mediaUrl, $caption);
     }

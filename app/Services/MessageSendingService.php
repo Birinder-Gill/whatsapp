@@ -28,7 +28,7 @@ class MessageSendingService
     function giveQueryResponse(GeneralQuery $query): ResponseInterface
     {
         $response = $this->rcService->getQueryResponse($query);
-        return $this->waService->sendWhatsappMedia($this->rcService->getFrom(),$response);
+        return $this->waService->sendWhatsAppMessage($this->rcService->getFrom(),$response);
     }
 
 
@@ -52,7 +52,7 @@ class MessageSendingService
 
     function sendTestMessage($message): ResponseInterface
     {
-        return $this->waService->sendWhatsappMedia('917009154010@c.us', $message);
+        return $this->waService->sendWhatsAppMessage('917009154010@c.us', $message);
     }
 
     function sendTestMedia($mediaUrl, $caption = ''): ResponseInterface

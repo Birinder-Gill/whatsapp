@@ -22,7 +22,9 @@ class MessageSendingService
     {
         $to = $this->rcService->getFrom();
         $toSend = $this->rcService->getFirstMessage($personName);
-        return $this->waService->sendWhatsAppMessage($to, $toSend);
+        $this->waService->sendWhatsAppMedia($to,'https://electricsuitcase.tech/storage/videoplayback.mp4', $toSend);
+        $this->waService->sendWhatsAppMedia($to,'https://electricsuitcase.tech/storage/7145cf8lZJL._SL1500_.jpg');
+        return $this->waService->sendWhatsAppMedia($to,'https://electricsuitcase.tech/storage/61EJ0rtDdML._SL1000_.jpg');
     }
 
     function giveQueryResponse(GeneralQuery $query): ResponseInterface

@@ -52,6 +52,7 @@ class MessageAnalysisService
     }
     function queryDetection($message): GeneralQuery
     {
+        if($this->askingForPrice($message)) return GeneralQuery::PRICE;
         $addressKeywords = ['address', 'location', 'where', 'office', 'store', 'shop', 'pata', 'sthan', 'kaha', 'kahan'];
         $addressPhrases = [
             'where are you located',

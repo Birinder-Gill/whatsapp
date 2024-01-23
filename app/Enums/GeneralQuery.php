@@ -5,6 +5,7 @@ namespace App\Enums;
 
 enum GeneralQuery: string
 {
+    case PRICE = "PRICE";
     case ADDRESS = 'ADDRESS';
     case MORE_DETAILS = 'MORE_DETAILS';
     case USE_CASE = 'USE_CASE';

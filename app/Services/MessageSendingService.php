@@ -27,6 +27,7 @@ class MessageSendingService
 
     function giveQueryResponse(GeneralQuery $query): ResponseInterface
     {
+        if($query == GeneralQuery::PRICE) return $this->sendDiscountedPriceMessage();
         $response = $this->rcService->getQueryResponse($query);
         return $this->waService->sendWhatsAppMessage($this->rcService->getFrom(),$response);
     }

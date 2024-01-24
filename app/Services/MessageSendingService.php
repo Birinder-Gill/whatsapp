@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\GeneralQuery;
 use App\Enums\PriceQuery;
+use App\Models\PriceLog;
 use Psr\Http\Message\ResponseInterface;
 
 class MessageSendingService
@@ -50,6 +51,8 @@ class MessageSendingService
 
     function sendDiscountedPriceMessage()
     {
+        if(PriceLog::where(['to' => $this->rcService->getFrom()])->exists())return;
+        PriceLog::create(['to' => $this->rcService->getFrom()]);
         $message = $this->rcService->getDiscountedPriceMessage();
         return $this->waService->sendWhatsAppMessage($this->rcService->getFrom(),$message);
     }

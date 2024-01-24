@@ -53,6 +53,7 @@ class MessageSendingService
         return $this->waService->sendWhatsAppMessage($this->rcService->getFrom(), $message);
     }
 
+
     function sendDiscountedPriceMessage()
     {
         if (LogKeeper::where(['to' => $this->rcService->getFrom(), 'price' => 1])->exists()) return;

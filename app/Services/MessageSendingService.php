@@ -33,15 +33,15 @@ class MessageSendingService
     {
         if ($query == GeneralQuery::PRICE) return $this->sendDiscountedPriceMessage();
         $response = $this->rcService->getQueryResponse($query);
-        if ($query == GeneralQuery::ADDRESS) {
-            if (PriceLog::where(['to' => $this->rcService->getFrom(), 'address' => 1])->exists()) return;
-            PriceLog::updateOrCreate(
-                ['to' => $this->rcService->getFrom()],
-                [
-                    'address' => 1
-                ]
-            );
-        }
+        // if ($query == GeneralQuery::ADDRESS) {
+        //     if (PriceLog::where(['to' => $this->rcService->getFrom(), 'address' => 1])->exists()) return;
+        //     PriceLog::updateOrCreate(
+        //         ['to' => $this->rcService->getFrom()],
+        //         [
+        //             'address' => 1
+        //         ]
+        //     );
+        // }
         $this->waService->sendWhatsAppMessage($this->rcService->getFrom(), $response);
     }
 
@@ -60,13 +60,13 @@ class MessageSendingService
 
     function sendDiscountedPriceMessage()
     {
-        if (PriceLog::where(['to' => $this->rcService->getFrom(), 'price' => 1])->exists()) return;
-        PriceLog::updateOrCreate(
-            ['to' => $this->rcService->getFrom()],
-            [
-                'price' => 1
-            ]
-        );
+        // if (PriceLog::where(['to' => $this->rcService->getFrom(), 'price' => 1])->exists()) return;
+        // PriceLog::updateOrCreate(
+        //     ['to' => $this->rcService->getFrom()],
+        //     [
+        //         'price' => 1
+        //     ]
+        // );
         $message = $this->rcService->getDiscountedPriceMessage();
         return $this->waService->sendWhatsAppMessage($this->rcService->getFrom(), $message);
     }

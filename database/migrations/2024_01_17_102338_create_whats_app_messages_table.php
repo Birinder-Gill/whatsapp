@@ -21,6 +21,8 @@ return new class extends Migration
             $table->integer("counter");
             $table->string("messageText")->default('');
             $table->string("messageId");
+            $table->string("messageHash");
+
             $table->timestamps();
         });
     }

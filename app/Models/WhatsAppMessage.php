@@ -14,7 +14,8 @@ class WhatsAppMessage extends Model
         'to',
         'counter',
         'messageText',
-        'messageId'
+        'messageId',
+        'messageHash'
 
     ];
 }

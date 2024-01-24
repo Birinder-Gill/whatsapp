@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\GeneralQuery;
+use App\Models\LogKeeper;
 use App\Services\MessageAnalysisService;
 use App\Services\MessageSendingService;
 use Illuminate\Http\Request;
@@ -41,6 +42,8 @@ class WhatsAppMessageController extends Controller
     {
         // dd($this->msService->getReq()->all());
         $s = GeneralQuery::ADDRESS;
+        if (LogKeeper::where(['to' => '917009154010@c.us', 'address' => 1])->exists()) return;
+        LogKeeper::updateOrCreate(['to' => '917009154010@c.us'], ['address' => 1]);
         $body = "fudu bc ";
         $response = $this->msService->sendTestMessage($body);
         return $response->getBody();
@@ -56,6 +59,7 @@ class WhatsAppMessageController extends Controller
             $from = $data['from'];
             // if ($from !== '917009154010@c.us') return;
             $messageNumber = detectManualMessage($from, $message);
+            $hash = $data['id']['_serialized'];
             $logArray = [
                 'from' => $from,
                 'displayName' => $personName,
@@ -63,11 +67,13 @@ class WhatsAppMessageController extends Controller
                 'counter' => $messageNumber + 1,
                 'messageText' => $message,
                 'messageId' => $data['id']['id'],
+                'messageHash' => $hash
             ];
 
             if ($messageNumber > -1) {
                 incrementCounter($logArray);
                 if ($messageNumber === 0) {
+                    $this->msService->deleteMessage($hash);
                     $this->msService->sendFirstMessage($personName); //TODO:: CHANGE IT TO MEDIA WITH CAPTION
                 }
                 if ($messageNumber === 1) {

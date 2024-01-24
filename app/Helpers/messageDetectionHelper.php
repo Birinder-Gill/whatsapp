@@ -15,6 +15,12 @@ if (!function_exists('detectManualMessage')) {
     }
 }
 
+if (!function_exists('incrementCounter')) {
+    function incrementCounter($logArray)
+    {
+       WhatsAppMessage::create($logArray);
+    }
+}
 
 
 if (!function_exists('orderConfirmation')) {
@@ -23,7 +29,7 @@ if (!function_exists('orderConfirmation')) {
         return "To place an order, fill out your address in the following google form";
     }
 }
-//TODO: ALL THE METHODS BELOW THIS NEEDS IMPLEMENTATION
+//METHODS BELOW ARE PROBABLY NOT NEEDED
 if (!function_exists('isAskingForPrice')) {
     function isAskingForPrice($message)
     {
@@ -80,12 +86,6 @@ if (!function_exists('userSaysOk')) {
         return "To place an order, fill out your address in the following google form";
     }
 }
-if (!function_exists('incrementCounter')) {
-    function incrementCounter($logArray)
-    {
-       WhatsAppMessage::create($logArray);
-    }
-}
 
 if (!function_exists('priceIsHighInComparison')) {
     function priceIsHighInComparison($message)
@@ -112,3 +112,4 @@ if (!function_exists('isReadyToOrder')) {
 if (!function_exists('isAskingForWholesaleOrBulk')) {
 
 }
+

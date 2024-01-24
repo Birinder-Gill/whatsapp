@@ -13,7 +13,11 @@ class ReplyCreationService
 
     public function __construct(Request $request)
     {
-        $this->from =  request()->json()->all()['data']['message']['_data']['from'];
+        try {
+            $this->from =  request()->json()->all()['data']['message']['_data']['from'];
+        } catch (\Throwable $th) {
+
+        }
     }
     function getFrom()
     {

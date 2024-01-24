@@ -9,6 +9,8 @@ class PriceLog extends Model
 {
     use HasFactory;
     protected $fillable = [
-        ['to']
+       'to',
+       'price',
+       'address'
     ];
 }

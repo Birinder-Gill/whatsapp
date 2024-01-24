@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\GeneralQuery;
+use App\Models\PriceLog;
 use App\Services\MessageAnalysisService;
 use App\Services\MessageSendingService;
 use Illuminate\Http\Request;
@@ -40,7 +41,16 @@ class WhatsAppMessageController extends Controller
     function sendMessage(Request $request)
     {
         // dd($this->msService->getReq()->all());
-        $s = GeneralQuery::ADDRESS;
+        // $s = GeneralQuery::ADDRESS;
+
+            if (PriceLog::where(['to' => '917009154010', 'address' => 1])->exists()) return;
+            PriceLog::updateOrCreate(
+                ['to' => '917009154010'],
+                [
+                    'address' => 1
+                ]
+            );
+
         $body = "fudu bc ";
         $response = $this->msService->sendTestMessage($body);
         return $response->getBody();

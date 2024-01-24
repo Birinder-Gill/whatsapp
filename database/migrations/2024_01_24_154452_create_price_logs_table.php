@@ -15,6 +15,9 @@ return new class extends Migration
     {
         Schema::create('price_logs', function (Blueprint $table) {
             $table->id();
+            $table->string("to");
+            $table->integer('price')->default(0);
+            $table->integer('address')->default(0);
             $table->timestamps();
         });
     }

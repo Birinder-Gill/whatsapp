@@ -41,10 +41,7 @@ class WhatsAppMessageController extends Controller
     function sendMessage(Request $request)
     {
         // dd($this->msService->getReq()->all());
-        $s = GeneralQuery::ADDRESS;
-        if (LogKeeper::where(['to' => '917009154010@c.us', 'address' => 1])->exists()) return;
-        LogKeeper::updateOrCreate(['to' => '917009154010@c.us'], ['address' => 1]);
-        $body = "fudu bc ";
+        $body = "prod sirra bc ";
         $response = $this->msService->sendTestMessage($body);
         return $response->getBody();
     }

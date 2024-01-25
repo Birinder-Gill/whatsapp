@@ -13,7 +13,7 @@ class WhatsAppApiService
         $apiToken = 'PudFRi3j0sxlsy1qCwL6vSCyjG17fjLFs9fbZp0O336e5cf8';
 
         $client = new \GuzzleHttp\Client([
-            'verify' => false, // Disable SSL verification - only use this for local development
+            // 'verify' => false, // Disable SSL verification - only use this for local development
         ]);
         $body = [
             "chatId" => $to,
@@ -37,7 +37,7 @@ class WhatsAppApiService
         $apiToken = 'PudFRi3j0sxlsy1qCwL6vSCyjG17fjLFs9fbZp0O336e5cf8';
 
         $client = new \GuzzleHttp\Client([
-            'verify' => false, // Disable SSL verification - only use this for local development
+            // 'verify' => false, // Disable SSL verification - only use this for local development
         ]);
         $body = [
             "messageId" => $hash        ];

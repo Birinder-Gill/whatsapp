@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\GeneralQuery;
+use App\Jobs\SendFollowUpsJob;
 use App\Models\LogKeeper;
 use App\Services\MessageAnalysisService;
 use App\Services\MessageSendingService;
@@ -40,6 +41,8 @@ class WhatsAppMessageController extends Controller
     }
     function sendMessage(Request $request)
     {
+        SendFollowUpsJob::dispatch($this->msService);
+        return;
         // dd($this->msService->getReq()->all());
         $body = "prod sirra bc ";
         $response = $this->msService->sendTestMessage($body);

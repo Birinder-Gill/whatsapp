@@ -23,10 +23,10 @@ class MessageSendingService
     {
         $to = $this->rcService->getFrom();
         $toSend = $this->rcService->getFirstMessage($personName);
-        $this->waService->sendWhatsAppMedia($to, 'https://productfinds.in/storage/bVideo.mp4', $toSend);
-        $this->waService->sendWhatsAppMedia($to, 'https://productfinds.in/storage/b1.jpeg');
-        $this->waService->sendWhatsAppMedia($to, 'https://productfinds.in/storage/b2.jpeg');
-        return $this->waService->sendWhatsAppMedia($to, 'https://productfinds.in/storage/b3.jpeg');
+        $this->waService->sendWhatsAppMedia($to, 'https://productfinds.in/storage/videoplayback.mp4', $toSend);
+        $this->waService->sendWhatsAppMedia($to, 'https://productfinds.in/storage/7145cf8lZJL._SL1500_.jpg');
+        $this->waService->sendWhatsAppMedia($to, 'https://productfinds.in/storage/81qzoibGayL._SL1500_.jpg');
+        return $this->waService->sendWhatsAppMedia($to, 'https://productfinds.in/storage/71vsJgFsqRS._SL1500_.jpg');
     }
 
     function giveQueryResponse(GeneralQuery $query)

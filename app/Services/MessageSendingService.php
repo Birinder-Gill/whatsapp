@@ -26,7 +26,7 @@ class MessageSendingService
         $this->waService->sendWhatsAppMedia($to, 'https://productfinds.in/storage/videoplayback.mp4', $toSend);
         $this->waService->sendWhatsAppMedia($to, 'https://productfinds.in/storage/7145cf8lZJL._SL1500_.jpg');
         $this->waService->sendWhatsAppMedia($to, 'https://productfinds.in/storage/81qzoibGayL._SL1500_.jpg');
-        return $this->waService->sendWhatsAppMedia($to, 'https://productfinds.in/storage/71vsJgFsqRS._SL1500_.jpg');
+        $this->waService->sendWhatsAppMedia($to, 'https://productfinds.in/storage/71vsJgFsqRS._SL1500_.jpg');
     }
 
     function giveQueryResponse(GeneralQuery $query)

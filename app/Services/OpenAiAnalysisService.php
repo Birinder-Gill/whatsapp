@@ -16,7 +16,7 @@ class OpenAiAnalysisService
     {
         $this->client = OpenAI::client($this->openAiKey);
 
-        // try {
+        try {
             $from = request()->json()->all()['data']['message']['_data']['from'];
             $query = OpenAiThread::where('from', $from);
             if ($query->exists()) {
@@ -29,8 +29,8 @@ class OpenAiAnalysisService
                     'threadId' => $this->threadId
                 ]);
             }
-        // } catch (\Throwable $th) {
-        // }
+        } catch (\Throwable $th) {
+        }
     }
 
     function createARun($message)

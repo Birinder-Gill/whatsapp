@@ -5,17 +5,18 @@ namespace App\Services;
 
 use App\Models\OpenAiThread;
 use OpenAI;
+use OpenAI\Client;
 
 class OpenAiAnalysisService
 {
     protected $openAiKey = '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';
     protected $threadId;
-    protected $client;
+    protected Client $client;
     public function __construct()
     {
         $this->client = OpenAI::client($this->openAiKey);
 
-        try {
+        // try {
             $from = request()->json()->all()['data']['message']['_data']['from'];
             $query = OpenAiThread::where('from', $from);
             if ($query->exists()) {
@@ -28,8 +29,8 @@ class OpenAiAnalysisService
                     'threadId' => $this->threadId
                 ]);
             }
-        } catch (\Throwable $th) {
-        }
+        // } catch (\Throwable $th) {
+        // }
     }
 
     function createARun($message)

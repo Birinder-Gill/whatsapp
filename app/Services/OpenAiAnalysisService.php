@@ -1,6 +1,10 @@
 <?php
 
+
+namespace App\Services;
+
 use App\Models\OpenAiThread;
+use OpenAI;
 
 class OpenAiAnalysisService
 {
@@ -47,7 +51,7 @@ class OpenAiAnalysisService
             runId: $run->id,
         );
 
-        dd($run->toArray());
+        // dd($run->toArray());
     }
 
     function tryToRetrieve($runId)

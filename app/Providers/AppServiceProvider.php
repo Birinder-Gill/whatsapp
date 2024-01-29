@@ -8,7 +8,7 @@ use App\Services\ReplyCreationService;
 use App\Services\WhatsAppApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
-use OpenAiAnalysisService;
+use App\Services\OpenAiAnalysisService;
 
 class AppServiceProvider extends ServiceProvider
 {

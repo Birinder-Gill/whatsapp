@@ -7,6 +7,8 @@ use App\Enums\PriceQuery;
 
 class MessageAnalysisService
 {
+
+
     function askingForPrice($message): bool
     {
         // Common root forms of 'price' and 'rate'
@@ -50,6 +52,7 @@ class MessageAnalysisService
 
         return detectMessageMeaning($message, $orderConfirmationKeywords, $phrases, 0);
     }
+
     function queryDetection($message): GeneralQuery
     {
         if($this->askingForPrice($message)) return GeneralQuery::PRICE;

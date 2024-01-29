@@ -8,6 +8,7 @@ use App\Services\ReplyCreationService;
 use App\Services\WhatsAppApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
+use OpenAiAnalysisService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +21,9 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(MessageAnalysisService::class, function ($app) {
             return new MessageAnalysisService();
+        });
+        $this->app->bind(OpenAiAnalysisService::class, function ($app) {
+            return new OpenAiAnalysisService();
         });
         $this->app->bind(ReplyCreationService::class, function ($app) {
             return new ReplyCreationService($this->app->make(Request::class));

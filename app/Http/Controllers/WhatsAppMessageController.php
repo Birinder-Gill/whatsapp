@@ -8,18 +8,20 @@ use App\Models\LogKeeper;
 use App\Services\MessageAnalysisService;
 use App\Services\MessageSendingService;
 use Illuminate\Http\Request;
-
+use OpenAiAnalysisService;
 
 class WhatsAppMessageController extends Controller
 {
     protected $to = '917009154010@c.us';
     protected MessageAnalysisService $maService;
     protected MessageSendingService $msService;
+    protected OpenAiAnalysisService $aiService;
 
-    public function __construct(MessageAnalysisService $maService, MessageSendingService $msService)
+    public function __construct(MessageAnalysisService $maService, MessageSendingService $msService, OpenAiAnalysisService $aiService)
     {
         $this->maService = $maService;
         $this->msService = $msService;
+        $this->aiService = $aiService;
     }
 
     function isAskingForPrice(Request $request)
@@ -75,15 +77,31 @@ class WhatsAppMessageController extends Controller
                 if ($messageNumber === 0) {
                     $this->msService->deleteMessage($hash);
                     $this->msService->sendFirstMessage($personName); //TODO:: CHANGE IT TO MEDIA WITH CAPTION
-                }
-                if ($messageNumber === 1) {
-                    if ($this->maService->askingForPrice($message)) {
-                        $this->sendDiscountedPriceMessage();
+
+                } else {
+                    $useOpenAi = true;
+                    if ($useOpenAi) {
+                        $this->aiService->createARun($message);
                     } else {
-                        $discussingPrice = $this->maService->discussingPrice($message);
-                        if ($discussingPrice) {
-                            $this->msService->answerPriceDiscussion($discussingPrice);
-                        } else {
+                        if ($messageNumber === 1) {
+                            if ($this->maService->askingForPrice($message)) {
+                                $this->sendDiscountedPriceMessage();
+                            } else {
+                                $discussingPrice = $this->maService->discussingPrice($message);
+                                if ($discussingPrice) {
+                                    $this->msService->answerPriceDiscussion($discussingPrice);
+                                } else {
+                                    if ($this->maService->userReadyToOrder($message)) {
+                                        //Order confirmation
+                                        $this->sendOrderConfirmation($from, $personName, $messageNumber);
+                                    } else {
+                                        $query = $this->maService->queryDetection($message);
+                                        $this->msService->giveQueryResponse($query);
+                                    }
+                                }
+                            }
+                        }
+                        if ($messageNumber >= 2) {
                             if ($this->maService->userReadyToOrder($message)) {
                                 //Order confirmation
                                 $this->sendOrderConfirmation($from, $personName, $messageNumber);
@@ -92,15 +110,6 @@ class WhatsAppMessageController extends Controller
                                 $this->msService->giveQueryResponse($query);
                             }
                         }
-                    }
-                }
-                if ($messageNumber >= 2) {
-                    if ($this->maService->userReadyToOrder($message)) {
-                        //Order confirmation
-                        $this->sendOrderConfirmation($from, $personName, $messageNumber);
-                    } else {
-                        $query = $this->maService->queryDetection($message);
-                        $this->msService->giveQueryResponse($query);
                     }
                 }
             }

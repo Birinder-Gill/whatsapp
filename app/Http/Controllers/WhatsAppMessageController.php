@@ -60,8 +60,6 @@ class WhatsAppMessageController extends Controller
             $personName = $data['notifyName'];
             $from = $data['from'];
             // if ($from !== '917009154010@c.us') return;
-            // $this->msService->sendTestMessage($message);
-
             $messageNumber = detectManualMessage($from, $message);
             $hash = $data['id']['_serialized'];
             $fromMe = $data['id']['fromMe'];

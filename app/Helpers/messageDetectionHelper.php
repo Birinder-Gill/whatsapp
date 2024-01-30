@@ -18,7 +18,9 @@ if (!function_exists('detectManualMessage')) {
 if (!function_exists('incrementCounter')) {
     function incrementCounter($logArray)
     {
-       WhatsAppMessage::create($logArray);
+       WhatsAppMessage::updateOrCreate([
+        'messageId'=>$logArray['messageId']
+       ],$logArray);
     }
 }
 

@@ -54,12 +54,13 @@ class WhatsAppMessageController extends Controller
     function messageReceived(Request $request)
     {
         try {
-            $this->msService->sendTestMessage("change yester");
             $data = request()->json()->all()['data']['message']['_data'];
             $message = $data['body'];
             $personName = $data['notifyName'];
             $from = $data['from'];
-            // if ($from !== '917009154010@c.us') return;
+            if ($from !== '917009154010@c.us') return;
+            // $this->msService->sendTestMessage($message);
+
             $messageNumber = detectManualMessage($from, $message);
             $hash = $data['id']['_serialized'];
             $logArray = [
@@ -69,7 +70,8 @@ class WhatsAppMessageController extends Controller
                 'counter' => $messageNumber + 1,
                 'messageText' => $message,
                 'messageId' => $data['id']['id'],
-                'messageHash' => $hash
+                'messageHash' => $hash,
+                'threadId' => $this->aiService->getThreadId()
             ];
 
             if ($messageNumber > -1) {
@@ -81,7 +83,7 @@ class WhatsAppMessageController extends Controller
                 } else {
                     $useOpenAi = true;
                     if ($useOpenAi) {
-                        $this->aiService->createARun($message);
+                        return $this->aiService->createAndRun($message);
                     } else {
                         if ($messageNumber === 1) {
                             if ($this->maService->askingForPrice($message)) {

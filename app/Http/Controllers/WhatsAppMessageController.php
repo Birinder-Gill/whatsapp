@@ -83,7 +83,8 @@ class WhatsAppMessageController extends Controller
                 } else {
                     $useOpenAi = true;
                     if ($useOpenAi) {
-                        return $this->aiService->createAndRun($message);
+                        $assistant = $this->aiService->createAndRun($message);
+                        $this->msService->sendOpenAiResponse($assistant);
                     } else {
                         if ($messageNumber === 1) {
                             if ($this->maService->askingForPrice($message)) {

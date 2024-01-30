@@ -11,7 +11,7 @@ use OpenAI;
 
 class OpenAiAnalysisService
 {
-    protected $openAiKey = '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';
+    protected $openAiKey = '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';
     protected $threadId;
     protected  $client;
     public function __construct()
@@ -51,17 +51,13 @@ class OpenAiAnalysisService
                 ]
             );
         } else {
-            $this->createMessages([
+            return $this->createMessages([
                 'role' => 'user',
                 'content' => $message,
             ]);
         }
 
-        //TODO: WHILE THE THREAD POLLING IS GOING ON,
-        //       WE SAVE THE NEW MESSAGES IN DB AND CREATE THREADS FOR THOSE MESSAGES ALONG THE WAY
-        //      WE DO THIS USING A FLAG IN DB. AND IF WE START THE CHAT i.e WE SEND A MESSAGE MANUALLY,
-        //      OPENAI SHOULD STOP MAKING RUNS AND FLAG THE CONVERSATION COMPLETE.
-        //      TODO: if threadId in lock exists add message to tracker.
+
 
 
 
@@ -85,7 +81,7 @@ class OpenAiAnalysisService
         $response = $this->client->threads()->messages()->list($this->threadId, [
             'limit' => 1,
         ]);
-        return $response;
+        return $response->toArray();
     }
     function createRun()
     {
@@ -96,30 +92,42 @@ class OpenAiAnalysisService
             ],
         );
         $this->runRetrievePolling($run->id);
-        $this->getAssistantResponse();
+        return $this->getAssistantResponse();
     }
     function runRetrievePolling($runId)
     {
         OpenAiLock::updateOrCreate(['threadId' => $this->threadId]);
-        $response = $this->client->threads()->runs()->retrieve(
-            threadId: $this->threadId,
-            runId: $runId,
-        );
+        while (true) {
+            sleep(.5);
+            $response = $this->client->threads()->runs()->retrieve(
+                threadId: $this->threadId,
+                runId: $runId,
+            );
+            if ($response->status == 'completed') break;
+        }
+
         OpenAiLock::where('threadId', $this->threadId)->delete();
         $this->checkMessageTrack();
+
     }
     function checkMessageTrack()
     {
         $messages = OpenAiMessageTrack::where('threadId', $this->threadId)->get();
-        if($messages->count()){
-            $mappedMessages = $messages;
-            $this->createMessages($mappedMessages);
+        if ($messages->count()) {
+            $mappedMessages = $messages->map(function ($mapMessage){
+                    return [
+                        'role' => 'user',
+                        'content' => $mapMessage->message
+                    ];
+            });
+            OpenAiMessageTrack::destroy($messages->pluck('id'));
+            return $this->createMessages($mappedMessages);
         }
     }
     function createMessages(array $messages)
     {
         $response = $this->client->threads()->messages()->create($this->threadId, $messages);
-        $run = $this->createRun();
+        return $this->createRun();
     }
     function tryToRetrieve($runId)
     {

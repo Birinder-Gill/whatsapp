@@ -19,6 +19,13 @@ class MessageSendingService
         $this->waService = $waService;
     }
 
+    function sendOpenAiResponse(array $openAi) {
+        $to = $this->rcService->getFrom();
+        $toSend = $openAi['data'][0]['content'][0]['text']['value'];
+        $this->waService->sendWhatsAppMessage($to,$toSend);
+
+    }
+
     function sendFirstMessage($personName)
     {
         $to = $this->rcService->getFrom();

@@ -53,7 +53,7 @@ class WhatsAppMessageController extends Controller
 
     function messageReceived(Request $request)
     {
-        return (request()->json()->all());
+        return json_encode(request()->json()->all());
         try {
 
             $data = request()->json()->all()['data']['message']['_data'];

@@ -16,6 +16,7 @@ class OpenAiAnalysisService
     protected  $client;
     public function __construct()
     {
+        return;
         $this->client = OpenAI::client($this->openAiKey);
 
         try {

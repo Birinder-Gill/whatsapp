@@ -56,25 +56,6 @@ class OpenAiAnalysisService
                 'content' => $message,
             ]);
         }
-
-
-
-
-
-        // OpenAiRun::create(
-        //     [
-        //         'threadId' => $this->threadId,
-        //         'runId'=>  $run->id
-        //     ]
-        // );
-        // sleep(2);
-
-
-
-
-
-        // return $response->toArray();
-        // dd($run->toArray());
     }
     function getAssistantResponse()
     {
@@ -108,17 +89,16 @@ class OpenAiAnalysisService
 
         OpenAiLock::where('threadId', $this->threadId)->delete();
         $this->checkMessageTrack();
-
     }
     function checkMessageTrack()
     {
         $messages = OpenAiMessageTrack::where('threadId', $this->threadId)->get();
         if ($messages->count()) {
-            $mappedMessages = $messages->map(function ($mapMessage){
-                    return [
-                        'role' => 'user',
-                        'content' => $mapMessage->message
-                    ];
+            $mappedMessages = $messages->map(function ($mapMessage) {
+                return [
+                    'role' => 'user',
+                    'content' => $mapMessage->message
+                ];
             });
             OpenAiMessageTrack::destroy($messages->pluck('id'));
             return $this->createMessages($mappedMessages);

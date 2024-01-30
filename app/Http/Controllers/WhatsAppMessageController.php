@@ -53,21 +53,18 @@ class WhatsAppMessageController extends Controller
 
     function messageReceived(Request $request)
     {
-        return $this->msService->sendTestMessage(json_encode(request()->json()->all()));
         try {
 
             $data = request()->json()->all()['data']['message']['_data'];
             $message = $data['body'];
             $personName = $data['notifyName'];
             $from = $data['from'];
-
             // if ($from !== '917009154010@c.us') return;
             // $this->msService->sendTestMessage($message);
 
-
             $messageNumber = detectManualMessage($from, $message);
             $hash = $data['id']['_serialized'];
-
+            $fromMe = $data['id']['fromMe'];
 
             $logArray = [
                 'from' => $from,

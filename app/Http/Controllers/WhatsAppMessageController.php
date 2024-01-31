@@ -119,7 +119,7 @@ class WhatsAppMessageController extends Controller
             }
         } catch (\Throwable $e) {
             report($e);
-            $this->msService->sendTestMessage($e->getMessage());
+            // $this->msService->sendTestMessage($e->getMessage());
         }
     }
 

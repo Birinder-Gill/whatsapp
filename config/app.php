@@ -214,5 +214,9 @@ return [
 
 
     "openAiKey" => env("OPEN_AI_KEY"),
-    "assistantId" => env("ASSISTANT_ID")
+    "assistantId" => env("ASSISTANT_ID"),
+    "video" => env("VIDEO"),
+    "picOne" => env("PIC_ONE"),
+    "picTwo" => env("PIC_TWO"),
+    "picThree" => env("PIC_THREE")
 ];

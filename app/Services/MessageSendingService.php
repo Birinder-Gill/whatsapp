@@ -31,10 +31,10 @@ class MessageSendingService
         $to = $this->rcService->getFrom();
         $toSend = $this->rcService->getFirstMessage($personName);
         $this->waService->sendWhatsAppMessage($to,$toSend);
-        $this->waService->sendWhatsAppMedia($to, config('app.url').'/storage/videoplayback.mp4', $toSend);
-        $this->waService->sendWhatsAppMedia($to, config('app.url').'/storage/7145cf8lZJL._SL1500_.jpg');
-        $this->waService->sendWhatsAppMedia($to, config('app.url').'/storage/81qzoibGayL._SL1500_.jpg');
-        $this->waService->sendWhatsAppMedia($to, config('app.url').'/storage/71vsJgFsqRS._SL1500_.jpg');
+        $this->waService->sendWhatsAppMedia($to, config('app.url').config('app.video'), $toSend);
+        $this->waService->sendWhatsAppMedia($to, config('app.url').config('app.picOne'));
+        $this->waService->sendWhatsAppMedia($to, config('app.url').config('app.picTwo'));
+        $this->waService->sendWhatsAppMedia($to, config('app.url').config('app.picThree'));
     }
 
     function giveQueryResponse(GeneralQuery $query)

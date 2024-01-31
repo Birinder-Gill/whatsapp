@@ -218,5 +218,5 @@ return [
     "video" => env("VIDEO"),
     "picOne" => env("PIC_ONE"),
     "picTwo" => env("PIC_TWO"),
-    "picThree" => env("PIC_THREE")
+    "picThree" => env("PIC_THREE"),
 ];

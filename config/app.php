@@ -214,6 +214,7 @@ return [
 
 
     "openAiKey" => env("OPEN_AI_KEY"),
+    "waapiKey" => env('WAAPI_KEY'),
     "assistantId" => env("ASSISTANT_ID"),
     "video" => env("VIDEO"),
     "picOne" => env("PIC_ONE"),

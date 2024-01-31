@@ -213,5 +213,6 @@ return [
     ])->toArray(),
 
 
-    "openAiKey" => env("OPEN_AI_KEY")
+    "openAiKey" => env("OPEN_AI_KEY"),
+    "assistantId" => env("ASSISTANT_ID")
 ];

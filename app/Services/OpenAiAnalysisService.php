@@ -69,7 +69,7 @@ class OpenAiAnalysisService
         $run =  $this->client->threads()->runs()->create(
             threadId: $this->threadId,
             parameters: [
-                'assistant_id' => 'asst_ljqNMDA6uAGjRMatHUyBnR07',
+                'assistant_id' => config('app.assistantId'),
             ],
         );
         $this->runRetrievePolling($run->id);

@@ -11,12 +11,12 @@ use OpenAI;
 
 class OpenAiAnalysisService
 {
-    protected $openAiKey = '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';
     protected $threadId;
     protected  $client;
     public function __construct()
     {
-        $this->client = OpenAI::client($this->openAiKey);
+        $openAiKey = config('app.openAiKey');
+        $this->client = OpenAI::client($openAiKey);
 
         try {
             $from = request()->json()->all()['data']['message']['_data']['from'];

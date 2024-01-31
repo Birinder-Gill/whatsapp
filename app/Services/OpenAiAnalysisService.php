@@ -15,10 +15,11 @@ class OpenAiAnalysisService
     protected  $client;
     public function __construct()
     {
-        $openAiKey = config('app.openAiKey');
-        $this->client = OpenAI::client($openAiKey);
+
 
         try {
+            $openAiKey = config('app.openAiKey');
+            $this->client = OpenAI::client($openAiKey);
             $from = request()->json()->all()['data']['message']['_data']['from'];
             $query = OpenAiThread::where('from', $from);
             if ($query->exists()) {
@@ -32,7 +33,7 @@ class OpenAiAnalysisService
                 ]);
             }
         } catch (\Throwable $th) {
-            dd($th->getMessage());
+            // dd($th->getMessage());
         }
     }
     function getThreadId(): string

@@ -82,7 +82,7 @@ class WhatsAppMessageController extends Controller
                     $this->msService->sendFirstMessage($personName); //TODO:: CHANGE IT TO MEDIA WITH CAPTION
 
                 } else {
-                    $useOpenAi = true;
+                    $useOpenAi = false;
                     if ($useOpenAi) {
                         $assistant = $this->aiService->createAndRun($message);
                         $this->msService->sendOpenAiResponse($assistant);

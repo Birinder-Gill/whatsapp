@@ -30,7 +30,6 @@ class MessageSendingService
     {
         $to = $this->rcService->getFrom();
         $toSend = $this->rcService->getFirstMessage($personName);
-        $this->waService->sendWhatsAppMessage($to,$toSend);
         $this->waService->sendWhatsAppMedia($to, config('app.url').config('app.video'), $toSend);
         $this->waService->sendWhatsAppMedia($to, config('app.url').config('app.picOne'));
         $this->waService->sendWhatsAppMedia($to, config('app.url').config('app.picTwo'));

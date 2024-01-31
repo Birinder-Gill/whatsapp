@@ -220,4 +220,6 @@ return [
     "picOne" => env("PIC_ONE"),
     "picTwo" => env("PIC_TWO"),
     "picThree" => env("PIC_THREE"),
+    'waapiBaseUrl' => env("WAAPI_URL"),
+    'waapiKey' => env('WAAPI_KEY')
 ];

@@ -11,7 +11,7 @@ use OpenAI;
 
 class OpenAiAnalysisService
 {
-    protected $openAiKey = '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';
+    protected $openAiKey = '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';
     protected $threadId;
     protected  $client;
     public function __construct()

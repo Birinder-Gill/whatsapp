@@ -10,7 +10,7 @@ class WhatsAppApiService
         if ($body == "") {
             return;
         }
-        $apiToken = 'PudFRi3j0sxlsy1qCwL6vSCyjG17fjLFs9fbZp0O336e5cf8';
+        $apiToken = config('app.waapiKey');
 
         $client = new \GuzzleHttp\Client([
             'verify' => false, // Disable SSL verification - only use this for local development
@@ -19,7 +19,7 @@ class WhatsAppApiService
             "chatId" => $to,
             "message" => $body
         ];
-        $response = $client->request('POST', 'https://waapi.app/api/v1/instances/5041/client/action/send-message', [
+        $response = $client->request('POST', config('app.waapiBaseUrl').'send-message', [
             'headers' => [
                 'Authorization' => 'Bearer ' . $apiToken,
                 'Accept' => 'application/json',
@@ -34,14 +34,14 @@ class WhatsAppApiService
         if ($hash == "") {
             return;
         }
-        $apiToken = 'PudFRi3j0sxlsy1qCwL6vSCyjG17fjLFs9fbZp0O336e5cf8';
+        $apiToken = config('app.waapiKey');
 
         $client = new \GuzzleHttp\Client([
             // 'verify' => false, // Disable SSL verification - only use this for local development
         ]);
         $body = [
             "messageId" => $hash        ];
-        $response = $client->request('POST', 'https://waapi.app/api/v1/instances/5041/client/action/delete-message-by-id', [
+        $response = $client->request('POST',  config('app.waapiBaseUrl').'delete-message-by-id', [
             'headers' => [
                 'Authorization' => 'Bearer ' . $apiToken,
                 'Accept' => 'application/json',
@@ -56,7 +56,7 @@ class WhatsAppApiService
 
     function sendWhatsappMedia($to,$mediaUrl, $caption = '')
     {
-        $apiToken = 'PudFRi3j0sxlsy1qCwL6vSCyjG17fjLFs9fbZp0O336e5cf8';
+        $apiToken = config('app.waapiKey');
         $client = new \GuzzleHttp\Client([
             // 'verify' => false, // Disable SSL verification - only use this for local development
         ]);
@@ -65,7 +65,7 @@ class WhatsAppApiService
             "mediaUrl" => $mediaUrl,
             "mediaCaption" => $caption
         ];
-        $response = $client->request('POST', 'https://waapi.app/api/v1/instances/5041/client/action/send-media', [
+        $response = $client->request('POST',  config('app.waapiBaseUrl').'send-media', [
             'body' => json_encode($body),
             'headers' => [
                 'Authorization' => 'Bearer ' . $apiToken,

@@ -32,7 +32,7 @@ class OpenAiAnalysisService
                 ]);
             }
         } catch (\Throwable $th) {
-            dd($th);
+            echo $th->getMessage();
         }
     }
     function getThreadId(): string

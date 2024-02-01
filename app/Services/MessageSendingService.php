@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\GeneralQuery;
 use App\Enums\PriceQuery;
 use App\Models\LogKeeper;
+use App\Models\ThreadFinisher;
 use Psr\Http\Message\ResponseInterface;
 
 class MessageSendingService
@@ -22,6 +23,13 @@ class MessageSendingService
     function sendOpenAiResponse(array $openAi) {
         $to = $this->rcService->getFrom();
         $toSend = $openAi['data'][0]['content'][0]['text']['value'];
+        if(str_contains($toSend,'INFO_RECEIVED')){
+            ThreadFinisher::create([
+                'threadId' => $toSend = $openAi['data'][0]['thread_id']
+            ]);
+        $this->waService->sendWhatsAppMessage('919023433999@c.us','This guy gave store name and design number => '.$to);
+            return;
+        }
         $this->waService->sendWhatsAppMessage($to,$toSend);
 
     }

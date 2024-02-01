@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\GeneralQuery;
 use App\Jobs\SendFollowUpsJob;
 use App\Models\LogKeeper;
+use App\Models\ThreadFinisher;
 use App\Services\MessageAnalysisService;
 use App\Services\MessageSendingService;
 use App\Services\OpenAiAnalysisService;
@@ -81,6 +82,7 @@ class WhatsAppMessageController extends Controller
                     $this->msService->deleteMessage($hash);
                     $this->msService->sendFirstMessage($personName); //TODO:: CHANGE IT TO MEDIA WITH CAPTION
                 } else {
+                    if(ThreadFinisher::where('threadId',$this->aiService->getThreadId())->exists())return;
                     $useOpenAi = true;
                     if ($useOpenAi) {
                         $assistant = $this->aiService->createAndRun($message);

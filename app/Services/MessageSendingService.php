@@ -20,28 +20,28 @@ class MessageSendingService
         $this->waService = $waService;
     }
 
-    function sendOpenAiResponse(array $openAi) {
+    function sendOpenAiResponse(array $openAi)
+    {
         $to = $this->rcService->getFrom();
         $toSend = $openAi['data'][0]['content'][0]['text']['value'];
-        if(str_contains($toSend,'INFO_RECEIVED')){
+        if (str_contains($toSend, 'INFO_RECEIVED')) {
             ThreadFinisher::create([
                 'threadId' => $toSend = $openAi['data'][0]['thread_id']
             ]);
-        $this->waService->sendWhatsAppMessage('919023433999@c.us','This guy gave store name and design number => '.$to);
+            $this->waService->sendWhatsAppMessage('919023433999@c.us', 'This guy gave store name and design number => ' . $to);
             return;
         }
-        $this->waService->sendWhatsAppMessage($to,$toSend);
-
+        $this->waService->sendWhatsAppMessage($to, $toSend);
     }
 
     function sendFirstMessage($personName)
     {
         $to = $this->rcService->getFrom();
         $toSend = $this->rcService->getFirstMessage($personName);
-        $this->waService->sendWhatsAppMedia($to, config('app.url').config('app.video'), $toSend);
-        $this->waService->sendWhatsAppMedia($to, config('app.url').config('app.picOne'));
-        $this->waService->sendWhatsAppMedia($to, config('app.url').config('app.picTwo'));
-        $this->waService->sendWhatsAppMedia($to, config('app.url').config('app.picThree'));
+        $this->waService->sendWhatsAppMedia($to, config('app.url') . config('app.video'), $toSend);
+        $this->waService->sendWhatsAppMedia($to, config('app.url') . config('app.picOne'));
+        $this->waService->sendWhatsAppMedia($to, config('app.url') . config('app.picTwo'));
+        $this->waService->sendWhatsAppMedia($to, config('app.url') . config('app.picThree'));
     }
 
     function giveQueryResponse(GeneralQuery $query)

@@ -80,9 +80,8 @@ class WhatsAppMessageController extends Controller
                 if ($messageNumber === 0) {
                     $this->msService->deleteMessage($hash);
                     $this->msService->sendFirstMessage($personName); //TODO:: CHANGE IT TO MEDIA WITH CAPTION
-
                 } else {
-                    $useOpenAi = false;
+                    $useOpenAi = true;
                     if ($useOpenAi) {
                         $assistant = $this->aiService->createAndRun($message);
                         $this->msService->sendOpenAiResponse($assistant);

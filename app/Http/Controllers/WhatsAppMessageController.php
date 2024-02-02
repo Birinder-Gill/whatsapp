@@ -55,7 +55,6 @@ class WhatsAppMessageController extends Controller
     function messageReceived(Request $request)
     {
         try {
-
             $data = request()->json()->all()['data']['message']['_data'];
             $message = $data['body'];
             $personName = $data['notifyName'];
@@ -83,7 +82,7 @@ class WhatsAppMessageController extends Controller
                     $this->msService->sendFirstMessage($personName); //TODO:: CHANGE IT TO MEDIA WITH CAPTION
                 } else {
                     if(ThreadFinisher::where('threadId',$this->aiService->getThreadId())->exists())return;
-                    $useOpenAi = true;
+                    $useOpenAi = false;
                     if ($useOpenAi) {
                         $assistant = $this->aiService->createAndRun($message);
                         $this->msService->sendOpenAiResponse($assistant);

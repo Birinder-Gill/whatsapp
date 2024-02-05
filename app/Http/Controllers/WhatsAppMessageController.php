@@ -44,7 +44,7 @@ class WhatsAppMessageController extends Controller
     function sendMessage(Request $request)
     {
         SendFollowUpsJob::dispatch($this->msService);
-         // dd($this->msService->getReq()->all());
+        // dd($this->msService->getReq()->all());
         $body = "prod sirra bc ";
         $response = $this->msService->sendTestMessage($body);
         return $response->getBody();
@@ -59,7 +59,7 @@ class WhatsAppMessageController extends Controller
             $message = $data['body'];
             $personName = $data['notifyName'];
             $from = $data['from'];
-            if ($from !== '917009154010@c.us') return;
+            // if ($from !== '917009154010@c.us') return;
             $messageNumber = detectManualMessage($from, $message);
             $hash = $data['id']['_serialized'];
             $fromMe = $data['id']['fromMe'];
@@ -74,14 +74,24 @@ class WhatsAppMessageController extends Controller
                 'messageHash' => $hash,
                 'threadId' => $this->aiService->getThreadId()
             ];
+            $test = true;
 
             if ($messageNumber > -1) {
                 incrementCounter($logArray);
                 if ($messageNumber === 0) {
+
+                    if($test){
+                        $message ="https://api.whatsapp.com/send?phone=".substr($from,2,10)."&text=Hello, How may I help you";
+                        $this->msService->sendTestMessage($message);
+                        return;
+                    }
                     $this->msService->deleteMessage($hash);
                     $this->msService->sendFirstMessage($personName); //TODO:: CHANGE IT TO MEDIA WITH CAPTION
 
                 } else {
+                    if($test){
+                        return;
+                    }
                     $useOpenAi = true;
                     if ($useOpenAi) {
                         $assistant = $this->aiService->createAndRun($message);
@@ -119,7 +129,7 @@ class WhatsAppMessageController extends Controller
             }
         } catch (\Throwable $e) {
             report($e);
-            $this->msService->sendTestMessage($e->getMessage());
+            // $this->msService->sendTestMessage($e->getMessage());
         }
     }
 
@@ -133,6 +143,8 @@ class WhatsAppMessageController extends Controller
     {
         $this->msService->sendDiscountedPriceMessage();
     }
+
+
 
 
 

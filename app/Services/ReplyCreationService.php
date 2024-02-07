@@ -48,11 +48,13 @@ class ReplyCreationService
                     GeneralQuery::MORE_DETAILS => 'Sir kisi bhi jaan kari ke liye aap is number pe WhatsApp call kr skte hain',
 
                     GeneralQuery::USE_CASE => '',
-                    GeneralQuery::DELIVERY_WAY => 'Sir Via courier aati hai ji delivery.7-10 days mein tags print hojaate hain & 3-4 days mein aapke store pe deliver',
-                    GeneralQuery::DELIVERY_TIME => 'Sir Via courier aati hai ji delivery.7-10 days mein tags print hojaate hain & 3-4 days mein aapke store pe deliver',
+                    GeneralQuery::DELIVERY_WAY => 'Sir Via courier aati hai ji delivery.3-4 days mein aapke store pe deliver hojega',
+                    GeneralQuery::DELIVERY_TIME => 'Sir Via courier aati hai ji delivery. 3-4 days mein aapke store pe deliver ho jayega',
                     GeneralQuery::PINCODE_AVAILABILITY => '',
                     GeneralQuery::FOLLOW_UP_GIVEN_BY_USER => '',
-                    GeneralQuery::OK => 'Thanks for the response sir.For more information Kindly contact 9023433999'};
+                    GeneralQuery::OK => 'Thanks for the response sir. Aap niche diye gye link se order kar sakte hain.
+
+                    https://7639cd.myshopify.com/products/jarlink-2-pack-jewelry-loupes'};
             case UserLanguage::ENGLISH:
                 return match ($query) {
                     GeneralQuery::ADDRESS => '',

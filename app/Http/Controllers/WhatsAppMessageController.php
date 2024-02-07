@@ -74,7 +74,7 @@ class WhatsAppMessageController extends Controller
                 'messageHash' => $hash,
                 'threadId' => $this->aiService->getThreadId()
             ];
-            $test = true;
+            $test = false;
 
             if ($messageNumber > -1) {
                 incrementCounter($logArray);
@@ -92,7 +92,7 @@ class WhatsAppMessageController extends Controller
                     if($test){
                         return;
                     }
-                    $useOpenAi = true;
+                    $useOpenAi = false;
                     if ($useOpenAi) {
                         $assistant = $this->aiService->createAndRun($message);
                         $this->msService->sendOpenAiResponse($assistant);

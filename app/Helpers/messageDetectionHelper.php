@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\WhatsAppLead;
 use App\Models\WhatsAppMessage;
 
 if (!function_exists('detectManualMessage')) {
@@ -21,6 +22,16 @@ if (!function_exists('incrementCounter')) {
        WhatsAppMessage::updateOrCreate([
         'messageId'=>$logArray['messageId']
        ],$logArray);
+
+    }
+}
+
+if (!function_exists('createNewLead')) {
+    function createNewLead($from)
+    {
+       if(WhatsAppLead::where('from',$from)->exists()) return;
+       WhatsAppLead::create(['from'=>$from]);
+
     }
 }
 

@@ -42,8 +42,7 @@ class ReplyCreationService
                 };
             case UserLanguage::HINGLISH:
                 return match ($query) {
-                    GeneralQuery::ADDRESS => 'Sir we have 2 branches, one in sector 35, chandigarh & one in pragati maidan, delhi
-                    सर हमारी 2 ब्रांचेज हैं, एक सेक्टर 35 चंडीगढ़ में और दूसरी प्रगति मैदान दिल्ली में',
+                    GeneralQuery::ADDRESS => 'Sir we have 2 branches, one in sector 35, chandigarh & one in pragati maidan, delhi',
 
                     GeneralQuery::MORE_DETAILS => 'Sir kisi bhi jaan kari ke liye aap is number pe WhatsApp call kr skte hain',
 

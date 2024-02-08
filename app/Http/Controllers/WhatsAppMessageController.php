@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\GeneralQuery;
 use App\Jobs\SendFollowUpsJob;
 use App\Models\LogKeeper;
+use App\Models\WhatsAppLead;
 use App\Services\MessageAnalysisService;
 use App\Services\MessageSendingService;
 use App\Services\OpenAiAnalysisService;
@@ -47,7 +48,7 @@ class WhatsAppMessageController extends Controller
         // dd($this->msService->getReq()->all());
         $body = "prod sirra bc ";
         $response = $this->msService->sendTestMessage($body);
-        return $response->getBody();
+        return json_decode($response->getBody())->data->status;
     }
 
 
@@ -79,9 +80,9 @@ class WhatsAppMessageController extends Controller
             if ($messageNumber > -1) {
                 incrementCounter($logArray);
                 if ($messageNumber === 0) {
-
-                    if($test){
-                        $message ="https://api.whatsapp.com/send?phone=".substr($from,2,10)."&text=Hello, How may I help you";
+                    createNewLead($from);
+                    if ($test) {
+                        $message = "https://api.whatsapp.com/send?phone=" . substr($from, 2, 10) . "&text=Hello, How may I help you";
                         $this->msService->sendTestMessage($message);
                         return;
                     }
@@ -89,7 +90,7 @@ class WhatsAppMessageController extends Controller
                     $this->msService->sendFirstMessage($personName); //TODO:: CHANGE IT TO MEDIA WITH CAPTION
 
                 } else {
-                    if($test){
+                    if ($test) {
                         return;
                     }
                     $useOpenAi = false;
@@ -98,6 +99,8 @@ class WhatsAppMessageController extends Controller
                         $this->msService->sendOpenAiResponse($assistant);
                     } else {
                         if ($messageNumber === 1) {
+                            WhatsAppLead::where('from' , $from)->update(['hotLead' => 1]);
+
                             if ($this->maService->askingForPrice($message)) {
                                 $this->sendDiscountedPriceMessage();
                             } else {

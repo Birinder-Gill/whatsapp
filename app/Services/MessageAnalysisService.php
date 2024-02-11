@@ -7,10 +7,21 @@ use App\Enums\PriceQuery;
 
 class MessageAnalysisService
 {
-
-
+    protected OpenAiAnalysisService $aiService;
+    protected $useOpenAi;
+    public function __construct(OpenAiAnalysisService $aiService)
+    {
+        $this->aiService = $aiService;
+        $this->useOpenAi = config('app.useOpenAi');
+    }
     function askingForPrice($message): bool
     {
+        if($this->useOpenAi){
+           $res= $this->aiService->createAndRun($message);
+           $toSend = $res['data'][0]['content'][0]['text']['value'];
+           return explode('-',$toSend)[0] == 'PRICE';
+
+        }
         // Common root forms of 'price' and 'rate'
         $keywords = [
             'price', 'prac', 'rate', 'ret', 'cost', 'how much', 'kitna',
@@ -23,6 +34,19 @@ class MessageAnalysisService
 
     function discussingPrice($message): PriceQuery
     {
+
+        if($this->useOpenAi){
+            $res= $this->aiService->createAndRun($message);
+            $toSend = $res['data'][0]['content'][0]['text']['value'];
+            match ($toSend) {
+                "HIGH_AS_COMPARED" => PriceQuery::HIGH_AS_COMPARED,
+                "HIGH_IN_GENERAL" => PriceQuery::HIGH_IN_GENERAL,
+                "WHOLESALE" => PriceQuery::WHOLESALE,
+                default => PriceQuery::UNKNOWN,
+            };
+
+        }
+
         // Common keywords or root forms indicating high prices
         $highPriceKeywords = ['expensive', 'costly', 'high', 'too much', 'zada', 'mahanga', 'jyada', 'mehega', 'mehanga'];
 
@@ -55,7 +79,7 @@ class MessageAnalysisService
 
     function queryDetection($message): GeneralQuery
     {
-        if($this->askingForPrice($message)) return GeneralQuery::PRICE;
+        if ($this->askingForPrice($message)) return GeneralQuery::PRICE;
         $addressKeywords = ['address', 'location', 'where', 'office', 'store', 'shop', 'pata', 'sthan', 'kaha', 'kahan'];
         $addressPhrases = [
             'where are you located',

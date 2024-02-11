@@ -19,11 +19,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(MessageAnalysisService::class, function ($app) {
-            return new MessageAnalysisService();
-        });
+
         $this->app->bind(OpenAiAnalysisService::class, function ($app) {
             return new OpenAiAnalysisService();
+        });
+        $this->app->bind(MessageAnalysisService::class, function ($app) {
+            return new MessageAnalysisService($this->app->make(OpenAiAnalysisService::class));
         });
         $this->app->bind(ReplyCreationService::class, function ($app) {
             return new ReplyCreationService($this->app->make(Request::class));

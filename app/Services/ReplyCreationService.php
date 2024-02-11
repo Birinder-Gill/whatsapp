@@ -42,15 +42,13 @@ class ReplyCreationService
                 };
             case UserLanguage::HINGLISH:
                 return match ($query) {
-                    GeneralQuery::ADDRESS => 'Sir we have 2 branches, one in sector 35, chandigarh & one in pragati maidan, delhi',
-
-                    GeneralQuery::MORE_DETAILS => 'Sir kisi bhi jaan kari ke liye aap is number pe WhatsApp call kr skte hain',
-
-                    GeneralQuery::USE_CASE => '',
-                    GeneralQuery::DELIVERY_WAY => 'Sir Via courier aati hai ji delivery.3-4 days mein aapke store pe deliver hojega',
-                    GeneralQuery::DELIVERY_TIME => 'Sir Via courier aati hai ji delivery. 3-4 days mein aapke store pe deliver ho jayega',
-                    GeneralQuery::PINCODE_AVAILABILITY => '',
-                    GeneralQuery::FOLLOW_UP_GIVEN_BY_USER => '',
+                    GeneralQuery::ADDRESS => 'Sir hamara store Worli, Mumbai, Maharashtra me hai.',
+                    GeneralQuery::MORE_DETAILS => 'Iska unique feature hai iski LED light , jo isko aur bhi valuable banata hai.',
+                    GeneralQuery::USE_CASE => 'Ji han Sir, Ise aap Jewelery related kisi bhi chiz ke liye use kr skte hain. Try kijiye, aapko zaroor pasand aayega.',
+                    GeneralQuery::DELIVERY_WAY => 'Safe aur reliable delivery ke through aapka product pahunchayenge.',
+                    GeneralQuery::DELIVERY_TIME => '5-7 din mein deliver ho jayega',
+                    GeneralQuery::PINCODE_AVAILABILITY => 'Aapke pin code pe delivery available hai. Aasani se order kare.',
+                    GeneralQuery::FOLLOW_UP_GIVEN_BY_USER => 'Jab ready ho, bataye. Aapki har zarurat ka dhyan rakhenge.',
                     GeneralQuery::OK => 'Thanks for the response sir. Aap niche diye gye link se order kar sakte hain.
 
                     https://7639cd.myshopify.com/products/jarlink-2-pack-jewelry-loupes'};
@@ -72,13 +70,43 @@ class ReplyCreationService
     {
 
 
-         return "Hi, " . $personName . ", \nThank you for your interest in our Eye Loupe Magnifier lens for jewelers! Our LED magnifying glass is great for looking closely at jewelry details, helping jewelers see small things better, like gemstones and delicate pieces.
+         return
+"*🔍Welcome to Gem Craft, .".$personName." Ji,*
 
-         If you want to buy one, just say \"Interested,\" and we'll guide you through the process. This fantastic tool is currently available at a discounted price of 990 rupees for a limited time. If you have any questions, feel free to ask here on WhatsApp.
+We specialize in stunning Jewelry Equipment! Our Eye Loupe Magnifier Lens for Jewelers offers:
 
-         हमारे Eye Loupe Magnifier लेंस के लिए आपकी रुचि के लिए धन्यवाद! हमारा LED magnifying glass ज्वेलरी के छोटे विवरणों को ध्यान से देखने के लिए बहुत उपयुक्त है, जो ज्वेलर्स को जेमस्टोन्स और नाजुक टुकड़ों को बेहतर तरीके से देखने में मदद करता है।
+- *🔎 30x and 60x High-quality lens* for sharp, accurate details.
 
-         यदि आप एक खरीददारी करना चाहते हैं, तो बस \"Interested\" कहें, और हम आपको प्रक्रिया के माध्यम से मार्गदर्शन करेंगे। यह शानदार टूल अब एक सीमित समय के लिए 990 रुपये में उपलब्ध है। अगर आपके पास कोई सवाल है, तो WhatsApp पर यहां पूछें।";
+- *💰 Price*: ```Rs. 899 only```
+
+- *🎯 Ideal for*: Checking gems and any other detailed jewelry work.
+
+- *💡 Special Features*: LED light for both magnifying lenses for enhanced visibility
+
+*🛒 To Order*:
+-``` Reply with *'Interested'* or *'Yes'*```
+
+*🌐 For more info*:
+- Ask here or call us at this number.
+
+*🔍Gem Craft में आपका स्वागत है, .".$personName." जी,*
+
+हम ज्वेलरी उपकरणों में माहिर हैं! हमारा Eye Loupe Magnifier Lens ज्वेलर्स के लिए खास है:
+
+- *🔎 30x और 60x  high-quality वाला लेंस* तेज़ और सटीक डिटेल्स के लिए।
+
+- *💰 मूल्य*: केवल रु. 899
+
+- *🎯 उपयोगिता के लिए*: रत्नों और किसी भी अन्य जटिल आभूषण कार्य की जाँच के लिए।
+
+- *💡 विशेष विशेषताएं*: बेहतर दृश्यता के लिए दोनों आवर्धक लेंसों के लिए LED प्रकाश।
+
+*🛒 ऑर्डर करने के लिए*:
+- 'इंटरेस्टेड' या 'हाँ' के साथ जवाब दें
+
+*🌐 अधिक जानकारी के लिए*:
+- यहाँ पूछें या इस नंबर पर हमें कॉल करें।
+";
     }
 
     function getPriceDiscussion(PriceQuery $priceQuery): string
@@ -93,9 +121,9 @@ class ReplyCreationService
                 };
             case UserLanguage::HINGLISH:
                 return match ($priceQuery) {
-                    PriceQuery::HIGH_AS_COMPARED => '',
-                    PriceQuery::HIGH_IN_GENERAL => '',
-                    PriceQuery::WHOLESALE => '',
+                    PriceQuery::HIGH_AS_COMPARED => 'Sir, koi bhi product ho, har tarah ki quality me milta hai. Hamari quality me ye price unmatched hai.',
+                    PriceQuery::HIGH_IN_GENERAL => 'Sir, koi bhi product ho, har tarah ki quality me milta hai. Hamari quality me ye price unmatched hai.',
+                    PriceQuery::WHOLESALE => 'Sir wholesale quantity me extra discount milega. Wholesale quantities ke baare is number call krlen',
                 };
             case UserLanguage::ENGLISH:
                 return match ($priceQuery) {
@@ -112,7 +140,7 @@ class ReplyCreationService
 
         return match ($language) {
             UserLanguage::HINDI => 'Your order is pending.',
-            UserLanguage::HINGLISH => 'Sir, Ye lens sirf 990/- ke discounted price pe milega',
+            UserLanguage::HINGLISH => 'Sir, Ye lens sirf 899/- ke discounted price pe milega',
             UserLanguage::ENGLISH => 'Your order has been completed.',
         };
     }

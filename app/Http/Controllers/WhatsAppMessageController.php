@@ -42,15 +42,16 @@ class WhatsAppMessageController extends Controller
         dd(preg_match('/\b(' . implode('|', $priceKeywords) . ')\b/i', $normalized) ||
             preg_match('/\b(' . implode('|', $priceKeywords) . ')\w*\b/i', $normalized));
     }
+
     function sendMessage(Request $request)
     {
+
         SendFollowUpsJob::dispatch($this->msService);
         // dd($this->msService->getReq()->all());
         $body = "prod sirra bc ";
         $response = $this->msService->sendTestMessage($body);
         return json_decode($response->getBody())->data->status;
     }
-
 
     function messageReceived(Request $request)
     {
@@ -78,12 +79,11 @@ class WhatsAppMessageController extends Controller
             $test = false;
 
             if ($messageNumber > -1) {
-                incrementCounter($logArray);
+                incrementCounter($logArray); // To see es bnde da kinnma message aa
                 if ($messageNumber === 0) {
                     createNewLead($from);
                     if ($test) {
-                        $message = "https://api.whatsapp.com/send?phone=" . substr($from, 2, 10) . "&text=Hello, How may I help you";
-                        $this->msService->sendTestMessage($message);
+                        $this->runAtest($from);
                         return;
                     }
                     $this->msService->deleteMessage($hash);
@@ -93,13 +93,13 @@ class WhatsAppMessageController extends Controller
                     if ($test) {
                         return;
                     }
-                    $useOpenAi = false;
+                    $useOpenAi = config('app.useOpenAi');
                     if ($useOpenAi) {
                         $assistant = $this->aiService->createAndRun($message);
                         $this->msService->sendOpenAiResponse($assistant);
                     } else {
                         if ($messageNumber === 1) {
-                            WhatsAppLead::where('from' , $from)->update(['hotLead' => 1]);
+                            WhatsAppLead::where('from', $from)->update(['hotLead' => 1]);
 
                             if ($this->maService->askingForPrice($message)) {
                                 $this->sendDiscountedPriceMessage();
@@ -136,12 +136,19 @@ class WhatsAppMessageController extends Controller
         }
     }
 
+    function runATest($from)
+    {
+        $message = "https://api.whatsapp.com/send?phone=" . substr($from, 2, 10) . "&text=Hello, How may I help you";
+        $this->msService->sendTestMessage($message);
+    }
+
     function sendOrderConfirmation($from, $personName, $messageNumber)
     {
         //TODO: STORE THE PERSON'S ID AND ORDER PLACED
 
         $this->msService->sendOrderConfirmation();
     }
+
     function sendDiscountedPriceMessage()
     {
         $this->msService->sendDiscountedPriceMessage();

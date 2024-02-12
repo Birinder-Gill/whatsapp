@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Enums\GeneralQuery;
-use App\Enums\PriceQuery;
 use App\Models\LogKeeper;
 use App\Models\WhatsAppLead;
 use Psr\Http\Message\ResponseInterface;
@@ -20,10 +19,9 @@ class MessageSendingService
         $this->waService = $waService;
     }
 
-    function sendOpenAiResponse(array $openAi)
+    function sendOpenAiResponse(array $toSend)
     {
         $to = $this->rcService->getFrom();
-        $toSend = $openAi['data'][0]['content'][0]['text']['value'];
         $this->waService->sendWhatsAppMessage($to, $toSend);
     }
 
@@ -43,35 +41,13 @@ class MessageSendingService
 
     function giveQueryResponse(GeneralQuery $query)
     {
-        if ($query == GeneralQuery::PRICE) return $this->sendDiscountedPriceMessage();
         $response = $this->rcService->getQueryResponse($query);
-        return $this->waService->sendWhatsAppMessage($this->rcService->getFrom(), $response);
-    }
-
-
-    function answerPriceDiscussion(PriceQuery $priceQuery)
-    {
-        $response = $this->rcService->getPriceDiscussion($priceQuery);
         return $this->waService->sendWhatsAppMessage($this->rcService->getFrom(), $response);
     }
 
     function deleteMessage($hash)
     {
         $this->waService->deleteWhatsAppMessage($hash);
-    }
-    function sendOrderConfirmation()
-    {
-        $message = $this->rcService->createOrderConfirmation();
-        return $this->waService->sendWhatsAppMessage($this->rcService->getFrom(), $message);
-    }
-
-
-    function sendDiscountedPriceMessage()
-    {
-        if (LogKeeper::where(['to' => $this->rcService->getFrom(), 'price' => 1])->exists()) return;
-        LogKeeper::updateOrCreate(['to' => $this->rcService->getFrom()], ['price' => 1]);
-        $message = $this->rcService->getDiscountedPriceMessage();
-        return $this->waService->sendWhatsAppMessage($this->rcService->getFrom(), $message);
     }
 
     function sendTestMessage($message)

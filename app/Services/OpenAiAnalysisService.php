@@ -3,6 +3,7 @@
 
 namespace App\Services;
 
+use App\Enums\GeneralQuery;
 use App\Models\OpenAiLock;
 use App\Models\OpenAiMessageTrack;
 use App\Models\OpenAiRun;
@@ -32,8 +33,26 @@ class OpenAiAnalysisService
                 ]);
             }
         } catch (\Throwable $th) {
-            // dd($th->getMessage());
         }
+    }
+
+    function queryDetection($message) : GeneralQuery {
+        $toSend= $this->createAndRun($message);
+        return match ($toSend) {
+            'PRICE' => GeneralQuery::PRICE,
+            'ADDRESS' => GeneralQuery::ADDRESS,
+            'MORE_DETAILS' => GeneralQuery::MORE_DETAILS,
+            'USE_CASE' => GeneralQuery::USE_CASE,
+            'DELIVERY_WAY' => GeneralQuery::DELIVERY_WAY,
+            'DELIVERY_TIME' => GeneralQuery::DELIVERY_TIME,
+            'PINCODE_AVAILABILITY' => GeneralQuery::PINCODE_AVAILABILITY,
+            'FOLLOW_UP_GIVEN_BY_USER' => GeneralQuery::FOLLOW_UP_GIVEN_BY_USER,
+            'HIGH_AS_COMPARED' => GeneralQuery::HIGH_AS_COMPARED,
+            'HIGH_IN_GENERAL' => GeneralQuery::HIGH_IN_GENERAL,
+            'WHOLESALE' => GeneralQuery::WHOLESALE,
+            'OK' => GeneralQuery::OK,
+            default => GeneralQuery::UNKNOWN,
+        };
     }
     function getThreadId(): string
     {
@@ -62,7 +81,8 @@ class OpenAiAnalysisService
         $response = $this->client->threads()->messages()->list($this->threadId, [
             'limit' => 1,
         ]);
-        return $response->toArray();
+        $result = $response->toArray();
+        return $result['data'][0]['content'][0]['text']['value'];
     }
     function createRun()
     {

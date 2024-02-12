@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Enums\GeneralQuery;
-use App\Enums\PriceQuery;
 
 class MessageAnalysisService
 {
@@ -32,17 +31,17 @@ class MessageAnalysisService
         return detectMessageMeaning($message, $keywords);
     }
 
-    function discussingPrice($message): PriceQuery
+    function discussingPrice($message): GeneralQuery
     {
 
         if($this->useOpenAi){
             $res= $this->aiService->createAndRun($message);
             $toSend = $res['data'][0]['content'][0]['text']['value'];
             match ($toSend) {
-                "HIGH_AS_COMPARED" => PriceQuery::HIGH_AS_COMPARED,
-                "HIGH_IN_GENERAL" => PriceQuery::HIGH_IN_GENERAL,
-                "WHOLESALE" => PriceQuery::WHOLESALE,
-                default => PriceQuery::UNKNOWN,
+                "HIGH_AS_COMPARED" => GeneralQuery::HIGH_AS_COMPARED,
+                "HIGH_IN_GENERAL" => GeneralQuery::HIGH_IN_GENERAL,
+                "WHOLESALE" => GeneralQuery::WHOLESALE,
+                default => GeneralQuery::UNKNOWN,
             };
 
         }
@@ -54,11 +53,11 @@ class MessageAnalysisService
         $phrases = ['price is too high', 'too costly', 'bahut zada', 'bahut mahanga'];
 
         if (detectMessageMeaning($message, $highPriceKeywords, $phrases)) {
-            return PriceQuery::HIGH_IN_GENERAL;
+            return GeneralQuery::HIGH_IN_GENERAL;
         }
 
-        if ($this->isAskingForWholesaleOrBulk($message)) return PriceQuery::WHOLESALE;
-        return PriceQuery::UNKNOWN;
+        if ($this->isAskingForWholesaleOrBulk($message)) return GeneralQuery::WHOLESALE;
+        return GeneralQuery::UNKNOWN;
     }
 
     function isAskingForWholesaleOrBulk($message)

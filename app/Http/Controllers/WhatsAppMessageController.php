@@ -25,24 +25,6 @@ class WhatsAppMessageController extends Controller
         $this->aiService = $aiService;
     }
 
-    function isAskingForPrice(Request $request)
-    {
-        // Normalize the input
-        // Normalize text for case-insensitivity and basic cleaning:
-        $normalized = strtolower(trim(preg_replace('/[^a-z0-9\s]/i', '', $request->query('line'))));
-
-        // Keywords related to price, including common misspellings and Hinglish variations:
-        $priceKeywords = [
-            'price', 'prac', 'praice', 'prise', 'prc',
-            'rate', 'ret', 'raet', 'reet',
-            'kitna', 'kitne', 'keemat', 'dam', 'muly', 'mahnga', 'sasta'
-        ];
-
-        // Check for direct matches or partial matches with wildcards:
-        dd(preg_match('/\b(' . implode('|', $priceKeywords) . ')\b/i', $normalized) ||
-            preg_match('/\b(' . implode('|', $priceKeywords) . ')\w*\b/i', $normalized));
-    }
-
     function sendMessage(Request $request)
     {
 
@@ -56,12 +38,11 @@ class WhatsAppMessageController extends Controller
     function messageReceived(Request $request)
     {
         try {
-
+            $useOpenAi = config('app.useOpenAi');
             $data = request()->json()->all()['data']['message']['_data'];
             $message = $data['body'];
             $personName = $data['notifyName'];
             $from = $data['from'];
-            // if ($from !== '917009154010@c.us') return;
             $messageNumber = detectManualMessage($from, $message);
             $hash = $data['id']['_serialized'];
             $fromMe = $data['id']['fromMe'];
@@ -76,63 +57,29 @@ class WhatsAppMessageController extends Controller
                 'messageHash' => $hash,
                 'threadId' => $this->aiService->getThreadId()
             ];
-            $test = false;
+
 
             if ($messageNumber > -1) {
-                incrementCounter($logArray); // To see es bnde da kinnma message aa
+                incrementCounter($logArray);
                 if ($messageNumber === 0) {
                     createNewLead($from);
-                    if ($test) {
-                        $this->runAtest($from);
-                        return;
-                    }
                     $this->msService->deleteMessage($hash);
-                    $this->msService->sendFirstMessage($personName); //TODO:: CHANGE IT TO MEDIA WITH CAPTION
-
+                    $this->msService->sendFirstMessage($personName);
                 } else {
-                    if ($test) {
-                        return;
+                    if ($messageNumber === 1) {
+                        createHotLead($from);
                     }
-                    $useOpenAi = config('app.useOpenAi');
                     if ($useOpenAi) {
                         $assistant = $this->aiService->createAndRun($message);
                         $this->msService->sendOpenAiResponse($assistant);
                     } else {
-                        if ($messageNumber === 1) {
-                            WhatsAppLead::where('from', $from)->update(['hotLead' => 1]);
-
-                            if ($this->maService->askingForPrice($message)) {
-                                $this->sendDiscountedPriceMessage();
-                            } else {
-                                $discussingPrice = $this->maService->discussingPrice($message);
-                                if ($discussingPrice) {
-                                    $this->msService->answerPriceDiscussion($discussingPrice);
-                                } else {
-                                    if ($this->maService->userReadyToOrder($message)) {
-                                        //Order confirmation
-                                        $this->sendOrderConfirmation($from, $personName, $messageNumber);
-                                    } else {
-                                        $query = $this->maService->queryDetection($message);
-                                        $this->msService->giveQueryResponse($query);
-                                    }
-                                }
-                            }
-                        }
-                        if ($messageNumber >= 2) {
-                            if ($this->maService->userReadyToOrder($message)) {
-                                //Order confirmation
-                                $this->sendOrderConfirmation($from, $personName, $messageNumber);
-                            } else {
-                                $query = $this->maService->queryDetection($message);
-                                $this->msService->giveQueryResponse($query);
-                            }
-                        }
+                        $query = $this->aiService->queryDetection($message);
+                        $this->msService->giveQueryResponse($query);
                     }
                 }
             }
         } catch (\Throwable $e) {
             report($e);
-            // $this->msService->sendTestMessage($e->getMessage());
         }
     }
 
@@ -140,18 +87,6 @@ class WhatsAppMessageController extends Controller
     {
         $message = "https://api.whatsapp.com/send?phone=" . substr($from, 2, 10) . "&text=Hello, How may I help you";
         $this->msService->sendTestMessage($message);
-    }
-
-    function sendOrderConfirmation($from, $personName, $messageNumber)
-    {
-        //TODO: STORE THE PERSON'S ID AND ORDER PLACED
-
-        $this->msService->sendOrderConfirmation();
-    }
-
-    function sendDiscountedPriceMessage()
-    {
-        $this->msService->sendDiscountedPriceMessage();
     }
 
 

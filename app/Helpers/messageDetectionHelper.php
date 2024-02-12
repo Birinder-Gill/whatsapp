@@ -35,6 +35,16 @@ if (!function_exists('createNewLead')) {
     }
 }
 
+if (!function_exists('createHotLead')) {
+    function createHotLead($from)
+    {
+        WhatsAppLead::where('from', $from)->update(['hotLead' => 1]);
+
+    }
+}
+
+
+
 
 if (!function_exists('orderConfirmation')) {
     function orderConfirmation(): string

@@ -41,7 +41,7 @@ class ReplyCreationService
             case UserLanguage::HINGLISH:
                 return match ($query) {
                     GeneralQuery::PRICE => 'Sir, Ye lens sirf 899/- ke discounted price pe milega',
-                    GeneralQuery::ADDRESS => 'Sir hamara store Worli, Mumbai, Maharashtra me hai.',
+                    GeneralQuery::ADDRESS => 'Sir hamara store Worli, Mumbai, Maharashtra me hai, lekin lens apko courier se apke address par pahunchayenge.',
                     GeneralQuery::MORE_DETAILS => 'Iska unique feature hai iski LED light , jo isko aur bhi valuable banata hai.',
                     GeneralQuery::USE_CASE => 'Ji han Sir, Ise aap Jewelery related kisi bhi chiz ke liye use kr skte hain. Try kijiye, aapko zaroor pasand aayega.',
                     GeneralQuery::DELIVERY_WAY => 'Safe aur reliable delivery ke through aapka product pahunchayenge.',

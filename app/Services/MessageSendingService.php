@@ -29,11 +29,11 @@ class MessageSendingService
     {
         $to = $this->rcService->getFrom();
         $toSend = $this->rcService->getFirstMessage($personName);
-        $response = $this->waService->sendWhatsAppMessage($to, $toSend);
+
+        $response = $this->waService->sendWhatsAppMedia($to, config('app.url') . config('app.video'), $toSend);
         if (json_decode($response->getBody())->data->status === 'success') {
             WhatsAppLead::where('from' , $to)->update(['infoSent' => 1]);
         }
-        $this->waService->sendWhatsAppMedia($to, config('app.url') . config('app.video'), $toSend);
         $this->waService->sendWhatsAppMedia($to, config('app.url') . config('app.picOne'));
         $this->waService->sendWhatsAppMedia($to, config('app.url') . config('app.picTwo'));
         $this->waService->sendWhatsAppMedia($to, config('app.url') . config('app.picThree'));

@@ -41,16 +41,16 @@ class ReplyCreationService
             case UserLanguage::HINGLISH:
                 return match ($query) {
                     GeneralQuery::PRICE => 'Sir, Ye lens sirf 899/- ke discounted price pe milega',
-                    GeneralQuery::ADDRESS => 'Sir hamara store Worli, Mumbai, Maharashtra me hai, lekin lens apko courier se apke address par pahunchayenge.',
-                    GeneralQuery::MORE_DETAILS => 'Iska unique feature hai iski LED light , jo isko aur bhi valuable banata hai.',
-                    GeneralQuery::USE_CASE => 'Ji han Sir, Ise aap Jewelery related kisi bhi chiz ke liye use kr skte hain. Try kijiye, aapko zaroor pasand aayega.',
+                    GeneralQuery::ADDRESS => 'Sir hamara store Mumbai, Maharashtra me hai, lekin lens apko courier ke through apke address par pahunchayenge.',
+                    GeneralQuery::MORE_DETAILS => 'Isme 2 lens included hain. 30x and 60x and iska unique feature hai iski LED light , jo isko aur bhi valuable banata hai.',
+                    GeneralQuery::USE_CASE => 'Ise aap Jewelery related kisi bhi chiz ki details ko clearly dekhne ke liye use kr skte hain.',
                     GeneralQuery::DELIVERY_WAY => 'Safe aur reliable delivery ke through aapka product pahunchayenge.',
-                    GeneralQuery::DELIVERY_TIME => '5-7 din mein deliver ho jayega',
+                    GeneralQuery::DELIVERY_TIME => '5-7 din mein apke address pe deliver ho jayega',
                     GeneralQuery::PINCODE_AVAILABILITY => 'Aapke pin code pe delivery available hai. Aasani se order kare.',
                     GeneralQuery::FOLLOW_UP_GIVEN_BY_USER => 'Jab ready ho, bataye. Aapki har zarurat ka dhyan rakhenge.',
                     GeneralQuery::HIGH_AS_COMPARED => 'Sir, koi bhi product ho, har tarah ki quality me milta hai. Hamari quality me ye price unmatched hai.',
                     GeneralQuery::HIGH_IN_GENERAL => 'Sir, koi bhi product ho, har tarah ki quality me milta hai. Hamari quality me ye price unmatched hai.',
-                    GeneralQuery::WHOLESALE => 'Sir wholesale quantity me extra discount milega. Wholesale quantities ke baare is number call krlen',
+                    GeneralQuery::WHOLESALE => 'Sir wholesale quantity me extra discount milega. Wholesale quantities ke baare is number par call karein.',
                     GeneralQuery::OK => 'Thanks for the response sir. Aap niche diye gye link se order kar sakte hain.
 
                     https://7639cd.myshopify.com/products/jarlink-2-pack-jewelry-loupes',

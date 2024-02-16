@@ -52,7 +52,7 @@ class ReplyCreationService
                     GeneralQuery::DELIVERY_TIME => 'Sir Via courier aati hai ji delivery.7-10 days mein tags print hojaate hain & 3-4 days mein aapke store pe deliver',
                     GeneralQuery::PINCODE_AVAILABILITY => '',
                     GeneralQuery::FOLLOW_UP_GIVEN_BY_USER => '',
-                    GeneralQuery::OK => 'Thanks for the response sir.For more information Kindly contact 9023433999'};
+                    GeneralQuery::OK => 'Thanks for the response sir.For more information Kindly contact 9872997978'};
             case UserLanguage::ENGLISH:
                 return match ($query) {
                     GeneralQuery::ADDRESS => '',

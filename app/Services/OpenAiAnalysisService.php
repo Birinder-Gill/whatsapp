@@ -38,7 +38,7 @@ class OpenAiAnalysisService
 
     function queryDetection($message) : GeneralQuery {
         $toSend= $this->createAndRun($message);
-        $toSend = explode("-",$toSend)[0];
+        // $toSend = explode("-",$toSend)[0];
         return match ($toSend) {
             'PRICE' => GeneralQuery::PRICE,
             'ADDRESS' => GeneralQuery::ADDRESS,

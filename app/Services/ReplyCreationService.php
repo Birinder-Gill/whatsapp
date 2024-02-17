@@ -51,9 +51,7 @@ class ReplyCreationService
                     GeneralQuery::HIGH_AS_COMPARED => 'Sir, koi bhi product ho, har tarah ki quality me milta hai. Hamari quality me ye price unmatched hai.',
                     GeneralQuery::HIGH_IN_GENERAL => 'Sir, koi bhi product ho, har tarah ki quality me milta hai. Hamari quality me ye price unmatched hai.',
                     GeneralQuery::WHOLESALE => 'Sir wholesale quantity me extra discount milega. Wholesale quantities ke baare is number par call karein.',
-                    GeneralQuery::OK => 'Thanks for the response sir. Aap niche diye gye link se order kar sakte hain.
-
-                    https://7639cd.myshopify.com/products/jarlink-2-pack-jewelry-loupes',
+                    GeneralQuery::OK => 'Thanks for the response sir.'. $this->getLinkMessage(),
                     GeneralQuery::UNKNOWN => "Kisi bhi jankari ke liye isi number pe whatsapp call kren."
                 };
             case UserLanguage::ENGLISH:
@@ -68,6 +66,12 @@ class ReplyCreationService
                     GeneralQuery::OK => '',
                 };
         }
+    }
+
+    function getLinkMessage() : string {
+        return ' Aap niche diye gye link se order kar sakte hain.
+
+https://7639cd.myshopify.com/products/jarlink-2-pack-jewelry-loupes';
     }
 
     function getFirstMessage($personName): string

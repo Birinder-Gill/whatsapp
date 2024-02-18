@@ -2,10 +2,7 @@
 
 namespace App\Services;
 
-use App\Enums\GeneralQuery;
-use App\Models\LogKeeper;
 use App\Models\WhatsAppLead;
-use Psr\Http\Message\ResponseInterface;
 
 class MessageSendingService
 {
@@ -30,19 +27,20 @@ class MessageSendingService
         $to = $this->rcService->getFrom();
         $toSend = $this->rcService->getFirstMessage($personName);
 
-        $response = $this->waService->sendWhatsAppMedia($to, config('app.url') . config('app.video'), $toSend);
+        $response = $this->waService->sendWhatsAppMedia($to, config('app.url') . $toSend['media'], $toSend['message']);
         if (json_decode($response->getBody())->data->status === 'success') {
             WhatsAppLead::where('from', $to)->update(['infoSent' => 1]);
         }
-        $this->waService->sendWhatsAppMedia($to, config('app.url') . config('app.picOne'));
-        $this->waService->sendWhatsAppMedia($to, config('app.url') . config('app.picTwo'));
-        $this->waService->sendWhatsAppMedia($to, config('app.url') . config('app.picThree'));
+        $medias = $this->rcService->getFirstMedias();
+        foreach ($medias as $media) {
+            $this->waService->sendWhatsAppMedia($to, config('app.url') . $media);
+        }
     }
 
-    function giveQueryResponse(GeneralQuery $query, $appendLink = false)
+    function giveQueryResponse(string $query, $appendLink = false)
     {
         $response = $this->rcService->getQueryResponse($query);
-        if ($appendLink && $query !== GeneralQuery::OK) {
+        if ($appendLink && $query !== 'OK') {
             $response = $response . $this->rcService->getLinkMessage();
         }
         return $this->waService->sendWhatsAppMessage($this->rcService->getFrom(), $response);

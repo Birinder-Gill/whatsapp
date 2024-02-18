@@ -2,11 +2,9 @@
 
 namespace App\Services;
 
-use App\Enums\GeneralQuery;
-use App\Enums\UserLanguage;
 use Illuminate\Http\Request;
 
-class ReplyCreationService
+abstract class ReplyCreationService
 {
     protected $from;
 
@@ -15,110 +13,20 @@ class ReplyCreationService
         try {
             $this->from =  request()->json()->all()['data']['message']['_data']['from'];
         } catch (\Throwable $th) {
+            $this->from = '917009154010@c.us';
         }
     }
+
     function getFrom()
     {
-        // return "917009154010@c.us";
         return $this->from;
     }
 
-    function getQueryResponse(GeneralQuery $query): string
-    {
-        $language = $this->getUserLanguage();
-        switch ($language) {
-            case UserLanguage::HINDI:
-                return match ($query) {
-                    GeneralQuery::ADDRESS => '',
-                    GeneralQuery::MORE_DETAILS => '',
-                    GeneralQuery::USE_CASE => '',
-                    GeneralQuery::DELIVERY_WAY => '',
-                    GeneralQuery::DELIVERY_TIME => '',
-                    GeneralQuery::PINCODE_AVAILABILITY => '',
-                    GeneralQuery::FOLLOW_UP_GIVEN_BY_USER => '',
-                    GeneralQuery::OK => '',
-                };
-            case UserLanguage::HINGLISH:
-                return match ($query) {
-                    GeneralQuery::PRICE => 'Sir, Ye lens sirf 899/- ke discounted price pe milega',
-                    GeneralQuery::ADDRESS => 'Sir hamara store Mumbai, Maharashtra me hai, lekin lens apko courier ke through apke address par pahunchayenge.',
-                    GeneralQuery::MORE_DETAILS => 'Isme 2 lens included hain. 30x and 60x and iska unique feature hai iski LED light , jo isko aur bhi valuable banata hai.',
-                    GeneralQuery::USE_CASE => 'Ise aap Jewelery related kisi bhi chiz ki details ko clearly dekhne ke liye use kr skte hain.',
-                    GeneralQuery::DELIVERY_WAY => 'Safe aur reliable delivery ke through aapka product pahunchayenge.',
-                    GeneralQuery::DELIVERY_TIME => '5-7 din mein apke address pe deliver ho jayega',
-                    GeneralQuery::PINCODE_AVAILABILITY => 'Aapke pin code pe delivery available hai. Aasani se order kare.',
-                    GeneralQuery::FOLLOW_UP_GIVEN_BY_USER => 'Jab ready ho, bataye. Aapki har zarurat ka dhyan rakhenge.',
-                    GeneralQuery::HIGH_AS_COMPARED => 'Sir, koi bhi product ho, har tarah ki quality me milta hai. Hamari quality me ye price unmatched hai.',
-                    GeneralQuery::HIGH_IN_GENERAL => 'Sir, koi bhi product ho, har tarah ki quality me milta hai. Hamari quality me ye price unmatched hai.',
-                    GeneralQuery::WHOLESALE => 'Sir wholesale quantity me extra discount milega. Wholesale quantities ke baare is number par call karein.',
-                    GeneralQuery::OK => 'Thanks for the response sir.'. $this->getLinkMessage(),
-                    GeneralQuery::UNKNOWN => "Kisi bhi jankari ke liye isi number pe whatsapp call kren."
-                };
-            case UserLanguage::ENGLISH:
-                return match ($query) {
-                    GeneralQuery::ADDRESS => '',
-                    GeneralQuery::MORE_DETAILS => '',
-                    GeneralQuery::USE_CASE => '',
-                    GeneralQuery::DELIVERY_WAY => '',
-                    GeneralQuery::DELIVERY_TIME => '',
-                    GeneralQuery::PINCODE_AVAILABILITY => '',
-                    GeneralQuery::FOLLOW_UP_GIVEN_BY_USER => '',
-                    GeneralQuery::OK => '',
-                };
-        }
-    }
+    abstract function getQueryResponse(string $query): string;
 
-    function getLinkMessage() : string {
-        return ' Aap niche diye gye link se order kar sakte hain.
+    abstract  function getLinkMessage(): string;
 
-https://7639cd.myshopify.com/products/jarlink-2-pack-jewelry-loupes';
-    }
+    abstract function getFirstMessage($personName): array;
 
-    function getFirstMessage($personName): string
-    {
-
-
-        return
-            "*🔍Welcome to Gem Craft, ." . $personName . " Ji,*
-
-We specialize in stunning Jewelry Equipment! Our Eye Loupe Magnifier Lens for Jewelers offers:
-
-- *🔎 30x and 60x High-quality lens* for sharp, accurate details.
-
-- *💰 Price*: ```Rs. 899 only```
-
-- *🎯 Ideal for*: Checking gems and any other detailed jewelry work.
-
-- *💡 Special Features*: LED light for both magnifying lenses for enhanced visibility
-
-*🛒 To Order*:
--``` Reply with *'Interested'* or *'Yes'*```
-
-*🌐 For more info*:
-- Ask here or call us at this number.
-
-*🔍Gem Craft में आपका स्वागत है, ." . $personName . " जी,*
-
-हम ज्वेलरी उपकरणों में माहिर हैं! हमारा Eye Loupe Magnifier Lens ज्वेलर्स के लिए खास है:
-
-- *🔎 30x और 60x  high-quality वाला लेंस* तेज़ और सटीक डिटेल्स के लिए।
-
-- *💰 मूल्य*: केवल रु. 899
-
-- *🎯 उपयोगिता के लिए*: रत्नों और किसी भी अन्य जटिल आभूषण कार्य की जाँच के लिए।
-
-- *💡 विशेष विशेषताएं*: बेहतर दृश्यता के लिए दोनों आवर्धक लेंसों के लिए LED प्रकाश।
-
-*🛒 ऑर्डर करने के लिए*:
-- 'इंटरेस्टेड' या 'हाँ' के साथ जवाब दें
-
-*🌐 अधिक जानकारी के लिए*:
-- यहाँ पूछें या इस नंबर पर हमें कॉल करें।
-";
-    }
-
-    function getUserLanguage(): UserLanguage
-    {
-        return UserLanguage::HINGLISH;
-    }
+    abstract function getFirstMedias(): array;
 }

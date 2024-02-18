@@ -2,11 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\GeneralQuery;
 use App\Jobs\SendFollowUpsJob;
-use App\Models\LogKeeper;
-use App\Models\WhatsAppLead;
-use App\Services\MessageAnalysisService;
 use App\Services\MessageSendingService;
 use App\Services\OpenAiAnalysisService;
 use Illuminate\Http\Request;
@@ -14,13 +10,11 @@ use Illuminate\Http\Request;
 class WhatsAppMessageController extends Controller
 {
     protected $to = '917009154010@c.us';
-    protected MessageAnalysisService $maService;
     protected MessageSendingService $msService;
     protected OpenAiAnalysisService $aiService;
 
-    public function __construct(MessageAnalysisService $maService, MessageSendingService $msService, OpenAiAnalysisService $aiService)
+    public function __construct(MessageSendingService $msService, OpenAiAnalysisService $aiService)
     {
-        $this->maService = $maService;
         $this->msService = $msService;
         $this->aiService = $aiService;
     }
@@ -28,11 +22,11 @@ class WhatsAppMessageController extends Controller
     function sendMessage(Request $request)
     {
 
-        SendFollowUpsJob::dispatch($this->msService);
-        // dd($this->msService->getReq()->all());
-        $body = "prod sirra bc ";
+        // SendFollowUpsJob::dispatch($this->msService);
+        // // dd($this->msService->getReq()->all());
+        $body = "prod sirra \n\n\nbc ";
         $response = $this->msService->sendTestMessage($body);
-        return json_decode($response->getBody())->data->status;
+        return json_decode($response->getBody());
     }
 
     function messageReceived(Request $request)

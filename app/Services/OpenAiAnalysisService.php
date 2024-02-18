@@ -3,10 +3,8 @@
 
 namespace App\Services;
 
-use App\Enums\GeneralQuery;
 use App\Models\OpenAiLock;
 use App\Models\OpenAiMessageTrack;
-use App\Models\OpenAiRun;
 use App\Models\OpenAiThread;
 use OpenAI;
 
@@ -36,24 +34,10 @@ class OpenAiAnalysisService
         }
     }
 
-    function queryDetection($message) : GeneralQuery {
+    function queryDetection($message) : string {
         $toSend= $this->createAndRun($message);
-        $toSend = explode("-",$toSend)[0];
-        return match ($toSend) {
-            'PRICE' => GeneralQuery::PRICE,
-            'ADDRESS' => GeneralQuery::ADDRESS,
-            'MORE_DETAILS' => GeneralQuery::MORE_DETAILS,
-            'USE_CASE' => GeneralQuery::USE_CASE,
-            'DELIVERY_WAY' => GeneralQuery::DELIVERY_WAY,
-            'DELIVERY_TIME' => GeneralQuery::DELIVERY_TIME,
-            'PINCODE_AVAILABILITY' => GeneralQuery::PINCODE_AVAILABILITY,
-            'FOLLOW_UP_GIVEN_BY_USER' => GeneralQuery::FOLLOW_UP_GIVEN_BY_USER,
-            'HIGH_AS_COMPARED' => GeneralQuery::HIGH_AS_COMPARED,
-            'HIGH_IN_GENERAL' => GeneralQuery::HIGH_IN_GENERAL,
-            'WHOLESALE' => GeneralQuery::WHOLESALE,
-            'OK' => GeneralQuery::OK,
-            default => GeneralQuery::UNKNOWN,
-        };
+        return explode("-",$toSend)[0];
+
     }
     function getThreadId(): string
     {

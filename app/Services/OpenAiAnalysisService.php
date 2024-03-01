@@ -21,7 +21,6 @@ class OpenAiAnalysisService
 
         try {
             $data = request()->json()->all()['data']['message']['_data'];
-            if($data['id']['fromMe'])return;
             $from = $data['from'];
             $query = OpenAiThread::where('from', $from);
             if ($query->exists()) {

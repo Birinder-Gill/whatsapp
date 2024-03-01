@@ -6,14 +6,12 @@ use App\Models\WhatsAppMessage;
 use Carbon\Carbon;
 
 if (!function_exists('detectManualMessage')) {
-    function detectManualMessage($senderId, $message, $fromMe): int
+    function detectManualMessage($senderId, $message): int
     {
         $message = strtolower($message);
         $row = WhatsAppMessage::where('from', $senderId)->orderBy('id', 'desc')->first();
         if ($row) {
             return $row->counter;
-        } else if ($fromMe) {
-            return -1;
         } else if (str_contains($message, "info") || str_contains($message, "Facebook")) {
             return 0;
         }
@@ -22,13 +20,13 @@ if (!function_exists('detectManualMessage')) {
 }
 
 if (!function_exists('updateStatus')) {
-    function updateStatus($from, $fromMe, $status = 'active')
+    function updateStatus($from, $status = 'active')
     {
         Conversation::updateOrCreate(['from' => $from], [
             'from' => $from,
             'status' => $status,
             'last_message_at' => Carbon::now('Asia/Kolkata'),
-            'fromMe' => $fromMe
+            'fromMe' => false
         ]);
     }
 }

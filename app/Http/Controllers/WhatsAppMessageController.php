@@ -60,8 +60,7 @@ class WhatsAppMessageController extends Controller
             ];
 
             if ($messageNumber > -1) {
-                updateStatus($fromMe?$to:$from,$fromMe);
-                if($fromMe) return;
+                updateStatus($from);
                 incrementCounter($logArray);
                 if ($messageNumber === 0) {
                     createNewLead($from);

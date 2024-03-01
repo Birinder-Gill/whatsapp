@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Conversation;
+use App\Services\WhatsAppApiService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -21,7 +22,14 @@ class FollowUpConversations extends Command
      * @var string
      */
     protected $description = 'Command description';
+    protected WhatsAppApiService $apiService;
 
+    // Inject the WhatsAppApiService into the command
+    public function __construct(WhatsAppApiService $apiService)
+    {
+        parent::__construct();
+        $this->apiService = $apiService;
+    }
     /**
      * Execute the console command.
      *
@@ -34,6 +42,7 @@ class FollowUpConversations extends Command
             'last_message_at' => Carbon::now('Asia/Kolkata'),
             'fromMe' => true,
         ]);
+        $this->apiService->sendWhatsAppMessage('917009154010@c.us','Test after 2 minutes');
         return Command::SUCCESS;
     }
 }

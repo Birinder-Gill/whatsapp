@@ -29,6 +29,13 @@ class WhatsAppMessageController extends Controller
         return json_decode($response->getBody());
     }
 
+    function mickeyCalling(Request $request){
+        $data = request()->json()->all()['data']['message']['_data'];
+        $message = $data['body'];
+        $assistant = $this->aiService->createAndRun($message, "asst_sgHG5GtlW0UWg4z2zZqzvC1W");
+        $this->msService->sendOpenAiResponse($assistant);
+    }
+
     function messageReceived(Request $request)
     {
         try {
@@ -37,10 +44,12 @@ class WhatsAppMessageController extends Controller
             $message = $data['body'];
             $personName = $data['notifyName'];
             $from = $data['from'];
-            $messageNumber = detectManualMessage($from, $message);
             $hash = $data['id']['_serialized'];
             $fromMe = $data['id']['fromMe'];
+            updateStatus($from,$fromMe);
+            if($fromMe) return;
 
+            $messageNumber = detectManualMessage($from, $message);
             $logArray = [
                 'from' => $from,
                 'displayName' => $personName,
@@ -51,7 +60,6 @@ class WhatsAppMessageController extends Controller
                 'messageHash' => $hash,
                 'threadId' => $this->aiService->getThreadId()
             ];
-
 
             if ($messageNumber > -1) {
                 incrementCounter($logArray);
@@ -84,23 +92,6 @@ class WhatsAppMessageController extends Controller
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     function sendMediaApi(Request $request)
     {
         $mediaUrl = 'https://drive.google.com/file/d/1sP3zfH4nIznkGX65Jtbh6WhQd1X0WWPS/view?usp=sharing';
@@ -110,3 +101,10 @@ class WhatsAppMessageController extends Controller
         return $response->getBody();
     }
 }
+
+
+/*
+    if ordered, close the conversaiton
+    pehla conv active.
+
+*/

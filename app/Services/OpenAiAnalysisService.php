@@ -12,13 +12,17 @@ class OpenAiAnalysisService
 {
     protected $threadId;
     protected  $client;
+    protected  $assId;
+
     public function __construct()
     {
         $openAiKey = config('app.openAiKey');
         $this->client = OpenAI::client($openAiKey);
 
         try {
-            $from = request()->json()->all()['data']['message']['_data']['from'];
+            $data = request()->json()->all()['data']['message']['_data'];
+            if($data['id']['fromMe'])return;
+            $from = $data['from'];
             $query = OpenAiThread::where('from', $from);
             if ($query->exists()) {
                 $this->threadId = $query->first()->threadId;
@@ -44,8 +48,11 @@ class OpenAiAnalysisService
         return $this->threadId;
     }
 
-    function createAndRun($message)
+    function createAndRun($message,$assId = null)
     {
+        if($assId){
+            $this->assId = $assId;
+        }
         $lock = OpenAiLock::where('threadId', $this->threadId);
         if ($lock->exists()) {
             OpenAiMessageTrack::create(
@@ -74,7 +81,7 @@ class OpenAiAnalysisService
         $run =  $this->client->threads()->runs()->create(
             threadId: $this->threadId,
             parameters: [
-                'assistant_id' => config('app.assistantId'),
+                'assistant_id' => $this->assId??config('app.assistantId'),
             ],
         );
         $this->runRetrievePolling($run->id);

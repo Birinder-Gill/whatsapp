@@ -1,7 +1,9 @@
 <?php
 
+use App\Models\Conversation;
 use App\Models\WhatsAppLead;
 use App\Models\WhatsAppMessage;
+use Carbon\Carbon;
 
 if (!function_exists('detectManualMessage')) {
     function detectManualMessage($senderId, $message): int
@@ -15,6 +17,19 @@ if (!function_exists('detectManualMessage')) {
         return -1;
     }
 }
+
+if (!function_exists('updateStatus')) {
+    function updateStatus($from,$fromMe, $status = 'active')
+    {
+        Conversation::updateOrCreate(['from'=>$from],[
+            'from'=>$from,
+            'status'=>$status,
+            'last_message_at' => Carbon::now(),
+            'fromMe' => $fromMe
+        ]);
+    }
+}
+
 
 if (!function_exists('incrementCounter')) {
     function incrementCounter($logArray)

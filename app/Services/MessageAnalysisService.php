@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Enums\GeneralQuery;
-
+//DEPRECATED
 class MessageAnalysisService
 {
     protected OpenAiAnalysisService $aiService;
@@ -13,6 +13,7 @@ class MessageAnalysisService
         $this->aiService = $aiService;
         $this->useOpenAi = config('app.useOpenAi');
     }
+
     function askingForPrice($message): bool
     {
         if($this->useOpenAi){

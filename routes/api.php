@@ -22,6 +22,7 @@ Route::middleware([LanguageDetection::class])->group(function (){
     Route::get('/test', [WhatsAppMessageController::class, 'isAskingForPrice']);
     Route::get('/sendMessage', [WhatsAppMessageController::class, 'sendMessage']);
     Route::post('/messageReceived', [WhatsAppMessageController::class, 'messageReceived']);
+    Route::post('/mickeyCalling', [WhatsAppMessageController::class, 'mickeyCalling']);
 });
 
 

@@ -16,7 +16,7 @@ class LanguageDetection
      */
     public function handle(Request $request, Closure $next)
     {
-        $request->merge(['language' => 'english']);
+         $request->merge(['language' => 'english']);
         return $next($request);
     }
 }

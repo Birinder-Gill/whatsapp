@@ -44,12 +44,10 @@ class WhatsAppMessageController extends Controller
             $message = $data['body'];
             $personName = $data['notifyName'];
             $from = $data['from'];
+            $to = $data['to'];
             $hash = $data['id']['_serialized'];
             $fromMe = $data['id']['fromMe'];
-            updateStatus($from,$fromMe);
-            if($fromMe) return;
-
-            $messageNumber = detectManualMessage($from, $message);
+            $messageNumber = detectManualMessage($from, $message,$fromMe);
             $logArray = [
                 'from' => $from,
                 'displayName' => $personName,
@@ -62,6 +60,8 @@ class WhatsAppMessageController extends Controller
             ];
 
             if ($messageNumber > -1) {
+                updateStatus($fromMe?$to:$from,$fromMe);
+                if($fromMe) return;
                 incrementCounter($logArray);
                 if ($messageNumber === 0) {
                     createNewLead($from);

@@ -6,11 +6,14 @@ use App\Models\WhatsAppMessage;
 use Carbon\Carbon;
 
 if (!function_exists('detectManualMessage')) {
-    function detectManualMessage($senderId, $message): int
+    function detectManualMessage($senderId, $message, $fromMe): int
     {
+        $message = strtolower($message);
         $row = WhatsAppMessage::where('from', $senderId)->orderBy('id', 'desc')->first();
         if ($row) {
             return $row->counter;
+        } else if ($fromMe) {
+            return -1;
         } else if (str_contains($message, "info") || str_contains($message, "Facebook")) {
             return 0;
         }
@@ -19,11 +22,11 @@ if (!function_exists('detectManualMessage')) {
 }
 
 if (!function_exists('updateStatus')) {
-    function updateStatus($from,$fromMe, $status = 'active')
+    function updateStatus($from, $fromMe, $status = 'active')
     {
-        Conversation::updateOrCreate(['from'=>$from],[
-            'from'=>$from,
-            'status'=>$status,
+        Conversation::updateOrCreate(['from' => $from], [
+            'from' => $from,
+            'status' => $status,
             'last_message_at' => Carbon::now(),
             'fromMe' => $fromMe
         ]);
@@ -34,19 +37,17 @@ if (!function_exists('updateStatus')) {
 if (!function_exists('incrementCounter')) {
     function incrementCounter($logArray)
     {
-       WhatsAppMessage::updateOrCreate([
-        'messageId'=>$logArray['messageId']
-       ],$logArray);
-
+        WhatsAppMessage::updateOrCreate([
+            'messageId' => $logArray['messageId']
+        ], $logArray);
     }
 }
 
 if (!function_exists('createNewLead')) {
     function createNewLead($from)
     {
-       if(WhatsAppLead::where('from',$from)->exists()) return;
-       WhatsAppLead::create(['from'=>$from]);
-
+        if (WhatsAppLead::where('from', $from)->exists()) return;
+        WhatsAppLead::create(['from' => $from]);
     }
 }
 
@@ -54,7 +55,6 @@ if (!function_exists('createHotLead')) {
     function createHotLead($from)
     {
         WhatsAppLead::where('from', $from)->update(['hotLead' => 1]);
-
     }
 }
 
@@ -128,26 +128,19 @@ if (!function_exists('userSaysOk')) {
 if (!function_exists('priceIsHighInComparison')) {
     function priceIsHighInComparison($message)
     {
-
     }
 }
 if (!function_exists('priceIsHighGenerally')) {
     function priceIsHighGenerally($message)
     {
-
     }
 }
 if (!function_exists('askingBulkOrderPrice')) {
     function askingBulkOrderPrice($message)
     {
-
     }
 }
 if (!function_exists('isReadyToOrder')) {
-
-
 }
 if (!function_exists('isAskingForWholesaleOrBulk')) {
-
 }
-

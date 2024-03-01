@@ -23,7 +23,7 @@ class FollowUpConversations extends Command
      */
     protected $description = 'Command description';
 
-    protected $followUp1 = 'Pehla Follow up';
+    protected $followUp1 = 'Do you wish to order it.\nAgar aap order karna chahte hain to aap niche diye gye link se order kar sakte hain.\n\nhttps://7639cd.myshopify.com/products/jarlink-2-pack-jewelry-loupes';
 
     protected WhatsAppApiService $apiService;
 

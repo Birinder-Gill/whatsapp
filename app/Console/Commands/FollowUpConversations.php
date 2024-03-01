@@ -31,7 +31,7 @@ class FollowUpConversations extends Command
     {
         Conversation::create([
             'from'=>'917009154010@c.us',
-            'last_message_at' => Carbon::now(),
+            'last_message_at' => Carbon::now('Asia/Kolkata'),
             'fromMe' => true,
         ]);
         return Command::SUCCESS;

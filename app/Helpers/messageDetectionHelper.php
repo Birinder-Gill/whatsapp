@@ -27,7 +27,7 @@ if (!function_exists('updateStatus')) {
         Conversation::updateOrCreate(['from' => $from], [
             'from' => $from,
             'status' => $status,
-            'last_message_at' => Carbon::now(),
+            'last_message_at' => Carbon::now('Asia/Kolkata'),
             'fromMe' => $fromMe
         ]);
     }

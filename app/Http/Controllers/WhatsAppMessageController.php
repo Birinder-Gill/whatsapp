@@ -95,7 +95,6 @@ class WhatsAppMessageController extends Controller
     function sendMediaApi(Request $request)
     {
         $mediaUrl = 'https://drive.google.com/file/d/1sP3zfH4nIznkGX65Jtbh6WhQd1X0WWPS/view?usp=sharing';
-        // $mediaUrl = 'https://images.unsplash.com/photo-1682686578707-140b042e8f19?q=80&w=1375&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
         $to =  '917009154010@c.us';
         $response = $this->msService->sendTestMedia($mediaUrl);
         return $response->getBody();

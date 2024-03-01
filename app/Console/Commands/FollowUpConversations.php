@@ -40,7 +40,7 @@ class FollowUpConversations extends Command
      */
     public function handle()
     {
-        $conversations = Conversation::where('last_message_at', '<=', Carbon::now('Asia/Kolkata')->subMinutes(9))
+        $conversations = Conversation::where('last_message_at', '<=', Carbon::now('Asia/Kolkata')->subMinutes(4))
             ->where('followUpCount', 0)
             ->get();
         foreach ($conversations as $conversation) {

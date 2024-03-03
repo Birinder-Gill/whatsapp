@@ -21,7 +21,6 @@ class WhatsAppMessageController extends Controller
 
     function sendMessage(Request $request)
     {
-
         // SendFollowUpsJob::dispatch($this->msService);
         // // dd($this->msService->getReq()->all());
         $body = "prod sirra \n\n\nbc ";
@@ -99,10 +98,3 @@ class WhatsAppMessageController extends Controller
         return $response->getBody();
     }
 }
-
-
-/*
-    if ordered, close the conversaiton
-    pehla conv active.
-
-*/

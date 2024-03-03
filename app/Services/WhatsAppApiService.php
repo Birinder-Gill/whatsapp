@@ -57,13 +57,14 @@ class WhatsAppApiService
     {
         $apiToken = config('app.waapiKey');
         $client = new \GuzzleHttp\Client([
-            // 'verify' => false, // Disable SSL verification - only use this for local development
+            'verify' => false, // Disable SSL verification - only use this for local development
         ]);
         $body = [
             "chatId" => $to,
             "mediaUrl" => $mediaUrl,
             "mediaCaption" => $caption
         ];
+        dd($body);
         $response = $client->request('POST',  config('app.waapiBaseUrl').'send-media', [
             'body' => json_encode($body),
             'headers' => [

@@ -1,10 +1,14 @@
 <?php
 
+use App\Models\Conversation;
+use App\Models\WhatsAppLead;
 use App\Models\WhatsAppMessage;
+use Carbon\Carbon;
 
 if (!function_exists('detectManualMessage')) {
     function detectManualMessage($senderId, $message): int
     {
+        $message = strtolower($message);
         $row = WhatsAppMessage::where('from', $senderId)->orderBy('id', 'desc')->first();
         if ($row) {
             return $row->counter;
@@ -15,14 +19,44 @@ if (!function_exists('detectManualMessage')) {
     }
 }
 
+if (!function_exists('updateStatus')) {
+    function updateStatus($from, $status = 'active')
+    {
+        Conversation::updateOrCreate(['from' => $from], [
+            'from' => $from,
+            'status' => $status,
+            'last_message_at' => Carbon::now('Asia/Kolkata'),
+            'fromMe' => false
+        ]);
+    }
+}
+
+
 if (!function_exists('incrementCounter')) {
     function incrementCounter($logArray)
     {
-       WhatsAppMessage::updateOrCreate([
-        'messageId'=>$logArray['messageId']
-       ],$logArray);
+        WhatsAppMessage::updateOrCreate([
+            'messageId' => $logArray['messageId']
+        ], $logArray);
     }
 }
+
+if (!function_exists('createNewLead')) {
+    function createNewLead($from)
+    {
+        if (WhatsAppLead::where('from', $from)->exists()) return;
+        WhatsAppLead::create(['from' => $from]);
+    }
+}
+
+if (!function_exists('createHotLead')) {
+    function createHotLead($from)
+    {
+        WhatsAppLead::where('from', $from)->update(['hotLead' => 1]);
+    }
+}
+
+
 
 
 if (!function_exists('orderConfirmation')) {
@@ -92,26 +126,19 @@ if (!function_exists('userSaysOk')) {
 if (!function_exists('priceIsHighInComparison')) {
     function priceIsHighInComparison($message)
     {
-
     }
 }
 if (!function_exists('priceIsHighGenerally')) {
     function priceIsHighGenerally($message)
     {
-
     }
 }
 if (!function_exists('askingBulkOrderPrice')) {
     function askingBulkOrderPrice($message)
     {
-
     }
 }
 if (!function_exists('isReadyToOrder')) {
-
-
 }
 if (!function_exists('isAskingForWholesaleOrBulk')) {
-
 }
-

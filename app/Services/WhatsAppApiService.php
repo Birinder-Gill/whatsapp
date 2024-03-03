@@ -37,7 +37,7 @@ class WhatsAppApiService
         $apiToken = config('app.waapiKey');
 
         $client = new \GuzzleHttp\Client([
-            // 'verify' => false, // Disable SSL verification - only use this for local development
+            'verify' => false, // Disable SSL verification - only use this for local development
         ]);
         $body = [
             "messageId" => $hash        ];

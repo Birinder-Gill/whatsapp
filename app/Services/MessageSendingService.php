@@ -2,11 +2,7 @@
 
 namespace App\Services;
 
-use App\Enums\GeneralQuery;
-use App\Enums\PriceQuery;
-use App\Models\LogKeeper;
-use App\Models\ThreadFinisher;
-use Psr\Http\Message\ResponseInterface;
+use App\Models\WhatsAppLead;
 
 class MessageSendingService
 {
@@ -20,17 +16,9 @@ class MessageSendingService
         $this->waService = $waService;
     }
 
-    function sendOpenAiResponse(array $openAi)
+    function sendOpenAiResponse(array $toSend)
     {
         $to = $this->rcService->getFrom();
-        $toSend = $openAi['data'][0]['content'][0]['text']['value'];
-        if (str_contains($toSend, 'INFO_RECEIVED')) {
-            ThreadFinisher::create([
-                'threadId' => $toSend = $openAi['data'][0]['thread_id']
-            ]);
-            $this->waService->sendWhatsAppMessage('919023433999@c.us', 'This guy gave store name and design number => ' . $to);
-            return;
-        }
         $this->waService->sendWhatsAppMessage($to, $toSend);
     }
 
@@ -38,43 +26,29 @@ class MessageSendingService
     {
         $to = $this->rcService->getFrom();
         $toSend = $this->rcService->getFirstMessage($personName);
-        $this->waService->sendWhatsAppMedia($to, config('app.url') . config('app.video'), $toSend);
-        $this->waService->sendWhatsAppMedia($to, config('app.url') . config('app.picOne'));
-        $this->waService->sendWhatsAppMedia($to, config('app.url') . config('app.picTwo'));
-        $this->waService->sendWhatsAppMedia($to, config('app.url') . config('app.picThree'));
+
+        $response = $this->waService->sendWhatsAppMedia($to, config('app.url') . $toSend['media'], $toSend['message']);
+        if (json_decode($response->getBody())->data->status === 'success') {
+            WhatsAppLead::where('from', $to)->update(['infoSent' => 1]);
+        }
+        $medias = $this->rcService->getFirstMedias();
+        foreach ($medias as $media) {
+            $this->waService->sendWhatsAppMedia($to, config('app.url') . $media);
+        }
     }
 
-    function giveQueryResponse(GeneralQuery $query)
+    function giveQueryResponse(string $query, $appendLink = false)
     {
-        if ($query == GeneralQuery::PRICE) return $this->sendDiscountedPriceMessage();
         $response = $this->rcService->getQueryResponse($query);
-        return $this->waService->sendWhatsAppMessage($this->rcService->getFrom(), $response);
-    }
-
-
-    function answerPriceDiscussion(PriceQuery $priceQuery)
-    {
-        $response = $this->rcService->getPriceDiscussion($priceQuery);
+        if ($appendLink && $query !== 'OK') {
+            $response = $response . $this->rcService->getLinkMessage();
+        }
         return $this->waService->sendWhatsAppMessage($this->rcService->getFrom(), $response);
     }
 
     function deleteMessage($hash)
     {
         $this->waService->deleteWhatsAppMessage($hash);
-    }
-    function sendOrderConfirmation()
-    {
-        $message = $this->rcService->createOrderConfirmation();
-        return $this->waService->sendWhatsAppMessage($this->rcService->getFrom(), $message);
-    }
-
-
-    function sendDiscountedPriceMessage()
-    {
-        if (LogKeeper::where(['to' => $this->rcService->getFrom(), 'price' => 1])->exists()) return;
-        LogKeeper::updateOrCreate(['to' => $this->rcService->getFrom()], ['price' => 1]);
-        $message = $this->rcService->getDiscountedPriceMessage();
-        return $this->waService->sendWhatsAppMessage($this->rcService->getFrom(), $message);
     }
 
     function sendTestMessage($message)

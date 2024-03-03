@@ -13,8 +13,11 @@ enum GeneralQuery: string
     case DELIVERY_TIME = 'DELIVERY_TIME';
     case PINCODE_AVAILABILITY = 'PINCODE_AVAILABILITY';
     case FOLLOW_UP_GIVEN_BY_USER = 'FOLLOW_UP_GIVEN_BY_USER';
-    case UNKNOWN = "UNKNOWN";
+    case HIGH_AS_COMPARED = 'HIGH_AS_COMPARED';
+    case HIGH_IN_GENERAL = 'HIGH_IN_GENERAL';
+    case WHOLESALE = 'WHOLESALE';
     case OK = 'OK';
+    case UNKNOWN = "UNKNOWN";
 }
 
 

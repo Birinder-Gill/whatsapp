@@ -30,6 +30,7 @@ class WhatsAppApiService
         ]);
         return $response;
     }
+
     function deleteWhatsAppMessage($hash)
     {
         if ($hash == "") {
@@ -83,7 +84,6 @@ class WhatsAppApiService
 
         echo $response->getBody();
     }
-
 
     function sendWhatsappMedia($to, $mediaUrl, $caption = '')
     {

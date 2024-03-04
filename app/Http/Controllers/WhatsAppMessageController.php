@@ -31,12 +31,11 @@ class WhatsAppMessageController extends Controller
     }
 
     public function generateImage(Request $request)  {
-        // return view('greeting',['name'=>"Birinder"]);
-        $pdf = SnappyImage::loadView('greeting',['name'=>"Birinder"]);
-        return $pdf
-        ->setOption('width', '920')
-        ->setOption('height', '139')
-        ->inline();
+        $pdf = SnappyImage::loadView('greeting')->setOption('width', '920')->setOption('height', '139');
+        $mediaUrl = generateAndStoreImage($pdf);
+        $response = $this->msService->sendTestMedia($mediaUrl);
+        deleteStoredImage($mediaUrl);
+        return json_decode($response->getBody());
     }
 
     function mickeyCalling(Request $request){

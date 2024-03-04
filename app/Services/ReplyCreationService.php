@@ -22,9 +22,13 @@ abstract class ReplyCreationService
         return $this->from;
     }
 
+    abstract function getContactSaveFollowUp(): string;
+
     abstract function getQueryResponse(string $query): string;
 
     abstract  function getLinkMessage(): string;
+
+    abstract  function getFirstFollowUp(): string;
 
     abstract function getFirstMessage($personName): array;
 

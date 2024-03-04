@@ -8,14 +8,14 @@ use App\Services\WhatsAppApiService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
-class FollowUpConversations extends Command
+class ContactSaveFollowUp extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'send:followUp';
+    protected $signature = 'command:name';
 
     /**
      * The console command description.
@@ -23,7 +23,6 @@ class FollowUpConversations extends Command
      * @var string
      */
     protected $description = 'Command description';
-
     protected WhatsAppApiService $apiService;
     protected ReplyCreationService $rcService;
 
@@ -41,35 +40,22 @@ class FollowUpConversations extends Command
      */
     public function handle()
     {
-        $conversations = Conversation::where('last_message_at', '<=', Carbon::now('Asia/Kolkata')->subMinutes(4))
-            ->where('followUpCount', 0)
+        $conversations = Conversation::whereDate('last_message_at', '=', Carbon::yesterday('Asia/Kolkata')->subDay())
+            ->where('followUpCount', 2)
             ->get();
-        foreach ($conversations as $conversation) {
-            switch ($conversation->status) {
-                case 'yes':
-                case 'no':
-                    $this->sendContactSaveFollowUp($conversation);
-                    break;
-                default:
-                    $this->sendFollowUp($conversation);
-                    break;
-            }
 
-            $conversation->followUpCount = 1;
+        foreach ($conversations as $conversation) {
+            $this->sendContactSaveFollowUp($conversation);
+            $conversation->followUpCount = 3;
             $conversation->save();
         }
+
         return Command::SUCCESS;
     }
-
     function sendContactSaveFollowUp($conversation)
     {
         $this->apiService->sendWhatsAppMessage($conversation->from, $this->rcService->getContactSaveFollowUp());
         $this->apiService->sendGemCraftVCard($conversation->from,  "Gem", "Craft");
         $conversation->delete();
-    }
-
-    function sendFollowUp($conversation)
-    {
-        $this->apiService->sendWhatsAppMessage($conversation->from, $this->rcService->getFirstFollowUp());
     }
 }

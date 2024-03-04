@@ -8,14 +8,14 @@ use App\Services\WhatsAppApiService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
-class FollowUpConversations extends Command
+class SecondFollowUp extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'send:followUp';
+    protected $signature = 'second:followUp';
 
     /**
      * The console command description.
@@ -23,7 +23,6 @@ class FollowUpConversations extends Command
      * @var string
      */
     protected $description = 'Command description';
-
     protected WhatsAppApiService $apiService;
     protected ReplyCreationService $rcService;
 
@@ -41,9 +40,9 @@ class FollowUpConversations extends Command
      */
     public function handle()
     {
-        $conversations = Conversation::where('last_message_at', '<=', Carbon::now('Asia/Kolkata')->subMinutes(4))
-            ->where('followUpCount', 0)
-            ->get();
+        $conversations = Conversation::whereDate('last_message_at', '=', Carbon::yesterday('Asia/Kolkata'))
+        ->where('followUpCount', 1)
+        ->get();
         foreach ($conversations as $conversation) {
             switch ($conversation->status) {
                 case 'yes':
@@ -55,12 +54,11 @@ class FollowUpConversations extends Command
                     break;
             }
 
-            $conversation->followUpCount = 1;
+            $conversation->followUpCount = 2;
             $conversation->save();
         }
         return Command::SUCCESS;
     }
-
     function sendContactSaveFollowUp($conversation)
     {
         $this->apiService->sendWhatsAppMessage($conversation->from, $this->rcService->getContactSaveFollowUp());

@@ -18,11 +18,11 @@ class JewellerTags extends ReplyCreationService
                     "PRICE" => '',
                     "DISCOUNT" => '',
                     "ADDRESS" => 'Sir we have 2 branches, one in sector 35, chandigarh & one in pragati maidan, delhi\nसर हमारी 2 ब्रांचेज हैं, एक सेक्टर 35 चंडीगढ़ में और दूसरी प्रगति मैदान दिल्ली में',
-                    "DELIVERY_WAY" =>'Sir Via courier aati hai ji delivery.7-10 days mein tags print hojaate hain & 3-4 days mein aapke store pe deliver',
-                    "DELIVERY_TIME" =>'Sir Via courier aati hai ji delivery.7-10 days mein tags print hojaate hain & 3-4 days mein aapke store pe deliver',
+                    "DELIVERY_WAY" => 'Sir Via courier aati hai ji delivery.7-10 days mein tags print hojaate hain & 3-4 days mein aapke store pe deliver',
+                    "DELIVERY_TIME" => 'Sir Via courier aati hai ji delivery.7-10 days mein tags print hojaate hain & 3-4 days mein aapke store pe deliver',
                     "PINCODE_AVAILABILITY" => '',
                     "FOLLOW_UP_GIVEN_BY_USER" => '',
-                    "OK" =>'Thanks for the response sir.For more information Kindly contact 9872997978',
+                    "OK" => 'Thanks for the response sir.For more information Kindly contact 9872997978',
                     "MINIMUM_QUANTITY" => '',
                     "TOTAL_PRICE" => '',
                     "Size" => '',
@@ -78,10 +78,12 @@ class JewellerTags extends ReplyCreationService
 
         return '';
     }
+
     function getLinkMessage(): string
     {
         return '';
     }
+
     function getFirstMessage($personName): array
     {
         $firstMessage = "Welcome to Custom Print, an expert in stunning Jewelry Tags! Our tags offer:
@@ -120,6 +122,7 @@ class JewellerTags extends ReplyCreationService
             'media' =>  config('app.video')
         ];
     }
+
     function getFirstMedias(): array
     {
         return [
@@ -127,5 +130,14 @@ class JewellerTags extends ReplyCreationService
             config('app.picTwo'),
             config('app.picThree')
         ];
+    }
+
+    function getFirstFollowUp(): string
+    {
+        return '';
+    }
+    function getContactSaveFollowUp(): string
+    {
+        return 'Namaste, kripya hamara contact save kar lein. Aisa karne se aap jewellery se related products aur offers, jo apke business me apki help kar sakte hain, seedhe WhatsApp stories me dekh sakte hain aur WhatsApp se hi order karke apne address par product pa sakte hain.';
     }
 }

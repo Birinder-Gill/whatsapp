@@ -20,6 +20,13 @@ class WhatsAppMessageController extends Controller
         $this->msService = $msService;
         $this->aiService = $aiService;
     }
+    function orderReceived(Request $request)
+    {
+        $phone =  $order['phone'] ?? $order['customer']['phone'] ?? $order['billing_address']['phone'] ?? $order['shipping_address']['phone'] ?? null;
+        if ($phone) {
+            updateStatus(formatPhoneNumber($phone), 'yes');
+        }
+    }
 
     function sendMessage(Request $request)
     {
@@ -38,7 +45,8 @@ class WhatsAppMessageController extends Controller
         return json_decode($response->getBody());
     }
 
-    function mickeyCalling(Request $request){
+    function mickeyCalling(Request $request)
+    {
         $data = request()->json()->all()['data']['message']['_data'];
         $message = $data['body'];
         $assistant = $this->aiService->createAndRun($message, "asst_sgHG5GtlW0UWg4z2zZqzvC1W");
@@ -56,7 +64,7 @@ class WhatsAppMessageController extends Controller
             $to = $data['to'];
             $hash = $data['id']['_serialized'];
             $fromMe = $data['id']['fromMe'];
-            $messageNumber = detectManualMessage($from, $message,$fromMe);
+            $messageNumber = detectManualMessage($from, $message, $fromMe);
             $logArray = [
                 'from' => $from,
                 'displayName' => $personName,
@@ -69,7 +77,7 @@ class WhatsAppMessageController extends Controller
             ];
 
             if ($messageNumber > -1) {
-                updateStatus($from);
+                createConvo($from);
                 incrementCounter($logArray);
                 if ($messageNumber === 0) {
                     createNewLead($from);
@@ -84,7 +92,7 @@ class WhatsAppMessageController extends Controller
                         $this->msService->sendOpenAiResponse($assistant);
                     } else {
                         $query = $this->aiService->queryDetection($message);
-                        $this->msService->giveQueryResponse($query,$messageNumber == 1);
+                        $this->msService->giveQueryResponse($query, $messageNumber == 1);
                     }
                 }
             }

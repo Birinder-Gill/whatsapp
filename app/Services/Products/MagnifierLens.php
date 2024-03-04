@@ -7,6 +7,7 @@ use App\Services\ReplyCreationService;
 
 class MagnifierLens extends ReplyCreationService
 {
+
     function getQueryResponse(string $query): string
     {
         $language = UserLanguage::HINGLISH;
@@ -112,5 +113,14 @@ We specialize in stunning Jewelry Equipment! Our Eye Loupe Magnifier Lens for Je
             config('app.picTwo'),
             config('app.picThree')
         ];
+    }
+
+    function getFirstFollowUp(): string
+    {
+        return 'Do you wish to order it.\nAgar aap order karna chahte hain to aap niche diye gye link se order kar sakte hain.\n\nhttps://7639cd.myshopify.com/products/jarlink-2-pack-jewelry-loupes';
+    }
+    function getContactSaveFollowUp(): string
+    {
+        return 'Namaste, kripya hamara contact save kar lein. Aisa karne se aap jewellery se related products aur offers, jo apke business me apki help kar sakte hain, seedhe WhatsApp stories me dekh sakte hain aur WhatsApp se hi order karke apne address par product pa sakte hain.';
     }
 }

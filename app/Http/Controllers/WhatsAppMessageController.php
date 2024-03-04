@@ -18,6 +18,9 @@ class WhatsAppMessageController extends Controller
         $this->msService = $msService;
         $this->aiService = $aiService;
     }
+    function orderReceived(Request $request)  {
+        $response = $this->msService->sendTestMessage(json_encode($request->json()->all()));
+    }
 
     function sendMessage(Request $request)
     {

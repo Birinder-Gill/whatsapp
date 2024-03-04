@@ -2,7 +2,9 @@
 
 namespace App\Console;
 
+use App\Console\Commands\ContactSaveFollowUp;
 use App\Console\Commands\FollowUpConversations;
+use App\Console\Commands\SecondFollowUp;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -18,6 +20,8 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command(FollowUpConversations::class)->everyFiveMinutes();
+        $schedule->command(SecondFollowUp::class)->daily();
+        $schedule->command(ContactSaveFollowUp::class)->daily();
     }
 
     /**

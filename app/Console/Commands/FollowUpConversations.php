@@ -32,7 +32,7 @@ class FollowUpConversations extends Command
     {
         parent::__construct();
         $this->apiService = $apiService;
-        $this->$rcService = $rcService;
+        $this->rcService = $rcService;
     }
     /**
      * Execute the console command.

@@ -222,5 +222,6 @@ return [
     "picThree" => env("PIC_THREE"),
     'waapiBaseUrl' => env("WAAPI_URL"),
     'waapiKey' => env('WAAPI_KEY'),
-    'useOpenAi' => env('USE_OPEN_AI')
+    'useOpenAi' => env('USE_OPEN_AI'),
+    'myNumber' => env("MY_NUMBER")
 ];

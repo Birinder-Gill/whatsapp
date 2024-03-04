@@ -19,8 +19,8 @@ if (!function_exists('detectManualMessage')) {
     }
 }
 
-if (!function_exists('updateStatus')) {
-    function updateStatus($from, $status = 'active')
+if (!function_exists('createConvo')) {
+    function createConvo($from, $status = 'active')
     {
         Conversation::updateOrCreate(['from' => $from], [
             'from' => $from,
@@ -28,6 +28,12 @@ if (!function_exists('updateStatus')) {
             'last_message_at' => Carbon::now('Asia/Kolkata'),
             'fromMe' => false
         ]);
+    }
+}
+if (!function_exists('updateStatus')) {
+    function updateStatus($from, $status)
+    {
+        Conversation::where(['from' => $from])->update(['status' => $status]);
     }
 }
 
@@ -38,6 +44,21 @@ if (!function_exists('incrementCounter')) {
         WhatsAppMessage::updateOrCreate([
             'messageId' => $logArray['messageId']
         ], $logArray);
+    }
+}
+if (!function_exists('formatPhoneNumber')) {
+    function formatPhoneNumber($phoneNumber)
+    {
+        // Normalize the phone number by removing non-numeric characters
+        $normalizedNumber = preg_replace('/\D/', '', $phoneNumber);
+
+        // Take the last 10 digits of the normalized number
+        $lastTenDigits = substr($normalizedNumber, -10);
+
+        // Add "91" in front and "@c.us" at the end
+        $formattedNumber = '91' . $lastTenDigits . '@c.us';
+
+        return $formattedNumber;
     }
 }
 
@@ -55,9 +76,6 @@ if (!function_exists('createHotLead')) {
         WhatsAppLead::where('from', $from)->update(['hotLead' => 1]);
     }
 }
-
-
-
 
 if (!function_exists('orderConfirmation')) {
     function orderConfirmation(): string

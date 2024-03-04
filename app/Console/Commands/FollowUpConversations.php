@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Conversation;
+use App\Services\ReplyCreationService;
 use App\Services\WhatsAppApiService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -23,15 +24,15 @@ class FollowUpConversations extends Command
      */
     protected $description = 'Command description';
 
-    protected $followUp1 = 'Do you wish to order it.\nAgar aap order karna chahte hain to aap niche diye gye link se order kar sakte hain.\n\nhttps://7639cd.myshopify.com/products/jarlink-2-pack-jewelry-loupes';
-
     protected WhatsAppApiService $apiService;
+    protected ReplyCreationService $rcService;
 
     // Inject the WhatsAppApiService into the command
-    public function __construct(WhatsAppApiService $apiService)
+    public function __construct(WhatsAppApiService $apiService, ReplyCreationService $rcService)
     {
         parent::__construct();
         $this->apiService = $apiService;
+        $this->$rcService = $rcService;
     }
     /**
      * Execute the console command.
@@ -45,13 +46,12 @@ class FollowUpConversations extends Command
             ->get();
         foreach ($conversations as $conversation) {
             switch ($conversation->status) {
-                //TODO:: MAKE FOLLOWUP LOGIC
                 case 'yes':
-                    break;
                 case 'no':
+                    $this->sendContactSaveFollowUp($conversation);
                     break;
                 default:
-                $this->sendFollowUp($conversation);
+                    $this->sendFollowUp($conversation);
                     break;
             }
 
@@ -60,7 +60,15 @@ class FollowUpConversations extends Command
         }
         return Command::SUCCESS;
     }
-    function sendFollowUp($conversation) {
-        $this->apiService->sendWhatsAppMessage($conversation->from,$this->followUp1 );
+
+    function sendContactSaveFollowUp($conversation)
+    {
+        $this->apiService->sendWhatsAppMessage($conversation->from, $this->rcService->getContactSaveFollowUp());
+        $this->apiService->sendGemCraftVCard($conversation->from,  "Gem", "Craft");
+    }
+
+    function sendFollowUp($conversation)
+    {
+        $this->apiService->sendWhatsAppMessage($conversation->from, $this->rcService->getFirstFollowUp());
     }
 }

@@ -82,7 +82,6 @@ class WhatsAppApiService
             ],
         ]);
 
-        echo $response->getBody();
     }
 
     function sendWhatsappMedia($to, $mediaUrl, $caption = '')

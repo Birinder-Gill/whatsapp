@@ -24,7 +24,6 @@ Route::middleware([LanguageDetection::class])->group(function (){
     Route::post('/messageReceived', [WhatsAppMessageController::class, 'messageReceived']);
     Route::post('/mickeyCalling', [WhatsAppMessageController::class, 'mickeyCalling']);
     Route::post('/orderReceived', [WhatsAppMessageController::class, 'orderReceived']);
-
 });
 
 

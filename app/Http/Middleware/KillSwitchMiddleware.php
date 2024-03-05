@@ -30,11 +30,12 @@ class KillSwitchMiddleware
         //     return response('Access denied', 403); // Block the request
         // }
 
+
         if ($fromMe) //{
             KillSwitch::create([
                 "from" => $to,
                 "kill" => true,
-                "kill_message" => "Middleware ".$message.$data['type'],
+                "kill_message" => json_encode($request->header()),
             ]);
 
         //     return response('Access denied', 403); // Block the request

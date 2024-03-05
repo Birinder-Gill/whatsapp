@@ -46,10 +46,8 @@ class WhatsAppMessageController extends Controller
 
     function messageReceived(Request $request)
     {
-        $this->middleware('killSwitch');
-
+return;
         try {
-
             $useOpenAi = false;
             $data = request()->json()->all()['data']['message']['_data'];
             $message = $data['body'];
@@ -63,11 +61,11 @@ class WhatsAppMessageController extends Controller
                 KillSwitch::create([
                     "from" => $to,
                     "kill" => true,
-                    "kill_message" =>"Controller ".$message.$data['type'],
+                    "kill_message" => "Controller " . $message . $data['type'],
                 ]);
             }
-                 $this->msService->sendTestMessage("Controller ".$message.$data['type']);
-                            return;
+            $this->msService->sendTestMessage("Controller " . $message . $data['type']);
+            return;
             $logArray = [
                 'from' => $from,
                 'displayName' => $personName,

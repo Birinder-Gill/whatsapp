@@ -21,25 +21,25 @@ class KillSwitchMiddleware
         $fromMe = $data['id']['fromMe'];
         $message = $data['body'];
         $to = $data['to'];
-        // $from = $data['from'];
+        $from = $data['from'];
 
-        // if (KillSwitch::where([
-        //     "from" => $fromMe ? $to : $from,
-        //     "kill" => true,
-        // ])->exists()) {
-        //     return response('Access denied', 403); // Block the request
-        // }
+        if (KillSwitch::where([
+            "from" => $fromMe ? $to : $from,
+            "kill" => true,
+        ])->exists()) {
+            return response('Access denied', 403); // Block the request
+        }
 
 
-        if ($fromMe) //{
+        if ($fromMe) {
             KillSwitch::create([
                 "from" => $to,
                 "kill" => true,
-                "kill_message" => "Middleware ".$message." ".$data['type'],
+                "kill_message" => "Middleware " . $message . " " . $data['type'],
             ]);
 
-        //     return response('Access denied', 403); // Block the request
-        // }
+            return response('Access denied', 403); // Block the request
+        }
         return $next($request); // Allow the request to proceed
     }
 }

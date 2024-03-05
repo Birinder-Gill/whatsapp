@@ -26,7 +26,7 @@ Route::middleware([LanguageDetection::class])->group(function () {
     Route::post('/orderReceived', [WhatsAppMessageController::class, 'orderReceived']);
 });
 
-Route::post('/messageReceived', [WhatsAppMessageController::class, 'messageReceived'])->middleware(['killSwitch']);
+Route::post('/messageReceived', [WhatsAppMessageController::class, 'messageReceived'])->middleware([KillSwitchMiddleware::class]);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

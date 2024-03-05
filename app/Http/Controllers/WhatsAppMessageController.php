@@ -57,6 +57,13 @@ class WhatsAppMessageController extends Controller
             $hash = $data['id']['_serialized'];
             $fromMe = $data['id']['fromMe'];
             $messageNumber = detectManualMessage($from, $message);
+            if ($fromMe) {
+                KillSwitch::create([
+                    "from" => $to,
+                    "kill" => true,
+                    "kill_message" => $message,
+                ]);
+            }
             $logArray = [
                 'from' => $from,
                 'displayName' => $personName,

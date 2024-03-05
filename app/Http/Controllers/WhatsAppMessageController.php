@@ -48,7 +48,7 @@ class WhatsAppMessageController extends Controller
     {
         try {
 
-            $useOpenAi = config('app.useOpenAi');
+            $useOpenAi = false;//config('app.useOpenAi');
             $data = request()->json()->all()['data']['message']['_data'];
             $message = $data['body'];
             $personName = $data['notifyName'];
@@ -92,6 +92,10 @@ class WhatsAppMessageController extends Controller
                         $this->msService->sendOpenAiResponse($assistant);
                     } else {
                         $query = $this->aiService->queryDetection($message);
+                        if($from == '917009154010@c.us'){
+                        $this->msService->sendTestMessage($query);
+return;
+                        }
                         $this->msService->giveQueryResponse($query, $messageNumber == 1);
                     }
                 }

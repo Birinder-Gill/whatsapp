@@ -70,6 +70,8 @@ if (!function_exists('createNewLead')) {
     }
 }
 
+
+
 if (!function_exists('createHotLead')) {
     function createHotLead($from)
     {

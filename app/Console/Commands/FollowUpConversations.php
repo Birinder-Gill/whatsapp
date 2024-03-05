@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Models\Conversation;
+use App\Models\WhatsAppLead;
+use App\Models\WhatsAppMessage;
 use App\Services\ReplyCreationService;
 use App\Services\WhatsAppApiService;
 use Carbon\Carbon;
@@ -70,6 +72,41 @@ class FollowUpConversations extends Command
 
     function sendFollowUp($conversation)
     {
+        switch (config('app.product')) {
+            case 'Tags':
+                $this->tagFollowUp($conversation);
+                break;
+            case 'Lens':
+                $this->lensFollowUp($conversation);
+                break;
+
+            default:
+                # code...
+                break;
+        }
+    }
+
+    function lensFollowUp($conversation)
+    {
         $this->apiService->sendWhatsAppMessage($conversation->from, $this->rcService->getFirstFollowUp());
+    }
+
+    function tagFollowUp($conversation)
+    {
+
+        $lead = WhatsAppLead::where('from', $conversation->from)->first();
+        if ($lead) {
+            if ($lead->hotLead == 0) {
+                //This is the followup only for cold leads
+                $this->apiService->sendWhatsAppMessage($conversation->from, $this->rcService->getFirstFollowUp());
+            } else {
+                $messages = WhatsAppMessage::where('from', $conversation->from)->get();
+                $content = 'From: ' . substr(explode("@", $conversation->from)[0], -10) . "\n\nMessages:\n\n";
+                foreach ($messages as $message) {
+                    $content =  Carbon::parse($message->created_at)->format('Y-m-d H:i:s') . "\n" . $content . $message->messageText . "\n------------\n";
+                }
+                $this->apiService->sendWhatsAppMessage(config('app.myNumber'), $content);
+            }
+        }
     }
 }

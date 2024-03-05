@@ -18,6 +18,7 @@ class WhatsAppMessageController extends Controller
     {
         $this->msService = $msService;
         $this->aiService = $aiService;
+        $this->middleware('killSwitch');
     }
     function orderReceived(Request $request)
     {

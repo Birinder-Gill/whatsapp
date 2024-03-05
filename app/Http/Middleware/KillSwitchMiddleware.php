@@ -17,28 +17,28 @@ class KillSwitchMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $data = request()->json()->all()['data']['message']['_data'];
-        $fromMe = $data['id']['fromMe'];
-        $message = $data['body'];
-        $to = $data['to'];
-        $from = $data['from'];
+        // $data = request()->json()->all()['data']['message']['_data'];
+        // $fromMe = $data['id']['fromMe'];
+        // $message = $data['body'];
+        // $to = $data['to'];
+        // $from = $data['from'];
 
-        if (KillSwitch::where([
-            "from" => $fromMe ? $to : $from,
-            "kill" => true,
-        ])->exists()) {
-            return response('Access denied', 403); // Block the request
-        }
+        // if (KillSwitch::where([
+        //     "from" => $fromMe ? $to : $from,
+        //     "kill" => true,
+        // ])->exists()) {
+        //     return response('Access denied', 403); // Block the request
+        // }
 
-        if ($fromMe) {
-            KillSwitch::create([
-                "from" => $to,
-                "kill" => true,
-                "kill_message" => $message,
-            ]);
+        // if ($fromMe) {
+        //     KillSwitch::create([
+        //         "from" => $to,
+        //         "kill" => true,
+        //         "kill_message" => $message,
+        //     ]);
 
-            return response('Access denied', 403); // Block the request
-        }
+        //     return response('Access denied', 403); // Block the request
+        // }
         return $next($request); // Allow the request to proceed
     }
 }

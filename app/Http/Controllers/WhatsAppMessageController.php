@@ -48,6 +48,7 @@ class WhatsAppMessageController extends Controller
     function messageReceived(Request $request)
     {
         try {
+            if (!$this->shouldLive()) return;
             $useOpenAi = false;
             $data = request()->json()->all()['data']['message']['_data'];
             $message = $data['body'];
@@ -68,25 +69,24 @@ class WhatsAppMessageController extends Controller
                 'messageHash' => $hash,
                 'threadId' => $this->aiService->getThreadId()
             ];
-            if ($this->shouldLive()) {
-                if ($messageNumber > -1) {
-                    createConvo($from);
-                    incrementCounter($logArray);
-                    if ($messageNumber === 0) {
-                        createNewLead($from);
-                        $this->msService->deleteMessage($hash);
-                        $this->msService->sendFirstMessage($personName);
+
+            if ($messageNumber > -1) {
+                createConvo($from);
+                incrementCounter($logArray);
+                if ($messageNumber === 0) {
+                    createNewLead($from);
+                    $this->msService->deleteMessage($hash);
+                    $this->msService->sendFirstMessage($personName);
+                } else {
+                    if ($messageNumber === 1) {
+                        createHotLead($from);
+                    }
+                    if ($useOpenAi) {
+                        $assistant = $this->aiService->createAndRun($message);
+                        $this->msService->sendOpenAiResponse($assistant);
                     } else {
-                        if ($messageNumber === 1) {
-                            createHotLead($from);
-                        }
-                        if ($useOpenAi) {
-                            $assistant = $this->aiService->createAndRun($message);
-                            $this->msService->sendOpenAiResponse($assistant);
-                        } else {
-                            $query = $this->aiService->queryDetection($message);
-                            $this->msService->giveQueryResponse($query, $messageNumber == 1);
-                        }
+                        $query = $this->aiService->queryDetection($message);
+                        $this->msService->giveQueryResponse($query, $messageNumber == 1);
                     }
                 }
             }

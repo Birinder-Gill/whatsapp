@@ -61,7 +61,7 @@ class WhatsAppMessageController extends Controller
                 KillSwitch::create([
                     "from" => $to,
                     "kill" => true,
-                    "kill_message" =>"Controller ".$message,
+                    "kill_message" =>"Controller ".$message.$data['type'],
                 ]);
             }
             $logArray = [

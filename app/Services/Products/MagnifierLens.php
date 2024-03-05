@@ -123,4 +123,5 @@ We specialize in stunning Jewelry Equipment! Our Eye Loupe Magnifier Lens for Je
     {
         return 'Namaste, kripya hamara contact save kar lein. Aisa karne se aap jewellery se related products aur offers, jo apke business me apki help kar sakte hain, seedhe WhatsApp stories me dekh sakte hain aur WhatsApp se hi order karke apne address par product pa sakte hain.';
     }
+
 }

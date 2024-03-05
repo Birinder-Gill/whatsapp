@@ -15,21 +15,21 @@ class JewellerTags extends ReplyCreationService
             case UserLanguage::HINGLISH:
                 return match ($query) {
                     "HIGH_IN_GENERAL" => '',
-                    "PRICE" => '',
+                    "PRICE" => 'Sir 18rs ki ekk sheet hai Jismein 40 tags nikaljaate hain sir 45 paise ka tag cost karjaataa hai ji',
                     "DISCOUNT" => '',
                     "ADDRESS" => 'Sir we have 2 branches, one in sector 35, chandigarh & one in pragati maidan, delhi\nसर हमारी 2 ब्रांचेज हैं, एक सेक्टर 35 चंडीगढ़ में और दूसरी प्रगति मैदान दिल्ली में',
                     "DELIVERY_WAY" => 'Sir Via courier aati hai ji delivery.7-10 days mein tags print hojaate hain & 3-4 days mein aapke store pe deliver',
-                    "DELIVERY_TIME" => 'Sir Via courier aati hai ji delivery.7-10 days mein tags print hojaate hain & 3-4 days mein aapke store pe deliver',
+                    "DELIVERY_TIME" => 'Sir 7-10 days mein tags ready hojaate hain ji & 3-4 days mein aapke store pe deliver',
                     "PINCODE_AVAILABILITY" => '',
                     "FOLLOW_UP_GIVEN_BY_USER" => '',
                     "OK" => 'Thanks for the response sir.For more information Kindly contact 9872997978',
-                    "MINIMUM_QUANTITY" => '',
+                    "MINIMUM_QUANTITY" => 'Sir Minimum order 150 sheets ka hojaata hai ji',
                     "TOTAL_PRICE" => '',
                     "Size" => '',
-                    "CASH_ON_DELIVERY" => '',
-                    "PAYMENT_METHOD" => '',
+                    "CASH_ON_DELIVERY" => 'Sir 35% token money hota hai ji & baaki ka jo aapka amount hai wohh aap cash on delivery pay karsakte hain ji',
+                    "PAYMENT_METHOD" => 'Sir Pehle tohh aapka design final hoga ji, Jabb aap design okk kardete hain ji, Tabb 35% token money dena hotaa haiji. 7-10 days mein tags aapke ready hojaate hain sir. Jaise hi ready hojaate hain tohh humari dispatching team aapko aapke tags ki photos, videos & tracking number send kardenge ji. Jabb aap check karlenge k aapke tags bilkul correct print huye hain.Then aapko baaki payment karna hota haiji',
                     "QUANTITY_OBJECTION" => '',
-                    "UNKNOWN" => '',
+                    "UNKNOWN" => 'Thanks for the response sir.For more information Kindly contact 9872997978',
                 };
                 #region Other languages
             case UserLanguage::HINDI:

@@ -20,39 +20,43 @@ class OpenAiAnalysisService
 
         try {
             $data = request()->json()->all()['data']['message']['_data'];
-            $fromMe = $data['id']['fromMe'];
-            if($fromMe)return;
-            $openAiKey = config('app.openAiKey');
-            $this->client = OpenAI::client($openAiKey);
+            $message = $data['body'];
             $from = $data['from'];
-            $query = OpenAiThread::where('from', $from);
-            if ($query->exists()) {
-                $this->threadId = $query->first()->threadId;
-            } else {
-                $response = $this->client->threads()->create([]);
-                $this->threadId = $response->id;
-                OpenAiThread::create([
-                    'from' => $from,
-                    'threadId' => $this->threadId
-                ]);
+
+            $messageNumber = detectManualMessage($from, $message);
+            if ($messageNumber > -1) {
+                $openAiKey = config('app.openAiKey');
+                $this->client = OpenAI::client($openAiKey);
+                $from = $data['from'];
+                $query = OpenAiThread::where('from', $from);
+                if ($query->exists()) {
+                    $this->threadId = $query->first()->threadId;
+                } else {
+                    $response = $this->client->threads()->create([]);
+                    $this->threadId = $response->id;
+                    OpenAiThread::create([
+                        'from' => $from,
+                        'threadId' => $this->threadId
+                    ]);
+                }
             }
         } catch (\Throwable $th) {
         }
     }
 
-    function queryDetection($message) : string {
-        $toSend= $this->createAndRun($message);
-        return explode("-",$toSend)[0];
-
+    function queryDetection($message): string
+    {
+        $toSend = $this->createAndRun($message);
+        return explode("-", $toSend)[0];
     }
     function getThreadId(): string
     {
         return $this->threadId;
     }
 
-    function createAndRun($message,$assId = null)
+    function createAndRun($message, $assId = null)
     {
-        if($assId){
+        if ($assId) {
             $this->assId = $assId;
         }
         $lock = OpenAiLock::where('threadId', $this->threadId);
@@ -83,7 +87,7 @@ class OpenAiAnalysisService
         $run =  $this->client->threads()->runs()->create(
             threadId: $this->threadId,
             parameters: [
-                'assistant_id' => $this->assId??config('app.assistantId'),
+                'assistant_id' => $this->assId ?? config('app.assistantId'),
             ],
         );
         $this->runRetrievePolling($run->id);

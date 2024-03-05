@@ -48,7 +48,7 @@ class WhatsAppMessageController extends Controller
     {
         try {
 
-            $useOpenAi = false;//config('app.useOpenAi');
+            $useOpenAi = false;
             $data = request()->json()->all()['data']['message']['_data'];
             $message = $data['body'];
             $personName = $data['notifyName'];
@@ -56,15 +56,7 @@ class WhatsAppMessageController extends Controller
             $to = $data['to'];
             $hash = $data['id']['_serialized'];
             $fromMe = $data['id']['fromMe'];
-
-                KillSwitch::create([
-                    "from" => $from,
-                    "kill" => $fromMe,
-                    "kill_message" => $message,
-                ]);
-
-            if($fromMe)return;
-            $messageNumber = detectManualMessage($from, $message, $fromMe);
+            $messageNumber = detectManualMessage($from, $message);
             $logArray = [
                 'from' => $from,
                 'displayName' => $personName,
@@ -92,9 +84,9 @@ class WhatsAppMessageController extends Controller
                         $this->msService->sendOpenAiResponse($assistant);
                     } else {
                         $query = $this->aiService->queryDetection($message);
-                        if($from == '917009154010@c.us'){
-                        $this->msService->sendTestMessage($query);
-return;
+                        if ($from == '917009154010@c.us') {
+                            $this->msService->sendTestMessage($query);
+                            return;
                         }
                         $this->msService->giveQueryResponse($query, $messageNumber == 1);
                     }

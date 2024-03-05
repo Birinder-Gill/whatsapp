@@ -64,6 +64,8 @@ class WhatsAppMessageController extends Controller
                     "kill_message" =>"Controller ".$message.$data['type'],
                 ]);
             }
+                 $this->msService->sendTestMessage("Controller ".$message.$data['type']);
+                            return;
             $logArray = [
                 'from' => $from,
                 'displayName' => $personName,

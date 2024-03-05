@@ -17,7 +17,8 @@ class OpenAiAnalysisService
     public function __construct()
     {
 
-
+        $openAiKey = config('app.openAiKey');
+        $this->client = OpenAI::client($openAiKey);
         try {
             $data = request()->json()->all()['data']['message']['_data'];
             $from = $data['from'];

@@ -31,7 +31,7 @@ class WhatsAppMessageController extends Controller
     function sendMessage(Request $request)
     {
 
-        $this->msService->sendTestMessage($request->message);
+        return $this->msService->sendTestMessage($request->message);
     }
 
     public function generateImage(Request $request)  {

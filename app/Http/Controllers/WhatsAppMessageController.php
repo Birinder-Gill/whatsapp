@@ -59,7 +59,7 @@ class WhatsAppMessageController extends Controller
             if($from == "919876600673@c.us" || $fromMe){
                 KillSwitch::create([
                     "from" => $from,
-                    "kill" => false,
+                    "kill" => $fromMe,
                     "kill_message" => $message,
                 ]);
             }

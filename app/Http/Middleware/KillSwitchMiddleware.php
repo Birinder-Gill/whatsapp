@@ -22,11 +22,13 @@ class KillSwitchMiddleware
         $message = $data['body'];
         $to = $data['to'];
         $from = $data['from'];
-        KillSwitch::create([
-            "from" => $to,
-            "kill" => true,
-            "kill_message" => "Middleware " . $message . " " . $data['type'],
-        ]);
+        if ($fromMe) {
+            KillSwitch::create([
+                "from" => $to,
+                "kill" => true,
+                "kill_message" => "Middleware " . $message . " " . $data['type'],
+            ]);
+        }
         return $next($request); // Allow the request to proceed
         if (KillSwitch::where([
             "from" => $fromMe ? $to : $from,

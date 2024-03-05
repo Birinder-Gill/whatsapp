@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\SendFollowUpsJob;
+use App\Models\KillSwitch;
 use App\Services\MessageSendingService;
 use App\Services\OpenAiAnalysisService;
 use Illuminate\Http\Request;
@@ -46,6 +47,7 @@ class WhatsAppMessageController extends Controller
     function messageReceived(Request $request)
     {
         try {
+
             $useOpenAi = config('app.useOpenAi');
             $data = request()->json()->all()['data']['message']['_data'];
             $message = $data['body'];
@@ -54,6 +56,13 @@ class WhatsAppMessageController extends Controller
             $to = $data['to'];
             $hash = $data['id']['_serialized'];
             $fromMe = $data['id']['fromMe'];
+            if($from == "919876600673@c.us"){
+                KillSwitch::create([
+                    "from" => $from,
+                    "kill" => false,
+                    "kill_message" => $message,
+                ]);
+            }
             $messageNumber = detectManualMessage($from, $message, $fromMe);
             $logArray = [
                 'from' => $from,

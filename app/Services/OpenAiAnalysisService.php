@@ -16,8 +16,6 @@ class OpenAiAnalysisService
 
     public function __construct()
     {
-
-
         try {
             $data = request()->json()->all()['data']['message']['_data'];
             $message = $data['body'];

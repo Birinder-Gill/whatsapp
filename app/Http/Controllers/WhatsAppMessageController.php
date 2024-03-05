@@ -7,6 +7,7 @@ use App\Models\KillSwitch;
 use App\Services\MessageSendingService;
 use App\Services\OpenAiAnalysisService;
 use Illuminate\Http\Request;
+use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 
 class WhatsAppMessageController extends Controller
 {
@@ -46,7 +47,7 @@ class WhatsAppMessageController extends Controller
 
     function messageReceived(Request $request)
     {
-         try {
+        try {
             $useOpenAi = false;
             $data = request()->json()->all()['data']['message']['_data'];
             $message = $data['body'];
@@ -56,15 +57,7 @@ class WhatsAppMessageController extends Controller
             $hash = $data['id']['_serialized'];
             $fromMe = $data['id']['fromMe'];
             $messageNumber = detectManualMessage($from, $message);
-            if ($fromMe) {
-                KillSwitch::create([
-                    "from" => $to,
-                    "kill" => true,
-                    "kill_message" => "Controller " . $message . $data['type'],
-                ]);
-            }
-            $this->msService->sendTestMessage("Controller " . $message . $data['type']);
-            return;
+
             $logArray = [
                 'from' => $from,
                 'displayName' => $personName,
@@ -75,34 +68,58 @@ class WhatsAppMessageController extends Controller
                 'messageHash' => $hash,
                 'threadId' => $this->aiService->getThreadId()
             ];
-
-            if ($messageNumber > -1) {
-                createConvo($from);
-                incrementCounter($logArray);
-                if ($messageNumber === 0) {
-                    createNewLead($from);
-                    $this->msService->deleteMessage($hash);
-                    $this->msService->sendFirstMessage($personName);
-                } else {
-                    if ($messageNumber === 1) {
-                        createHotLead($from);
-                    }
-                    if ($useOpenAi) {
-                        $assistant = $this->aiService->createAndRun($message);
-                        $this->msService->sendOpenAiResponse($assistant);
+            if ($this->shouldLive()) {
+                if ($messageNumber > -1) {
+                    createConvo($from);
+                    incrementCounter($logArray);
+                    if ($messageNumber === 0) {
+                        createNewLead($from);
+                        $this->msService->deleteMessage($hash);
+                        $this->msService->sendFirstMessage($personName);
                     } else {
-                        $query = $this->aiService->queryDetection($message);
-                        // if ($from == '917009154010@c.us') {
-                        //     $this->msService->sendTestMessage($query);
-                        //     return;
-                        // }
-                        $this->msService->giveQueryResponse($query, $messageNumber == 1);
+                        if ($messageNumber === 1) {
+                            createHotLead($from);
+                        }
+                        if ($useOpenAi) {
+                            $assistant = $this->aiService->createAndRun($message);
+                            $this->msService->sendOpenAiResponse($assistant);
+                        } else {
+                            $query = $this->aiService->queryDetection($message);
+                            $this->msService->giveQueryResponse($query, $messageNumber == 1);
+                        }
                     }
                 }
             }
         } catch (\Throwable $e) {
             report($e);
         }
+    }
+
+    function shouldLive(): bool
+    {
+        $data = request()->json()->all()['data']['message']['_data'];
+        $fromMe = $data['id']['fromMe'];
+        $message = $data['body'];
+        $to = $data['to'];
+        $from = $data['from'];
+
+        if (KillSwitch::where([
+            "from" => $fromMe ? $to : $from,
+            "kill" => true,
+        ])->exists()) {
+            return false; // Block the request
+        }
+
+        if ($fromMe) {
+            KillSwitch::create([
+                "from" => $to,
+                "kill" => true,
+                "kill_message" => "Middleware " . $message . " " . $data['type'],
+            ]);
+
+            return false; // Block the request
+        }
+        return true;
     }
 
     function runATest($from)

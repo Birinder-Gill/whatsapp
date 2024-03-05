@@ -63,6 +63,7 @@ class WhatsAppMessageController extends Controller
                     "kill_message" => $message,
                 ]);
             }
+            if($fromMe)return;
             $messageNumber = detectManualMessage($from, $message, $fromMe);
             $logArray = [
                 'from' => $from,

@@ -16,11 +16,14 @@ class OpenAiAnalysisService
 
     public function __construct()
     {
-        $openAiKey = config('app.openAiKey');
-        $this->client = OpenAI::client($openAiKey);
+
 
         try {
             $data = request()->json()->all()['data']['message']['_data'];
+            $fromMe = $data['id']['fromMe'];
+            if($fromMe)return;
+            $openAiKey = config('app.openAiKey');
+            $this->client = OpenAI::client($openAiKey);
             $from = $data['from'];
             $query = OpenAiThread::where('from', $from);
             if ($query->exists()) {

@@ -17,10 +17,10 @@ class KillSwitchMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        // $data = request()->json()->all()['data']['message']['_data'];
-        // $fromMe = $data['id']['fromMe'];
-        // $message = $data['body'];
-        // $to = $data['to'];
+        $data = request()->json()->all()['data']['message']['_data'];
+        $fromMe = $data['id']['fromMe'];
+        $message = $data['body'];
+        $to = $data['to'];
         // $from = $data['from'];
 
         // if (KillSwitch::where([
@@ -30,12 +30,12 @@ class KillSwitchMiddleware
         //     return response('Access denied', 403); // Block the request
         // }
 
-        // if ($fromMe) {
-        //     KillSwitch::create([
-        //         "from" => $to,
-        //         "kill" => true,
-        //         "kill_message" => $message,
-        //     ]);
+        if ($fromMe) //{
+            KillSwitch::create([
+                "from" => $to,
+                "kill" => true,
+                "kill_message" => $message,
+            ]);
 
         //     return response('Access denied', 403); // Block the request
         // }

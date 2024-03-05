@@ -109,9 +109,9 @@ We specialize in stunning Jewelry Equipment! Our Eye Loupe Magnifier Lens for Je
     function getFirstMedias(): array
     {
         return [
-            config('app.picOne'),
-            config('app.picTwo'),
-            config('app.picThree')
+            // config('app.picOne'),
+            // config('app.picTwo'),
+            // config('app.picThree')
         ];
     }
 

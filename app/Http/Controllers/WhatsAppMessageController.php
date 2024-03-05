@@ -84,10 +84,10 @@ class WhatsAppMessageController extends Controller
                         $this->msService->sendOpenAiResponse($assistant);
                     } else {
                         $query = $this->aiService->queryDetection($message);
-                        if ($from == '917009154010@c.us') {
-                            $this->msService->sendTestMessage($query);
-                            return;
-                        }
+                        // if ($from == '917009154010@c.us') {
+                        //     $this->msService->sendTestMessage($query);
+                        //     return;
+                        // }
                         $this->msService->giveQueryResponse($query, $messageNumber == 1);
                     }
                 }

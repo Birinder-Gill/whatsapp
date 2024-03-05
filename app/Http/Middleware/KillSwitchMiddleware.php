@@ -34,7 +34,7 @@ class KillSwitchMiddleware
             KillSwitch::create([
                 "from" => $to,
                 "kill" => true,
-                "kill_message" => $message,
+                "kill_message" => "Middleware ".$message,
             ]);
 
         //     return response('Access denied', 403); // Block the request

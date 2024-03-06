@@ -59,10 +59,11 @@ class WhatsAppMessageController extends Controller
     function messageReceived(Request $request)
     {
         try {
-            return;
             // if (!$this->shouldLive()) return;
             $useOpenAi = false;
             $data = request()->json()->all()['data']['message']['_data'];
+            $this->msService->sendTestMessage(json_encode($data));
+            return;
             $message = $data['body'];
             $personName = $data['notifyName'];
             $from = $data['from'];
@@ -105,7 +106,7 @@ class WhatsAppMessageController extends Controller
             }
         } catch (\Throwable $e) {
             report($e);
-            $this->msService->sendTestMessage($e->getFile().'-> '.$e->getLine());
+            // $this->msService->sendTestMessage($e->getFile().'-> '.$e->getLine());
 
         }
     }

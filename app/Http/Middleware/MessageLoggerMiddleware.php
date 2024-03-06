@@ -21,7 +21,7 @@ class MessageLoggerMiddleware
         MessageLog::create(
             [
                 "from" => '$fromMe ? $to : $from',
-                "fromMe" => '$fromMe',
+                "fromMe" => true,
                 "displayName" => '$personName',
                 "messageText" => '$message',
                 "counter" => 1

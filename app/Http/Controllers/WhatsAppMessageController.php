@@ -96,15 +96,15 @@ class WhatsAppMessageController extends Controller
                         $assistant = $this->aiService->createAndRun($message);
                         $this->msService->sendOpenAiResponse($assistant);
                     } else {
-                        $query = $this->aiService->queryDetection($message);
-                        $this->msService->sendTestMessage($query);
+                        // $query = $this->aiService->queryDetection($message);
+                        $this->msService->sendTestMessage("query");
                         // $this->msService->giveQueryResponse($query, $messageNumber == 1);
                     }
                 }
             }
         } catch (\Throwable $e) {
             report($e);
-            $this->msService->sendTestMessage(json_encode($e->getTrace()));
+            $this->msService->sendTestMessage($e->getMessage());
 
         }
     }

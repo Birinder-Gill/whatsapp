@@ -19,13 +19,12 @@ class MessageLoggerMiddleware
     public function handle(Request $request, Closure $next)
     {
 
-        try {
-            $data = request()->json()->all()['data']['message']['_data'];
+        $data = request()->json()->all()['data']['message']['_data'];
         $fromMe = $data['id']['fromMe'];
         $message = $data['body'];
         $to = $data['to'];
         $from = $data['from'];
-        $personName = $data['notifyName'];
+
         $messageNumber = detectManualMessage($from, $message, $fromMe);
         if (KillSwitch::where([
             "from" => $fromMe ? $to : $from,
@@ -42,24 +41,13 @@ class MessageLoggerMiddleware
                 [
                     "from" => $fromMe ? $to : $from,
                     "fromMe" => $fromMe,
-                    "displayName" => $personName,
+                    "displayName" => json_encode(request()->json()->all()),
                     "messageText" => $message,
                     "counter" => $messageNumber
                 ]
             );
         }
 
-        } catch (\Throwable $th) {
-            MessageLog::create(
-                [
-                    "from" =>'917009154010',
-                    "fromMe" => true,
-                    "displayName" => "Birinder Gill",
-                    "messageText" => $th->getMessage(),
-                    "counter" => 1
-                ]
-            );
-        }
 
         return $next($request); // Allow the request to proceed
     }

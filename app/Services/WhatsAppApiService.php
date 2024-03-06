@@ -73,7 +73,7 @@ class WhatsAppApiService
             "chatId"=>$to
         ];
 
-        $response = $client->request('POST', 'https://waapi.app/api/v1/instances/5391/client/action/send-vcard', [
+        $response = $client->request('POST',  config('app.waapiBaseUrl') . 'send-vcard', [
             'body' => json_encode($body),
             'headers' => [
                 'accept' => 'application/json',

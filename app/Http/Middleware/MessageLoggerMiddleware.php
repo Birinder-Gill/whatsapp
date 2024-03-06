@@ -41,7 +41,7 @@ class MessageLoggerMiddleware
                 [
                     "from" => $fromMe ? $to : $from,
                     "fromMe" => $fromMe,
-                    "displayName" => json_encode(request()->json()->all()),
+                    "displayName" =>' $personName',
                     "messageText" => $message,
                     "counter" => $messageNumber
                 ]

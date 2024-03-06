@@ -18,6 +18,15 @@ class MessageLoggerMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        MessageLog::create(
+            [
+                "from" => '$fromMe ? $to : $from',
+                "fromMe" => '$fromMe',
+                "displayName" => '$personName',
+                "messageText" => '$message',
+                "counter" => '$messageNumber'
+            ]
+        );
         $data = request()->json()->all()['data']['message']['_data'];
         $fromMe = $data['id']['fromMe'];
         $message = $data['body'];
@@ -31,6 +40,7 @@ class MessageLoggerMiddleware
         ])->exists()) {
             return response("Access denied", 403); // Block the request
         }
+
         if ($messageNumber > -1 && (!(request()->json()->all()['data']["media"]))) {
             if ($messageNumber === 0 && $fromMe) {
                 $message = "Info message......";

@@ -24,7 +24,7 @@ class MessageLoggerMiddleware
                 "fromMe" => '$fromMe',
                 "displayName" => '$personName',
                 "messageText" => '$message',
-                "counter" => '$messageNumber'
+                "counter" => 1
             ]
         );
         $data = request()->json()->all()['data']['message']['_data'];

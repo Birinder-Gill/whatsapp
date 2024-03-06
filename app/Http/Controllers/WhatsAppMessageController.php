@@ -68,7 +68,7 @@ class WhatsAppMessageController extends Controller
             $to = $data['to'];
             $hash = $data['id']['_serialized'];
             $fromMe = $data['id']['fromMe'];
-            $messageNumber = detectManualMessage($from, $message);
+            $messageNumber = detectManualMessage($from, $message, $fromMe);
 
             $logArray = [
                 'from' => $from,

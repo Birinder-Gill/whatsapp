@@ -1,0 +1,39 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use App\Models\MessageLog;
+use Closure;
+use Illuminate\Http\Request;
+
+class MessageLoggerMiddleware
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     */
+    public function handle(Request $request, Closure $next)
+    {
+        $data = request()->json()->all()['data']['message']['_data'];
+        $fromMe = $data['id']['fromMe'];
+        $message = $data['body'];
+        $to = $data['to'];
+        $from = $data['from'];
+        $personName = $data['notifyName'];
+
+        MessageLog::create(
+            [
+                "from" => $fromMe?$to:$from,
+                "fromMe" => $fromMe,
+                "displayName" =>$personName,
+                "messageText" => $message,
+            ]
+        );
+
+
+        return $next($request); // Allow the request to proceed
+    }
+}

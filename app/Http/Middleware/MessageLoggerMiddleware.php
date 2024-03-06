@@ -31,7 +31,7 @@ class MessageLoggerMiddleware
         ])->exists()) {
             return response("Access denied", 403); // Block the request
         }
-        if ($messageNumber > 1) {
+        if ($messageNumber > -1 && (!request()->json()->all()['data']["media"])) {
             if ($messageNumber === 0 && $fromMe)
             $message = "Info message......";
                 MessageLog::create(

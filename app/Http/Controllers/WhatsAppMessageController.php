@@ -59,6 +59,7 @@ class WhatsAppMessageController extends Controller
     function messageReceived(Request $request)
     {
         try {
+            return;
             // if (!$this->shouldLive()) return;
             $useOpenAi = false;
             $data = request()->json()->all()['data']['message']['_data'];

@@ -51,11 +51,11 @@ class MessageLoggerMiddleware
         } catch (\Throwable $th) {
             MessageLog::create(
                 [
-                    "from" => $fromMe ? $to : $from,
-                    "fromMe" => $fromMe,
+                    "from" => 'asd',
+                    "fromMe" => true,
                     "displayName" => ' $personName',
                     "messageText" => $th->getMessage(),
-                    "counter" => $messageNumber
+                    "counter" => 1
                 ]
             );
         }

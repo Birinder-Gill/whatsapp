@@ -37,18 +37,18 @@ class MessageLoggerMiddleware
             if ($messageNumber === 0 && $fromMe) {
                 $message = "Info message......";
             }
-            MessageLog::create(
-                [
-                    "from" => $fromMe ? $to : $from,
-                    "fromMe" => $fromMe,
-                    "displayName" => $personName,
-                    "messageText" => $message,
-                    "counter" => $messageNumber
-                ]
-            );
+
         }
 
-
+        MessageLog::create(
+            [
+                "from" => $fromMe ? $to : $from,
+                "fromMe" => $fromMe,
+                "displayName" => $personName,
+                "messageText" => $message,
+                "counter" => $messageNumber
+            ]
+        );
         return $next($request); // Allow the request to proceed
     }
 }

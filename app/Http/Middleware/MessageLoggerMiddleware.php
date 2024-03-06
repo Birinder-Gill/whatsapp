@@ -26,12 +26,12 @@ class MessageLoggerMiddleware
         $from = $data['from'];
         $personName = $data['notifyName'];
         $messageNumber = detectManualMessage($from, $message, $fromMe);
-        if (KillSwitch::where([
-            "from" => $fromMe ? $to : $from,
-            "kill" => true,
-        ])->exists()) {
-            return response("Access denied", 403); // Block the request
-        }
+        // if (KillSwitch::where([
+        //     "from" => $fromMe ? $to : $from,
+        //     "kill" => true,
+        // ])->exists()) {
+        //     return response("Access denied", 403); // Block the request
+        // }
 
         if ($messageNumber > -1) {
             if ($messageNumber === 0 && $fromMe) {

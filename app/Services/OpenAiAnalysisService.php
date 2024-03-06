@@ -16,7 +16,7 @@ class OpenAiAnalysisService
 
     public function __construct()
     {
-        try {
+        // try {
             $data = request()->json()->all()['data']['message']['_data'];
             $message = $data['body'];
             $from = $data['from'];
@@ -38,8 +38,10 @@ class OpenAiAnalysisService
                     ]);
                 }
             }
-        } catch (\Throwable $th) {
-        }
+        // } catch (\Throwable $e) {
+
+
+        // }
     }
 
     function queryDetection($message): string

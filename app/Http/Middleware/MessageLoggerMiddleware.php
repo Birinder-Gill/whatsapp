@@ -19,30 +19,42 @@ class MessageLoggerMiddleware
     public function handle(Request $request, Closure $next)
     {
 
-        $data = request()->json()->all()['data']['message']['_data'];
-        $fromMe = $data['id']['fromMe'];
-        $message = $data['body'];
-        $to = $data['to'];
-        $from = $data['from'];
+        try {
+            $data = request()->json()->all()['data']['message']['_data'];
+            $fromMe = $data['id']['fromMe'];
+            $message = $data['body'];
+            $to = $data['to'];
+            $from = $data['from'];
 
-        $messageNumber = detectManualMessage($from, $message, $fromMe);
-        if (KillSwitch::where([
-            "from" => $fromMe ? $to : $from,
-            "kill" => true,
-        ])->exists()) {
-            return response("Access denied", 403); // Block the request
-        }
-
-        if ($messageNumber > -1 && (!(request()->json()->all()['data']["media"]))) {
-            if ($messageNumber === 0 && $fromMe) {
-                $message = "Info message......";
+            $messageNumber = detectManualMessage($from, $message, $fromMe);
+            if (KillSwitch::where([
+                "from" => $fromMe ? $to : $from,
+                "kill" => true,
+            ])->exists()) {
+                return response("Access denied", 403); // Block the request
             }
+
+            if ($messageNumber > -1 && (!(request()->json()->all()['data']["media"]))) {
+                if ($messageNumber === 0 && $fromMe) {
+                    $message = "Info message......";
+                }
+                MessageLog::create(
+                    [
+                        "from" => $fromMe ? $to : $from,
+                        "fromMe" => $fromMe,
+                        "displayName" => ' $personName',
+                        "messageText" => $message,
+                        "counter" => $messageNumber
+                    ]
+                );
+            }
+        } catch (\Throwable $th) {
             MessageLog::create(
                 [
                     "from" => $fromMe ? $to : $from,
                     "fromMe" => $fromMe,
-                    "displayName" =>' $personName',
-                    "messageText" => $message,
+                    "displayName" => ' $personName',
+                    "messageText" => $th->getMessage(),
                     "counter" => $messageNumber
                 ]
             );

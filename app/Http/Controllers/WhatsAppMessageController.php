@@ -20,6 +20,7 @@ class WhatsAppMessageController extends Controller
         $this->msService = $msService;
         $this->aiService = $aiService;
     }
+
     function orderReceived(Request $request)
     {
         $phone =  $order['phone'] ?? $order['customer']['phone'] ?? $order['billing_address']['phone'] ?? $order['shipping_address']['phone'] ?? null;
@@ -127,7 +128,6 @@ class WhatsAppMessageController extends Controller
         $message = "https://api.whatsapp.com/send?phone=" . substr($from, 2, 10) . "&text=Hello, How may I help you";
         $this->msService->sendTestMessage($message);
     }
-
 
     function sendMediaApi(Request $request)
     {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\KillSwitch;
 use App\Models\MessageLog;
 use Closure;
 use Illuminate\Http\Request;
@@ -24,17 +25,24 @@ class MessageLoggerMiddleware
         $from = $data['from'];
         $personName = $data['notifyName'];
         $messageNumber = detectManualMessage($from, $message, $fromMe);
-
+        if (KillSwitch::where([
+            "from" => $fromMe ? $to : $from,
+            "kill" => true,
+        ])->exists()) {
+            return response("Access denied", 403); // Block the request
+        }
         if ($messageNumber > 1) {
-            MessageLog::create(
-                [
-                    "from" => $fromMe ? $to : $from,
-                    "fromMe" => $fromMe,
-                    "displayName" => $personName,
-                    "messageText" => $message,
-                    "counter" => $messageNumber
-                ]
-            );
+            if ($messageNumber === 0 && $fromMe)
+            $message = "Info message......";
+                MessageLog::create(
+                    [
+                        "from" => $fromMe ? $to : $from,
+                        "fromMe" => $fromMe,
+                        "displayName" => $personName,
+                        "messageText" => $message,
+                        "counter" => $messageNumber
+                    ]
+                );
         }
 
 

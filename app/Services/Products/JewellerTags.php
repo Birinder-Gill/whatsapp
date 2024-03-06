@@ -29,7 +29,7 @@ class JewellerTags extends ReplyCreationService
                     "CASH_ON_DELIVERY" => 'Sir 35% token money hota hai ji & baaki ka jo aapka amount hai wohh aap cash on delivery pay karsakte hain ji',
                     "PAYMENT_METHOD" => 'Sir Pehle tohh aapka design final hoga ji, Jabb aap design okk kardete hain ji, Tabb 35% token money dena hotaa haiji. 7-10 days mein tags aapke ready hojaate hain sir. Jaise hi ready hojaate hain tohh humari dispatching team aapko aapke tags ki photos, videos & tracking number send kardenge ji. Jabb aap check karlenge k aapke tags bilkul correct print huye hain.Then aapko baaki payment karna hota haiji',
                     "QUANTITY_OBJECTION" => '',
-                    "UNKNOWN" => 'Thanks for the response sir.For more information Kindly contact 9872997978',
+                    "UNKNOWN" => '',
                 };
                 #region Other languages
             case UserLanguage::HINDI:

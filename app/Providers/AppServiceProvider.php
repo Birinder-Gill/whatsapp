@@ -8,6 +8,7 @@ use App\Services\WhatsAppApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 use App\Services\OpenAiAnalysisService;
+use App\Services\Products\JewellerTags;
 use App\Services\Products\MagnifierLens;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,11 +25,11 @@ class AppServiceProvider extends ServiceProvider
             return new OpenAiAnalysisService();
         });
         $this->app->bind(ReplyCreationService::class, function ($app) {
-            $productType = 'Lens';
+            $productType = config('app.product');
 
             switch ($productType) {
                 case 'Lens': return new MagnifierLens($this->app->make(Request::class));
-
+                case 'Tags': return new JewellerTags($this->app->make(Request::class));
                 default: throw new \Exception("Invalid product type");
             }
 

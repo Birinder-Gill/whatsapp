@@ -6,6 +6,7 @@ use App\Jobs\SendFollowUpsJob;
 use App\Models\KillSwitch;
 use App\Services\MessageSendingService;
 use App\Services\OpenAiAnalysisService;
+use Barryvdh\Snappy\Facades\SnappyImage;
 use Illuminate\Http\Request;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 
@@ -45,6 +46,15 @@ class WhatsAppMessageController extends Controller
         $assistant = $this->aiService->createAndRun($message, "asst_sgHG5GtlW0UWg4z2zZqzvC1W");
         $this->msService->sendOpenAiResponse($assistant);
     }
+
+    public function generateImage(Request $request)  {
+        $pdf = SnappyImage::loadView('greeting')->setOption('width', '920')->setOption('height', '139');
+        $mediaUrl = generateAndStoreImage($pdf);
+        $response = $this->msService->sendTestMedia($mediaUrl);
+        deleteStoredImage($mediaUrl);
+        return json_decode($response->getBody());
+    }
+
 
     function messageReceived(Request $request)
     {

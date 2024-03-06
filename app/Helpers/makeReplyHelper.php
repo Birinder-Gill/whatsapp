@@ -1,6 +1,27 @@
 <?php
 
 
+use Illuminate\Support\Facades\Storage; // For interacting with storage
+
+if (!function_exists('generateAndStoreImage')) {
+    function generateAndStoreImage($pdf, $filename = 'generated_image.jpg', $disk = 'public')
+    {
+        // Use loadHtml for flexibility
+        $imagePath = 'images/' . $filename; // Adjust the storage path as needed
+
+        Storage::disk($disk)->put($imagePath, $pdf->output());
+
+        return Storage::disk($disk)->url($imagePath);
+    }
+}
+
+function deleteStoredImage($imageUrlOrPath, $disk = 'public')
+{
+    $imagePath = Str::after($imageUrlOrPath, Storage::disk($disk)->url('/'));
+    return Storage::disk($disk)->delete($imagePath);
+}
+
+
 if (!function_exists('detectMessageMeaning')) {
     function detectMessageMeaning($message, array $keywords, array $phrases = [],$threshold = 1): bool
     {

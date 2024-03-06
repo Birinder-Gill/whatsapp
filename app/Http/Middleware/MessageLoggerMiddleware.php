@@ -23,15 +23,19 @@ class MessageLoggerMiddleware
         $to = $data['to'];
         $from = $data['from'];
         $personName = $data['notifyName'];
+        $messageNumber = detectManualMessage($from, $message, $fromMe);
 
-        MessageLog::create(
-            [
-                "from" => $fromMe?$to:$from,
-                "fromMe" => $fromMe,
-                "displayName" =>$personName,
-                "messageText" => $message,
-            ]
-        );
+        if ($messageNumber > 1) {
+            MessageLog::create(
+                [
+                    "from" => $fromMe ? $to : $from,
+                    "fromMe" => $fromMe,
+                    "displayName" => $personName,
+                    "messageText" => $message,
+                    "counter" => $messageNumber
+                ]
+            );
+        }
 
 
         return $next($request); // Allow the request to proceed

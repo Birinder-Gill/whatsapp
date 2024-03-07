@@ -25,15 +25,21 @@ class MessageSendingService
 
     function sendFirstMessage($personName)
     {
-        Log::info("sendFirstMessage",[$personName]);
+
         $to = $this->rcService->getFrom();
         $toSend = $this->rcService->getFirstMessage($personName);
+        Log::info("sendFirstMessage", [
+            "person name" => $personName,
+            "To" => $to,
+            "To send" => $toSend,
 
+        ]);
         $response = $this->waService->sendWhatsAppMedia($to, config('app.url') . $toSend['media'], $toSend['message']);
         if (json_decode($response->getBody())->data->status === 'success') {
             WhatsAppLead::where('from', $to)->update(['infoSent' => 1]);
         }
         $medias = $this->rcService->getFirstMedias();
+
         foreach ($medias as $media) {
             $this->waService->sendWhatsAppMedia($to, config('app.url') . $media);
         }

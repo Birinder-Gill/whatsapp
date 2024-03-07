@@ -78,7 +78,7 @@ class FollowUpConversations extends Command
                 $this->tagFollowUp($conversation);
                 break;
             case 'Lens':
-                $this->lensFollowUp($conversation);
+                $this->leadSystem($conversation);
                 break;
 
             default:

@@ -117,7 +117,7 @@ We specialize in stunning Jewelry Equipment! Our Eye Loupe Magnifier Lens for Je
 
     function getFirstFollowUp(): string
     {
-        return 'Do you wish to order it.\nAgar aap order karna chahte hain to aap niche diye gye link se order kar sakte hain.\n\nhttps://7639cd.myshopify.com/products/jarlink-2-pack-jewelry-loupes';
+        return 'Agar aap order karna chahte hain to aap niche diye gye link se order kar sakte hain sirf Rs.899/- mein.\n(Full cash on delivery)\n\nhttps://7639cd.myshopify.com/products/jarlink-2-pack-jewelry-loupes';
     }
     function getContactSaveFollowUp(): string
     {

@@ -52,7 +52,7 @@ class OpenAiAnalysisService
     }
     function getThreadId(): string
     {
-        return $this->threadId;
+        return "";// $this->threadId;
     }
 
     function createAndRun($message, $assId = null)

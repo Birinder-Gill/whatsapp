@@ -105,7 +105,7 @@ class FollowUpConversations extends Command
                     $messages = MessageLog::where('from', $conversation->from)->get();
                     if ($messages->isNotEmpty()) {
                         $content = '*From:* ' . substr(explode("@", $conversation->from)[0], -10) . "\n";
-                        $content = $content . '*Name: ' . "Birinder Gill*\n" . "--------";
+                        $content = $content . '*Name: ' . ($messages->first()->displayName)."*\n" . "--------";
                         $content = $content . "\n\n";
                         foreach ($messages as $message) {
                             $content =  $content . "\n*" . (($message->fromMe)?"Reply:":"Message:") . "*\n```" . $message->messageText.(($message->fromMe)?"```\n\n":"```");

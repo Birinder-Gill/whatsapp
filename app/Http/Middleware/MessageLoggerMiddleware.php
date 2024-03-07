@@ -27,6 +27,9 @@ class MessageLoggerMiddleware
             $to = $data['to'];
             $from = $data['from'];
 
+            if (str_starts_with($message, '*From:* ') && $fromMe) {
+                return response("Done bro", 200); // Block the request
+            }
 
             $messageNumber = detectManualMessage($fromMe ? $to : $from, $message, $fromMe);
 

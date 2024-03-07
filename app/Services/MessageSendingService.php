@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\WhatsAppLead;
+use Illuminate\Support\Facades\Log;
 
 class MessageSendingService
 {
@@ -24,6 +25,7 @@ class MessageSendingService
 
     function sendFirstMessage($personName)
     {
+        Log::info("sendFirstMessage",$personName);
         $to = $this->rcService->getFrom();
         $toSend = $this->rcService->getFirstMessage($personName);
 

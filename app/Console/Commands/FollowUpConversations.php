@@ -101,7 +101,7 @@ class FollowUpConversations extends Command
                 $messages = MessageLog::where('from', $conversation->from)->get();
                 if($messages->isNotEmpty()){
                     $content = '*From: ' . substr(explode("@", $conversation->from)[0], -10)."*\n";
-                    $content=$content .'*Name: ' . substr(explode("@", $conversation->from)[0], -10)."*--------";
+                    $content=$content .'*Name: ' . "Birinder Gill"."*--------";
                     $content = $content. "\nMessages:\n\n";
                     foreach ($messages as $message) {
                         $content =   $content . $message->messageText . "\n```".Carbon::parse($message->created_at)->format('Y-m-d H:i:s')."```\n\n";

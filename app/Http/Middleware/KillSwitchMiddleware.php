@@ -23,7 +23,7 @@ class KillSwitchMiddleware
         $message = $data['body'];
         $to = $data['to'];
         $from = $data['from'];
-        Log::info("MessageLoggerMiddleware::".$message);
+        Log::info("KillSwitchMiddleware::".$message);
 
         if (KillSwitch::where([
             "from" => $fromMe ? $to : $from,

@@ -28,6 +28,8 @@ class MessageLoggerMiddleware
 
 
             $messageNumber = detectManualMessage($from, $message, $fromMe);
+            Log::debug('MessageLoggerMiddleware',request()->json()->all());
+            Log::debug('MessageLoggerMiddleware ',["Message number"=>$messageNumber]);
 
             if ($messageNumber > -1 && (!(request()->json()->all()['data']["media"]))) {
                 if (isset($data['notifyName'])) {
@@ -47,7 +49,7 @@ class MessageLoggerMiddleware
                     [
                         "from" => $fromMe ? $to : $from,
                         "fromMe" => $fromMe,
-                        "displayName" => $personName??"-/-",
+                        "displayName" => $personName ?? "-/-",
                         "messageText" => $message,
                         "counter" => $messageNumber
                     ]
@@ -55,6 +57,9 @@ class MessageLoggerMiddleware
             }
         } catch (\Throwable $th) {
             report($th);
+        }
+        if ($fromMe) {
+            return response("Access denied", 403); // Block the request
         }
         return $next($request);
     }

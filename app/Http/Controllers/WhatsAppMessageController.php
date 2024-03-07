@@ -79,7 +79,7 @@ class WhatsAppMessageController extends Controller
                 'messageHash' => $hash,
                 'threadId' => $this->aiService->getThreadId()
             ];
-            Log::info("messageNumber: ",$messageNumber);
+            Log::info("messageNumber: ",["message"=>$messageNumber]);
             if ($messageNumber > -1) {
                 createConvo($from);
                 incrementCounter($logArray);

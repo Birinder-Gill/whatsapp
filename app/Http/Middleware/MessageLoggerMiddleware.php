@@ -30,7 +30,7 @@ class MessageLoggerMiddleware
 
             $messageNumber = detectManualMessage($fromMe ? $to : $from, $message, $fromMe);
 
-            Log::info("MessageLoggerMiddleware::",request()->json()->all());
+            Log::info("MessageLoggerMiddleware::", request()->json()->all());
 
             if ($messageNumber > -1 && (!(request()->json()->all()['data']["media"]))) {
                 if (isset($data['notifyName'])) {

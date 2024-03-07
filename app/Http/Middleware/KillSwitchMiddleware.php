@@ -39,6 +39,9 @@ class KillSwitchMiddleware
             return response("Access denied", 403); // Block the request
 
         }
+        if($fromMe){
+            return response("Access denied", 403); // Block the request
+        }
         return $next($request);
     }
 }

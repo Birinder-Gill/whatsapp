@@ -8,6 +8,7 @@ use App\Services\MessageSendingService;
 use App\Services\OpenAiAnalysisService;
 use Barryvdh\Snappy\Facades\SnappyImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 
 class WhatsAppMessageController extends Controller
@@ -59,6 +60,7 @@ class WhatsAppMessageController extends Controller
     function messageReceived(Request $request)
     {
         try {
+            Log::info("YAHA BHI BC 2 baar");
             $useOpenAi = false;
             $data = request()->json()->all()['data']['message']['_data'];
             $fromMe = $data['id']['fromMe'];

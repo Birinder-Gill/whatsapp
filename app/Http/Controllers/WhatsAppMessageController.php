@@ -60,11 +60,12 @@ class WhatsAppMessageController extends Controller
     function messageReceived(Request $request)
     {
         try {
-            Log::info("YAHA BHI BC 2 baar");
+
             $useOpenAi = false;
             $data = request()->json()->all()['data']['message']['_data'];
             $fromMe = $data['id']['fromMe'];
             $message = $data['body'];
+            Log::info("Controller ".$message);
             $personName = $data['notifyName'];
             $from = $data['from'];
             $to = $data['to'];

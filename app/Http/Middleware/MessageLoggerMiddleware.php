@@ -51,7 +51,7 @@ class MessageLoggerMiddleware
                     ]
                 );
             } else if ((request()->json()->all()['data']["media"])) {
-                if ($messageNumber === 1 && $fromMe) {
+                if ($messageNumber === 1 && $fromMe && isset($data["caption"])) {
                     $message = "Info message......";
                     MessageLog::create(
                         [

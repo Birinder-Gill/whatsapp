@@ -32,7 +32,6 @@ class MessageSendingService
             "person name" => $personName,
             "To" => $to,
             "To send" => $toSend,
-
         ]);
         $response = $this->waService->sendWhatsAppMedia($to, config('app.url') . $toSend['media'], $toSend['message']);
         if (json_decode($response->getBody())->data->status === 'success') {

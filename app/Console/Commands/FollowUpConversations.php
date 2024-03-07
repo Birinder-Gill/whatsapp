@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Conversation;
+use App\Models\MessageLog;
 use App\Models\WhatsAppLead;
 use App\Models\WhatsAppMessage;
 use App\Services\ReplyCreationService;
@@ -89,6 +90,26 @@ class FollowUpConversations extends Command
     function lensFollowUp($conversation)
     {
         $this->apiService->sendWhatsAppMessage($conversation->from, $this->rcService->getFirstFollowUp());
+    }
+
+
+    function leadSystem($conversation)
+    {
+        $lead = WhatsAppLead::where('from', $conversation->from)->first();
+        if ($lead) {
+            if ($lead->hotLead == 1) {
+                $messages = MessageLog::where('from', $conversation->from)->get();
+                if($messages->isNotEmpty()){
+                    $content = '*From: ' . substr(explode("@", $conversation->from)[0], -10)."*\n";
+                    $content=$content .'*Name: ' . substr(explode("@", $conversation->from)[0], -10)."*--------";
+                    $content = $content. "\nMessages:\n\n";
+                    foreach ($messages as $message) {
+                        $content =   $content . $message->messageText . "\n```".Carbon::parse($message->created_at)->format('Y-m-d H:i:s')."```\n\n";
+                    }
+                    $this->apiService->sendWhatsAppMessage(config('app.myNumber'), $content);
+                }
+            }
+        }
     }
 
     function tagFollowUp($conversation)

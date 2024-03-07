@@ -27,7 +27,7 @@ Route::middleware([LanguageDetection::class])->group(function () {
     Route::post('/orderReceived', [WhatsAppMessageController::class, 'orderReceived']);
     Route::get('/generateImage', [WhatsAppMessageController::class, 'generateImage']);
 });
-Route::post('/messageReceived', [WhatsAppMessageController::class, 'messageReceived'])->middleware([MessageLoggerMiddleware::class]);
+Route::post('/messageReceived', [WhatsAppMessageController::class, 'messageReceived']);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

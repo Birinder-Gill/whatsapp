@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Models\KillSwitch;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class KillSwitchMiddleware
 {
@@ -18,6 +19,7 @@ class KillSwitchMiddleware
     public function handle(Request $request, Closure $next)
     {
         $data = request()->json()->all()['data']['message']['_data'];
+        Log::info("KIll Switch Middleware", $data);
         $fromMe = $data['id']['fromMe'];
         $message = $data['body'];
         $to = $data['to'];

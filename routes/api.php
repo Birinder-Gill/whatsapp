@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\WhatsAppMessageController;
+use App\Http\Middleware\KillSwitchMiddleware;
 use App\Http\Middleware\LanguageDetection;
 use App\Http\Middleware\MessageLoggerMiddleware;
 use Illuminate\Http\Request;
@@ -22,7 +23,7 @@ Route::middleware([LanguageDetection::class])->group(function () {
     Route::get('/sendMedia', [WhatsAppMessageController::class, 'sendMediaApi']);
     Route::get('/test', [WhatsAppMessageController::class, 'isAskingForPrice']);
     Route::get('/sendMessage', [WhatsAppMessageController::class, 'sendMessage']);
-    Route::middleware([MessageLoggerMiddleware::class])->post('/messageReceived', [WhatsAppMessageController::class, 'messageReceived']);
+    Route::middleware([MessageLoggerMiddleware::class/*, KillSwitchMiddleware::class*/])->post('/messageReceived', [WhatsAppMessageController::class, 'messageReceived']);
     Route::post('/mickeyCalling', [WhatsAppMessageController::class, 'mickeyCalling']);
     Route::post('/orderReceived', [WhatsAppMessageController::class, 'orderReceived']);
     Route::get('/generateImage', [WhatsAppMessageController::class, 'generateImage']);

@@ -59,11 +59,10 @@ class WhatsAppMessageController extends Controller
     function messageReceived(Request $request)
     {
         try {
-
-            // if (!$this->shouldLive()) return;
             $useOpenAi = false;
             $data = request()->json()->all()['data']['message']['_data'];
             $fromMe = $data['id']['fromMe'];
+            if($fromMe)return;
             $message = $data['body'];
             $personName = $data['notifyName'];
             $from = $data['from'];
@@ -110,34 +109,6 @@ class WhatsAppMessageController extends Controller
 
         }
     }
-
-    function shouldLive(): bool
-    {
-        $data = request()->json()->all()['data']['message']['_data'];
-        $fromMe = $data['id']['fromMe'];
-        $message = $data['body'];
-        $to = $data['to'];
-        $from = $data['from'];
-
-        if (KillSwitch::where([
-            "from" => $fromMe ? $to : $from,
-            "kill" => true,
-        ])->exists()) {
-            return false; // Block the request
-        }
-
-        if ($fromMe) {
-            KillSwitch::create([
-                "from" => $to,
-                "kill" => true,
-                "kill_message" => "Middleware " . $message . " " . $data['type'],
-            ]);
-
-            return false; // Block the request
-        }
-        return true;
-    }
-
     function runATest($from)
     {
         $message = "https://api.whatsapp.com/send?phone=" . substr($from, 2, 10) . "&text=Hello, How may I help you";

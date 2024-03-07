@@ -6,6 +6,7 @@ use App\Models\KillSwitch;
 use App\Models\MessageLog;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class MessageLoggerMiddleware
 {
@@ -19,7 +20,7 @@ class MessageLoggerMiddleware
     public function handle(Request $request, Closure $next)
     {
 
-
+        Log::debug("MessageLoggerMiddleware request:",$request->json()->all());
         return $next($request); // Allow the request to proceed
     }
 }

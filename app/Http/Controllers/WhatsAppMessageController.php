@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\SendFollowUpsJob;
-use App\Models\KillSwitch;
 use App\Services\MessageSendingService;
 use App\Services\OpenAiAnalysisService;
 use Barryvdh\Snappy\Facades\SnappyImage;
@@ -33,8 +31,7 @@ class WhatsAppMessageController extends Controller
 
     function sendMessage(Request $request)
     {
-        // SendFollowUpsJob::dispatch($this->msService);
-        // // dd($this->msService->getReq()->all());
+
         $body = "prod sirra \n\n\nbc ";
         $response = $this->msService->sendTestMessage($body);
         return json_decode($response->getBody());
@@ -65,7 +62,6 @@ class WhatsAppMessageController extends Controller
             $data = request()->json()->all()['data']['message']['_data'];
             $fromMe = $data['id']['fromMe'];
             $message = $data['body'];
-            // Log::info("Controller ".$message);
             $personName = $data['notifyName'];
             $from = $data['from'];
             $to = $data['to'];

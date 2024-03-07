@@ -60,8 +60,8 @@ class FollowUpConversations extends Command
                     break;
             }
 
-            // $conversation->followUpCount = 1;
-            // $conversation->save();
+            $conversation->followUpCount = 1;
+            $conversation->save();
         }
         return Command::SUCCESS;
     }

@@ -25,7 +25,7 @@ class MessageSendingService
 
     function sendFirstMessage($personName)
     {
-        Log::info("sendFirstMessage",$personName);
+        Log::info("sendFirstMessage",[$personName]);
         $to = $this->rcService->getFrom();
         $toSend = $this->rcService->getFirstMessage($personName);
 

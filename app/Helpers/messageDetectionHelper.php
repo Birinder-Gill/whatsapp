@@ -19,6 +19,13 @@ if (!function_exists('detectManualMessage')) {
     }
 }
 
+if (!function_exists('getLatestMessage')) {
+    function getLatestMessage($senderId)
+    {
+        return WhatsAppMessage::where('from', $senderId)->orderBy('id', 'desc')->first();
+    }
+}
+
 if (!function_exists('createConvo')) {
     function createConvo($from, $status = 'active')
     {

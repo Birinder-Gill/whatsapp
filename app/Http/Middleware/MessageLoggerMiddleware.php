@@ -19,8 +19,43 @@ class MessageLoggerMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        try {
+            $data = request()->json()->all()['data']['message']['_data'];
+            $fromMe = $data['id']['fromMe'];
+            $message = $data['body'];
+            $to = $data['to'];
+            $from = $data['from'];
 
-        Log::debug("MessageLoggerMiddleware request:",$request->json()->all());
-        return $next($request); // Allow the request to proceed
+
+            $messageNumber = detectManualMessage($from, $message, $fromMe);
+
+            if ($messageNumber > -1 && (!(request()->json()->all()['data']["media"]))) {
+                if (isset($data['notifyName'])) {
+                    $personName = $data['notifyName'];
+                } else {
+                    $lastRow = getLatestMessage($fromMe ? $to : $from);
+                    if ($lastRow) {
+                        $personName = $lastRow->displayName;
+                    }
+                }
+                if ($messageNumber === 0) {
+                    if ($fromMe) {
+                        $message = "Info message......";
+                    }
+                }
+                MessageLog::create(
+                    [
+                        "from" => $fromMe ? $to : $from,
+                        "fromMe" => $fromMe,
+                        "displayName" => $personName??"-/-",
+                        "messageText" => $message,
+                        "counter" => $messageNumber
+                    ]
+                );
+            }
+        } catch (\Throwable $th) {
+            report($th);
+        }
+        return next($request);
     }
 }

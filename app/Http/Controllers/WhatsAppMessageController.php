@@ -62,7 +62,6 @@ class WhatsAppMessageController extends Controller
             $useOpenAi = false;
             $data = request()->json()->all()['data']['message']['_data'];
             $fromMe = $data['id']['fromMe'];
-            if($fromMe)return;
             $message = $data['body'];
             $personName = $data['notifyName'];
             $from = $data['from'];

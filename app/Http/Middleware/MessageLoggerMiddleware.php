@@ -30,8 +30,8 @@ class MessageLoggerMiddleware
 
             $messageNumber = detectManualMessage($from, $message, $fromMe);
 
-            Log::info("Message Log Middleware", $data);
-            Log::info("$messageNumber ----------------------------------------------------------------------------------------------------");
+            Log::info("MessageLoggerMiddleware::$messageNumber :: ".$message);
+
             if ($messageNumber > -1 && (!(request()->json()->all()['data']["media"]))) {
                 if (isset($data['notifyName'])) {
                     $personName = $data['notifyName'];

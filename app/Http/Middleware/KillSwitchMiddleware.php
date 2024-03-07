@@ -19,11 +19,11 @@ class KillSwitchMiddleware
     public function handle(Request $request, Closure $next)
     {
         $data = request()->json()->all()['data']['message']['_data'];
-        Log::info("KIll Switch Middleware", $data);
         $fromMe = $data['id']['fromMe'];
         $message = $data['body'];
         $to = $data['to'];
         $from = $data['from'];
+        Log::info("MessageLoggerMiddleware::".$message);
 
         if (KillSwitch::where([
             "from" => $fromMe ? $to : $from,

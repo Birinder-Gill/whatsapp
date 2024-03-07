@@ -38,10 +38,7 @@ class KillSwitchMiddleware
                 "kill" => true,
                 "kill_message" => $message,
             ]);
-
             return response("Bas ho gya", 200); // Block the request
-
-
         }
         return $next($request);
     }

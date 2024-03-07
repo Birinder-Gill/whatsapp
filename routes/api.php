@@ -23,7 +23,7 @@ Route::middleware([LanguageDetection::class])->group(function () {
     Route::get('/sendMedia', [WhatsAppMessageController::class, 'sendMediaApi']);
     Route::get('/test', [WhatsAppMessageController::class, 'isAskingForPrice']);
     Route::get('/sendMessage', [WhatsAppMessageController::class, 'sendMessage']);
-    Route::middleware([MessageLoggerMiddleware::class/*, KillSwitchMiddleware::class*/])->post('/messageReceived', [WhatsAppMessageController::class, 'messageReceived']);
+    Route::post('/messageReceived', [WhatsAppMessageController::class, 'messageReceived'])->middleware([MessageLoggerMiddleware::class/*, KillSwitchMiddleware::class*/]);
     Route::post('/mickeyCalling', [WhatsAppMessageController::class, 'mickeyCalling']);
     Route::post('/orderReceived', [WhatsAppMessageController::class, 'orderReceived']);
     Route::get('/generateImage', [WhatsAppMessageController::class, 'generateImage']);

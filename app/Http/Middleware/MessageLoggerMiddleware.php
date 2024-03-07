@@ -56,6 +56,6 @@ class MessageLoggerMiddleware
         } catch (\Throwable $th) {
             report($th);
         }
-        return next($request);
+        return $next($request);
     }
 }

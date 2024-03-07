@@ -95,25 +95,25 @@ class FollowUpConversations extends Command
 
     function leadSystem($conversation)
     {
-      try {
-        $lead = WhatsAppLead::where('from', $conversation->from)->first();
-        if ($lead) {
-            if ($lead->hotLead == 1) {
-                $messages = MessageLog::where('from', $conversation->from)->get();
-                if($messages->isNotEmpty()){
-                    $content = '*From: ' . substr(explode("@", $conversation->from)[0], -10)."*\n";
-                    $content=$content .'*Name: ' . "Birinder Gill"."*--------";
-                    $content = $content. "\nMessages:\n\n";
-                    foreach ($messages as $message) {
-                        $content =   $content . $message->messageText . "\n```".Carbon::parse($message->created_at)->format('Y-m-d H:i:s')."```\n\n";
+        try {
+            $lead = WhatsAppLead::where('from', $conversation->from)->first();
+            if ($lead) {
+                if ($lead->hotLead == 1) {
+                    $messages = MessageLog::where('from', $conversation->from)->get();
+                    if ($messages->isNotEmpty()) {
+                        $content = '*From: ' . substr(explode("@", $conversation->from)[0], -10) . "*\n";
+                        $content = $content . '*Name: ' . "Birinder Gill" . "*--------";
+                        $content = $content . "\nMessages:\n\n";
+                        foreach ($messages as $message) {
+                            $content =   $content . $message->messageText . "\n```" . Carbon::parse($message->created_at)->format('Y-m-d H:i:s') . "```\n\n";
+                        }
+                        $this->apiService->sendWhatsAppMessage(config('app.myNumber'), $content);
                     }
-                    $this->apiService->sendWhatsAppMessage(config('app.myNumber'), $content);
                 }
             }
+        } catch (\Throwable $th) {
+            report($th);
         }
-      } catch (\Throwable $th) {
-        report($th);
-      }
     }
 
     function tagFollowUp($conversation)

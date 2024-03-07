@@ -16,12 +16,12 @@ class OpenAiAnalysisService
 
     public function __construct()
     {
-        // try {
+        try {
             $data = request()->json()->all()['data']['message']['_data'];
             $message = $data['body'];
             $from = $data['from'];
             $fromMe = $data['id']['fromMe'];
-            $messageNumber = detectManualMessage($from, $message,$fromMe);
+            $messageNumber = detectManualMessage($from, $message, $fromMe);
             if ($messageNumber > -1) {
                 $openAiKey = config('app.openAiKey');
                 $this->client = OpenAI::client($openAiKey);
@@ -38,10 +38,9 @@ class OpenAiAnalysisService
                     ]);
                 }
             }
-        // } catch (\Throwable $e) {
-
-
-        // }
+        } catch (\Throwable $e) {
+            report($e);
+        }
     }
 
     function queryDetection($message): string

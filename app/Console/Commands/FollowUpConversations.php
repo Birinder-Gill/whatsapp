@@ -77,10 +77,10 @@ class FollowUpConversations extends Command
     {
         switch (config('app.product')) {
             case 'Tags':
-                $this->tagFollowUp($conversation);
+                $this->leadSystem($conversation);
                 break;
             case 'Lens':
-                $this->leadSystem($conversation);
+                $this->lensFollowUp($conversation);
                 break;
 
             default:

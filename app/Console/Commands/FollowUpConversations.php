@@ -108,7 +108,7 @@ class FollowUpConversations extends Command
                         $content = $content . '*Name: ' . "Birinder Gill*\n" . "--------";
                         $content = $content . "\nMessages:\n\n";
                         foreach ($messages as $message) {
-                            $content =   $content . $message->messageText . "\n```" . Carbon::parse($message->created_at)->format('Y-m-d H:i:s') . "```\n";
+                            $content =  $content . "\n```" . $message->fromMe?"Reply:":"Message:" . "```\n" . $message->messageText."\n";
                         }
                         $this->apiService->sendWhatsAppMessage(config('app.myNumber'), $content);
                     }

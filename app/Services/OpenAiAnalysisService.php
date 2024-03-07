@@ -16,7 +16,6 @@ class OpenAiAnalysisService
 
     public function __construct()
     {
-        return;
         // try {
             $data = request()->json()->all()['data']['message']['_data'];
             $message = $data['body'];
@@ -52,7 +51,7 @@ class OpenAiAnalysisService
     }
     function getThreadId(): string
     {
-        return "";// $this->threadId;
+        return $this->threadId;
     }
 
     function createAndRun($message, $assId = null)

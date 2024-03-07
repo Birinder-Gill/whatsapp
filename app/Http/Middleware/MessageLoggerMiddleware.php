@@ -30,7 +30,7 @@ class MessageLoggerMiddleware
 
             $messageNumber = detectManualMessage($fromMe ? $to : $from, $message, $fromMe);
 
-            Log::info("MessageLoggerMiddleware::$messageNumber :: " . $message);
+            Log::info("MessageLoggerMiddleware::",request()->json()->all());
 
             if ($messageNumber > -1 && (!(request()->json()->all()['data']["media"]))) {
                 if (isset($data['notifyName'])) {
@@ -52,9 +52,7 @@ class MessageLoggerMiddleware
                 );
             } else if ((request()->json()->all()['data']["media"])) {
                 if ($messageNumber === 1 && $fromMe) {
-
                     $message = "Info message......";
-
                     MessageLog::create(
                         [
                             "from" => $fromMe ? $to : $from,

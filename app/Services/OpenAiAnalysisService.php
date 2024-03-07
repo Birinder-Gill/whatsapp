@@ -6,6 +6,7 @@ namespace App\Services;
 use App\Models\OpenAiLock;
 use App\Models\OpenAiMessageTrack;
 use App\Models\OpenAiThread;
+use Illuminate\Support\Facades\Log;
 use OpenAI;
 
 class OpenAiAnalysisService
@@ -18,6 +19,7 @@ class OpenAiAnalysisService
     {
         try {
             $data = request()->json()->all()['data']['message']['_data'];
+            Log::info(OpenAiAnalysisService::class,request()->json()->all());
             $message = $data['body'];
             $from = $data['from'];
             $fromMe = $data['id']['fromMe'];

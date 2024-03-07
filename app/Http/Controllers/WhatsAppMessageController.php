@@ -31,7 +31,6 @@ class WhatsAppMessageController extends Controller
 
     function sendMessage(Request $request)
     {
-
         $body = "prod sirra \n\n\nbc ";
         $response = $this->msService->sendTestMessage($body);
         return json_decode($response->getBody());
@@ -46,7 +45,7 @@ class WhatsAppMessageController extends Controller
     }
 
     public function generateImage(Request $request)  {
-        return view('greeting');
+        // return view('greeting');
         $pdf = SnappyImage::loadView('greeting')->setOption('width', '920')->setOption('height', '139')->inline();
         $mediaUrl = generateAndStoreImage($pdf);
         $response = $this->msService->sendTestMedia($mediaUrl);

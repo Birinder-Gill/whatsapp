@@ -95,6 +95,7 @@ class FollowUpConversations extends Command
 
     function leadSystem($conversation)
     {
+      try {
         $lead = WhatsAppLead::where('from', $conversation->from)->first();
         if ($lead) {
             if ($lead->hotLead == 1) {
@@ -110,6 +111,9 @@ class FollowUpConversations extends Command
                 }
             }
         }
+      } catch (\Throwable $th) {
+        report($th);
+      }
     }
 
     function tagFollowUp($conversation)

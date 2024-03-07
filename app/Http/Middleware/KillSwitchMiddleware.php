@@ -31,7 +31,8 @@ class KillSwitchMiddleware
         ])->exists()) {
             return response("Access denied", 403); // Block the request
         }
-        if (isset($data['data']['message']['author']) && $fromMe) {
+
+        if (isset($data['author']) && $fromMe) {
             KillSwitch::create([
                 "from" => $to,
                 "kill" => true,

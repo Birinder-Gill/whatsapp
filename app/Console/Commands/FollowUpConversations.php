@@ -106,7 +106,7 @@ class FollowUpConversations extends Command
                     if ($messages->isNotEmpty()) {
                         $content = '*From:* ' . substr(explode("@", $conversation->from)[0], -10) . "\n";
                         $content = $content . '*Name: ' . "Birinder Gill*\n" . "--------";
-                        $content = $content . "\nMessages:\n\n";
+                        $content = $content . "\n\n";
                         foreach ($messages as $message) {
                             $content =  $content . "\n*" . (($message->fromMe)?"Reply:":"Message:") . "*\n```" . $message->messageText.(($message->fromMe)?"```\n\n":"```");
                         }

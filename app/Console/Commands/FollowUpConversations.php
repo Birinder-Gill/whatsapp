@@ -108,7 +108,7 @@ class FollowUpConversations extends Command
                         $content = $content . '*Name: ' . "Birinder Gill*\n" . "--------";
                         $content = $content . "\nMessages:\n\n";
                         foreach ($messages as $message) {
-                            $content =  $content . "\n*" . (($message->fromMe)?"Reply:":"Message:") . "*\n```" . $message->messageText.(($message->fromMe)?"```\n---------------":"```");
+                            $content =  $content . "\n*" . (($message->fromMe)?"Reply:":"Message:") . "*\n```" . $message->messageText.(($message->fromMe)?"```\n---------------\n":"```");
                         }
                         $this->apiService->sendWhatsAppMessage("917009154010@c.us", $content);
                     }

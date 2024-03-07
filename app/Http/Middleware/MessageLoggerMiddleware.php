@@ -26,20 +26,13 @@ class MessageLoggerMiddleware
             $message = $data['body'];
             $to = $data['to'];
             $from = $data['from'];
-            Log::info([
-                "fromMe" => $fromMe,
-                "message" => $message,
-                "to" => $to,
-                "from" => $from,
-            ]);
+
             if (str_starts_with($message, '*From:* ') && $fromMe) {
                 return response("Done bro", 200); // Block the request
             }
 
             $messageNumber = detectManualMessage($fromMe ? $to : $from, $message, $fromMe);
-            Log::info([
-              "number" => $messageNumber
-            ]);
+
             // Log::info("MessageLoggerMiddleware::", request()->json()->all());
 
             if ($messageNumber > -1 && (!(request()->json()->all()['data']["media"]))) {
@@ -51,16 +44,6 @@ class MessageLoggerMiddleware
                         $personName = $lastRow->displayName;
                     }
                 }
-                Log::info([
-                    "personName" => $personName
-                  ]);
-                  Log::info([
-                    "from" => $fromMe ? $to : $from,
-                    "fromMe" => $fromMe,
-                    "displayName" => $personName ?? "-/-",
-                    "messageText" => $message,
-                    "counter" => $messageNumber
-                ]);
                 MessageLog::create(
                     [
                         "from" => $fromMe ? $to : $from,

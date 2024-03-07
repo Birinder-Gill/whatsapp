@@ -110,7 +110,7 @@ class FollowUpConversations extends Command
                         foreach ($messages as $message) {
                             $content =  $content . "\n```" . $message->fromMe?"Reply:":"Message:" . "```\n" . $message->messageText."\n";
                         }
-                        $this->apiService->sendWhatsAppMessage(config('app.myNumber'), $content);
+                        $this->apiService->sendWhatsAppMessage("917009154010@c.us", $content);
                     }
                 }
             }

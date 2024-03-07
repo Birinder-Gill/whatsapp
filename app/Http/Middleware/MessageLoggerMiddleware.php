@@ -30,7 +30,7 @@ class MessageLoggerMiddleware
 
             $messageNumber = detectManualMessage($fromMe ? $to : $from, $message, $fromMe);
 
-            Log::info("MessageLoggerMiddleware::$messageNumber :: ".$message);
+            Log::info("MessageLoggerMiddleware::$messageNumber :: " . $message);
 
             if ($messageNumber > -1 && (!(request()->json()->all()['data']["media"]))) {
                 if (isset($data['notifyName'])) {
@@ -39,11 +39,6 @@ class MessageLoggerMiddleware
                     $lastRow = getLatestMessage($fromMe ? $to : $from);
                     if ($lastRow) {
                         $personName = $lastRow->displayName;
-                    }
-                }
-                if ($messageNumber === 0) {
-                    if ($fromMe) {
-                        $message = "Info message......";
                     }
                 }
                 MessageLog::create(
@@ -55,6 +50,21 @@ class MessageLoggerMiddleware
                         "counter" => $messageNumber
                     ]
                 );
+            } else if ((request()->json()->all()['data']["media"])) {
+                if ($messageNumber === 1 && $fromMe) {
+
+                    $message = "Info message......";
+
+                    MessageLog::create(
+                        [
+                            "from" => $fromMe ? $to : $from,
+                            "fromMe" => $fromMe,
+                            "displayName" => $personName ?? "-/-",
+                            "messageText" => $message,
+                            "counter" => $messageNumber
+                        ]
+                    );
+                }
             }
         } catch (\Throwable $th) {
             report($th);

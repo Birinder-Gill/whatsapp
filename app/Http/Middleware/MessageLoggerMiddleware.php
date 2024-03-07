@@ -21,6 +21,8 @@ class MessageLoggerMiddleware
     {
         try {
             $data = request()->json()->all()['data']['message']['_data'];
+        Log::info("Message Log Middleware", $data);
+        Log::info("----------------------------------------------------------------------------------------------------");
             $fromMe = $data['id']['fromMe'];
             $message = $data['body'];
             $to = $data['to'];

@@ -97,7 +97,7 @@ class FollowUpConversations extends Command
 
     function leadSystem($conversation)
     {
-        Log::info("CHAL AYA TA SAHI");
+        // Log::info("CHAL AYA TA SAHI");
         try {
             $lead = WhatsAppLead::where('from', $conversation->from)->first();
             if ($lead) {
@@ -110,12 +110,12 @@ class FollowUpConversations extends Command
                         foreach ($messages as $message) {
                             $content =   $content . $message->messageText . "\n```" . Carbon::parse($message->created_at)->format('Y-m-d H:i:s') . "```\n";
                         }
-                        $this->apiService->sendWhatsAppMessage('917009154010@c.us', $content);
+                        $this->apiService->sendWhatsAppMessage(config('app.myNumber'), $content);
                     }
                 }
             }
         } catch (\Throwable $th) {
-            Log::info("FOLLOWUP");
+            // Log::info("FOLLOWUP");
             report($th);
         }
     }

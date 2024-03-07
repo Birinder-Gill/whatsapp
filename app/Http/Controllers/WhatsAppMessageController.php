@@ -65,7 +65,7 @@ class WhatsAppMessageController extends Controller
             $data = request()->json()->all()['data']['message']['_data'];
             $fromMe = $data['id']['fromMe'];
             $message = $data['body'];
-            Log::info("Controller ".$message);
+            // Log::info("Controller ".$message);
             $personName = $data['notifyName'];
             $from = $data['from'];
             $to = $data['to'];

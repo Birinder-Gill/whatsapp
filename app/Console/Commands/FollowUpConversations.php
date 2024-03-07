@@ -10,6 +10,8 @@ use App\Services\ReplyCreationService;
 use App\Services\WhatsAppApiService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
+use PgSql\Lob;
 
 class FollowUpConversations extends Command
 {
@@ -107,11 +109,12 @@ class FollowUpConversations extends Command
                         foreach ($messages as $message) {
                             $content =   $content . $message->messageText . "\n```" . Carbon::parse($message->created_at)->format('Y-m-d H:i:s') . "```\n\n";
                         }
-                        $this->apiService->sendWhatsAppMessage('917009154010', $content);
+                        $this->apiService->sendWhatsAppMessage('917009154010@c.us', $content);
                     }
                 }
             }
         } catch (\Throwable $th) {
+            Log::info("FOLLOWUP");
             report($th);
         }
     }

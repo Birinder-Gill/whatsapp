@@ -28,7 +28,7 @@ class MessageLoggerMiddleware
             $from = $data['from'];
 
 
-            $messageNumber = detectManualMessage($from, $message, $fromMe);
+            $messageNumber = detectManualMessage($fromMe ? $to : $from, $message, $fromMe);
 
             Log::info("MessageLoggerMiddleware::$messageNumber :: ".$message);
 

@@ -97,6 +97,7 @@ class FollowUpConversations extends Command
 
     function leadSystem($conversation)
     {
+        Log::info("CHAL AYA TA SAHI");
         try {
             $lead = WhatsAppLead::where('from', $conversation->from)->first();
             if ($lead) {

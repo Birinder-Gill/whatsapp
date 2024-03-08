@@ -53,6 +53,19 @@ class MessageLoggerMiddleware
                         "counter" => $messageNumber
                     ]
                 );
+                Log::info(MessageLoggerMiddleware::class,[
+                    "Media" => (request()->json()->all()['data']["media"]),
+                    "Message number"=>$messageNumber,
+                    "From me" => $fromMe,
+                    "Has caption" => isset($data["caption"]),
+                    "MessageLog" =>  [
+                        "from" => $fromMe ? $to : $from,
+                        "fromMe" => $fromMe,
+                        "displayName" => $personName ?? "-/-",
+                        "messageText" => $message,
+                        "counter" => $messageNumber
+                    ]
+                ]);
             } else if ((request()->json()->all()['data']["media"])) {
                 if ($messageNumber === 1 && $fromMe && isset($data["caption"])) {
                     $message = "Info message......";

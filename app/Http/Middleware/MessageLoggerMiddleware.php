@@ -26,6 +26,7 @@ class MessageLoggerMiddleware
             $message = $data['body'];
             $to = $data['to'];
             $from = $data['from'];
+            Log::info("MessageLoggerMiddleware::", request()->json()->all());
 
             if (str_starts_with($message, '*From:* ') && $fromMe) {
                 return response("Done bro", 200); // Block the request
@@ -33,7 +34,6 @@ class MessageLoggerMiddleware
 
             $messageNumber = detectManualMessage($fromMe ? $to : $from, $message, $fromMe);
 
-            // Log::info("MessageLoggerMiddleware::", request()->json()->all());
 
             if ($messageNumber > -1 && (!(request()->json()->all()['data']["media"]))) {
                 if (isset($data['notifyName'])) {

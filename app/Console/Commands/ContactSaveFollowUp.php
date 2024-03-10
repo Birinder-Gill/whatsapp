@@ -55,7 +55,7 @@ class ContactSaveFollowUp extends Command
     function sendContactSaveFollowUp($conversation)
     {
         $this->apiService->sendWhatsAppMessage($conversation->from, $this->rcService->getContactSaveFollowUp());
-        $this->apiService->sendGemCraftVCard($conversation->from,  "Gem", "Craft");
+        $this->apiService->sendGemCraftVCard($conversation->from);
         $conversation->delete();
     }
 }

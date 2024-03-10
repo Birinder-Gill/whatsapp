@@ -55,22 +55,23 @@ class WhatsAppApiService
         return $response;
     }
 
-    function sendGemCraftVCard($to, $firstName, $lastName)
+    function sendGemCraftVCard($to)
     {
         $apiToken = config('app.waapiKey');
         $client = new \GuzzleHttp\Client([
             'verify' => false,
         ]);
-        $number = explode("@",config('app.myNumber'))[0];
+        $name = explode(" ", config('app.myName'));
+        $number = explode("@", config('app.myNumber'))[0];
         $body = [
-            "vCard"=>[
-                "waid"=>$number,
-                "iternationalnumber"=>"+$number",
-                "lastname"=>$lastName,
-                "firstname"=>$firstName,
-                "organization"=>"$firstName $lastName"
+            "vCard" => [
+                "waid" => $number,
+                "iternationalnumber" => "+$number",
+                "lastname" => $name[1],
+                "firstname" => $name[0],
+                "organization" => config('app.myName')
             ],
-            "chatId"=>$to
+            "chatId" => $to
         ];
 
         $response = $client->request('POST',  config('app.waapiBaseUrl') . 'send-vcard', [
@@ -81,7 +82,6 @@ class WhatsAppApiService
                 'content-type' => 'application/json',
             ],
         ]);
-
     }
 
     function sendWhatsappMedia($to, $mediaUrl, $caption = '')

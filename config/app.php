@@ -224,5 +224,6 @@ return [
     'waapiKey' => env('WAAPI_KEY'),
     'useOpenAi' => env('USE_OPEN_AI'),
     'myNumber' => env("MY_NUMBER"),
-    "product" => env("PRODUCT")
+    "product" => env("PRODUCT"),
+    "myName" => env("MY_NAME"),
 ];

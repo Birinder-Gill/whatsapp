@@ -20,6 +20,7 @@ class KillSwitchMiddleware
     {
         $data = request()->json()->all()['data']['message']['_data'];
         $fromMe = $data['id']['fromMe'];
+        Log::info($data);
         $message = $data['body'];
         $to = $data['to'];
         $from = $data['from'];

@@ -20,8 +20,6 @@ class MessageLoggerMiddleware
     public function handle(Request $request, Closure $next)
     {
         try {
-            Log::error("TEST_WAASTE::", request()->json()->all());
-            return;
 
             $data = request()->json()->all()['data']['message']['_data'];
 
@@ -76,7 +74,7 @@ class MessageLoggerMiddleware
         if ($fromMe) {
             return response("Done bro", 200); // Block the request
         }
-        if(array_key_exists("killSwitch",request()->json()->all())){
+        if(array_key_exists("killSwitch",request()->json()->all()['json']) && request()->json()->all()['json']["killSwitch"] ){
 
             return response("Done bro", 200); // Block the request
         }

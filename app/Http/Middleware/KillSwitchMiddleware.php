@@ -18,7 +18,6 @@ class KillSwitchMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        return $this->notHappening($request,$next);
         $data = request()->json()->all()['data']['message']['_data'];
         $fromMe = $data['id']['fromMe'];
         Log::info($data);
@@ -46,7 +45,7 @@ class KillSwitchMiddleware
     }
 
     function notHappening(Request $request, Closure $next) {
-        if (true) {
+        if (config('app.product') === "Tags") {
             $requestData = $request->json()->all();
             $requestData['killSwitch'] = true;
             $request->merge(['json' => $requestData]);

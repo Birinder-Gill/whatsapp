@@ -74,7 +74,7 @@ class MessageLoggerMiddleware
         if ($fromMe) {
             return response("Done bro", 200); // Block the request
         }
-        if(array_key_exists("killSwitch",request()->json()->all()['json']) && request()->json()->all()['json']["killSwitch"] ){
+        if(array_key_exists("killSwitch",request()->json()->all()) && request()->json()->all()['json']["killSwitch"] ){
 
             return response("Done bro", 200); // Block the request
         }

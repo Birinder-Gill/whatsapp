@@ -101,7 +101,7 @@ class FollowUpConversations extends Command
         try {
             $lead = WhatsAppLead::where('from', $conversation->from)->first();
             if ($lead) {
-                if ($lead->hotLead == 1) {
+                if ($lead->hotLead == 1 || config('app.product')== "Tags") {
                     $messages = MessageLog::where('from', $conversation->from)->get();
                     if ($messages->isNotEmpty()) {
                         $content = '*From:* ' . substr(explode("@", $conversation->from)[0], -10) . "\n";

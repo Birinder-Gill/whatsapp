@@ -44,6 +44,14 @@ class WhatsAppMessageController extends Controller
         $this->msService->sendOpenAiResponse($assistant);
     }
 
+    function testReceived(Request $request) {
+        $data = request()->json()->all()['data']['message']['_data'];
+        $message = $data['body'];
+        $assistant = $this->aiService->createAndRun($message, "asst_mHv2bINmV0mvMa3rDBTA2q2t");
+        $this->msService->sendOpenAiResponse($assistant);
+
+    }
+
     public function generateImage(Request $request)  {
         // return view('greeting');
         $pdf = SnappyImage::loadView('greeting')->setOption('width', '920')->setOption('height', '139')->inline();

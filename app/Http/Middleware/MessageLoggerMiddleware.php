@@ -34,7 +34,8 @@ class MessageLoggerMiddleware
 
             $messageNumber = detectManualMessage($fromMe ? $to : $from, $message, $fromMe);
 
-            if (($messageNumber > -1 || config('app.product') === "Tags") && (!(request()->json()->all()['data']["media"]))) {
+            if (($messageNumber > -1 || config('app.product') === "Tags")
+             && (!(request()->json()->all()['data']["media"]))) {
                 if (isset($data['notifyName'])) {
                     $personName = $data['notifyName'];
                 } else {

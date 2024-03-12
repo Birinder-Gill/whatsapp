@@ -81,7 +81,7 @@ class JewellerTags extends ReplyCreationService
 
     function getLinkMessage(): string
     {
-        return '';
+        return "Agar interested hain sir Jewellery tags mein ji tohh yehh information share kardijiye ji taaki hum aapka free demo create kar sakein ji\n1.Apne Jewellery store ka name\n2.Aapki Choice ka Design Number\n3.Kis carot mein Jewellery sale karte hain ji?";
     }
 
     function getFirstMessage($personName): array

@@ -18,6 +18,9 @@ class KillSwitchMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        if(config('app.product') === "Tags"){
+        return $next($request);
+        }
         $data = request()->json()->all()['data']['message']['_data'];
         $fromMe = $data['id']['fromMe'];
         Log::info($data);

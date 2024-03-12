@@ -20,6 +20,7 @@ class MessageLoggerMiddleware
     public function handle(Request $request, Closure $next)
     {
         try {
+            dd(request()->json()->all());
             $data = request()->json()->all()['data']['message']['_data'];
 
             $fromMe = $data['id']['fromMe'];
@@ -71,6 +72,10 @@ class MessageLoggerMiddleware
             report($th);
         }
         if ($fromMe) {
+            return response("Done bro", 200); // Block the request
+        }
+        if(array_key_exists("killSwitch",request()->json()->all())){
+
             return response("Done bro", 200); // Block the request
         }
         return $next($request);

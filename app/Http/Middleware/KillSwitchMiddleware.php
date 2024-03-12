@@ -18,9 +18,7 @@ class KillSwitchMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if(config('app.product') === "Tags"){
-        return $next($request);
-        }
+        return $this->notHappening($request,$next);
         $data = request()->json()->all()['data']['message']['_data'];
         $fromMe = $data['id']['fromMe'];
         Log::info($data);
@@ -33,7 +31,7 @@ class KillSwitchMiddleware
             "from" => $fromMe ? $to : $from,
             "kill" => true,
         ])->exists()) {
-            return response("Bas ho gya", 200); // Block the request
+            return $this->notHappening($request,$next);
         }
 
         if (isset($data['author']) && $fromMe) {
@@ -42,8 +40,18 @@ class KillSwitchMiddleware
                 "kill" => true,
                 "kill_message" => $message,
             ]);
-            return response("Bas ho gya", 200); // Block the request
+            return $this->notHappening($request,$next);
         }
         return $next($request);
+    }
+
+    function notHappening(Request $request, Closure $next) {
+        if (true) {
+            $requestData = $request->json()->all();
+            $requestData['killSwitch'] = $request->input(true);
+            $request->merge(['json' => $requestData]);
+            return $next($request);
+        }
+        return response("Bas ho gya", 200); // Block the request
     }
 }

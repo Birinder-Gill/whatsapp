@@ -20,7 +20,9 @@ class MessageLoggerMiddleware
     public function handle(Request $request, Closure $next)
     {
         try {
-            dd(request()->json()->all());
+            Log::error("TEST_WAASTE::", request()->json()->all());
+            return;
+
             $data = request()->json()->all()['data']['message']['_data'];
 
             $fromMe = $data['id']['fromMe'];

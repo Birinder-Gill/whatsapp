@@ -48,7 +48,7 @@ class KillSwitchMiddleware
     function notHappening(Request $request, Closure $next) {
         if (true) {
             $requestData = $request->json()->all();
-            $requestData['killSwitch'] = $request->input(true);
+            $requestData['killSwitch'] = true;
             $request->merge(['json' => $requestData]);
             return $next($request);
         }

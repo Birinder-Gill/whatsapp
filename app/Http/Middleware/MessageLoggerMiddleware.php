@@ -36,7 +36,8 @@ class MessageLoggerMiddleware
             $messageNumber = detectManualMessage($fromMe ? $to : $from, $message, $fromMe);
 
             if (($messageNumber > -1 || config('app.product') === "Tags")
-             && (!(request()->json()->all()['data']["media"]))) {
+                && (!(request()->json()->all()['data']["media"]))
+            ) {
                 if (isset($data['notifyName'])) {
                     $personName = $data['notifyName'];
                 } else {
@@ -74,7 +75,12 @@ class MessageLoggerMiddleware
         if ($fromMe) {
             return response("Done bro", 200); // Block the request
         }
-        if(array_key_exists("killSwitch",request()->json()->all()) && request()->json()->all()['json']["killSwitch"] ){
+        $all = request()->json()->all();
+        if (
+            array_key_exists("json", $all)
+            && array_key_exists("killSwitch", $all['json'])
+            && $all['json']["killSwitch"]
+        ) {
 
             return response("Done bro", 200); // Block the request
         }

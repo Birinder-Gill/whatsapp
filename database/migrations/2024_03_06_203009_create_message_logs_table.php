@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string("from");
             $table->string("displayName");
             $table->integer("counter");
-            $table->string("messageText");
+            $table->text("messageText");
             $table->boolean("fromMe");
             $table->timestamps();
         });

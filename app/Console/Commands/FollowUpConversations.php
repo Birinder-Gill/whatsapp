@@ -100,7 +100,7 @@ class FollowUpConversations extends Command
         // Log::info("CHAL AYA TA SAHI");
         try {
             $lead = WhatsAppLead::where('from', $conversation->from)->first();
-            if ($lead) {
+            if ($lead  || config('app.product')== "Tags") {
                 if ($lead->hotLead == 1 || config('app.product')== "Tags") {
                     $messages = MessageLog::where('from', $conversation->from)->get();
                     if ($messages->isNotEmpty()) {

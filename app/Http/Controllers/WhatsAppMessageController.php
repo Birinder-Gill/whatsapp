@@ -48,8 +48,10 @@ class WhatsAppMessageController extends Controller
         try {
             $data = request()->json()->all()['data']['message']['_data'];
         $message = $data['body'];
-        $assistant = $this->aiService->createAndRun($message, "asst_mHv2bINmV0mvMa3rDBTA2q2t");
-        $this->msService->giveQueryResponse($assistant);
+
+        $query = $this->aiService->queryDetection($message,"asst_mHv2bINmV0mvMa3rDBTA2q2t");
+
+        $this->msService->giveQueryResponse($query);
         } catch (\Throwable $th) {
            report($th);
         }

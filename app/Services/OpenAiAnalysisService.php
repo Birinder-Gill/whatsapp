@@ -45,9 +45,9 @@ class OpenAiAnalysisService
         }
     }
 
-    function queryDetection($message): string
+    function queryDetection($message,$asstID=null): string
     {
-        $toSend = $this->createAndRun($message);
+        $toSend = $this->createAndRun($message,$asstID);
         return explode("-", $toSend)[0];
     }
     function getThreadId(): string

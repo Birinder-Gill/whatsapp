@@ -24,7 +24,7 @@ class OpenAiAnalysisService
             $from = $data['from'];
             $fromMe = $data['id']['fromMe'];
             $messageNumber = detectManualMessage($from, $message, $fromMe);
-            if ($messageNumber > -1) {
+            if ($messageNumber > -1 || true) {
                 $openAiKey = config('app.openAiKey');
                 $this->client = OpenAI::client($openAiKey);
                 $from = $data['from'];

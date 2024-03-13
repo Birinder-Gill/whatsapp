@@ -27,13 +27,13 @@ if (!function_exists('getLatestMessage')) {
 }
 
 if (!function_exists('createConvo')) {
-    function createConvo($from, $status = 'active')
+    function createConvo($from, $fromMe=false, $status = 'active')
     {
         Conversation::updateOrCreate(['from' => $from], [
             'from' => $from,
             'status' => $status,
             'last_message_at' => Carbon::now('Asia/Kolkata'),
-            'fromMe' => false
+            'fromMe' => $fromMe
         ]);
     }
 }

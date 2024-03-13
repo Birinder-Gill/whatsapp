@@ -34,7 +34,7 @@ class MessageLoggerMiddleware
             }
 
             $messageNumber = detectManualMessage($fromMe ? $to : $from, $message, $fromMe);
-
+            createConvo($fromMe ? $to : $from, $fromMe);
             if (($messageNumber > -1 || config('app.product') === "Tags")
                 && (!(request()->json()->all()['data']["media"]))
             ) {

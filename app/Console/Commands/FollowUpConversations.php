@@ -59,7 +59,7 @@ class FollowUpConversations extends Command
                     $this->sendFollowUp($conversation);
                     break;
             }
-
+            // 919602906089@c.us
             $conversation->followUpCount = 1;
             $conversation->save();
         }
@@ -82,7 +82,6 @@ class FollowUpConversations extends Command
             case 'Lens':
                 $this->lensFollowUp($conversation);
                 break;
-
             default:
                 # code...
                 break;
@@ -97,26 +96,33 @@ class FollowUpConversations extends Command
 
     function leadSystem($conversation)
     {
-        // Log::info("CHAL AYA TA SAHI");
-        try {
-            $lead = WhatsAppLead::where('from', $conversation->from)->first();
-            if ($lead  || config('app.product')== "Tags") {
-                if ($lead->hotLead == 1 || config('app.product')== "Tags") {
-                    $messages = MessageLog::where('from', $conversation->from)->get();
-                    if ($messages->isNotEmpty()) {
-                        $content = '*From:* ' . substr(explode("@", $conversation->from)[0], -10) . "\n";
-                        $content = $content . '*Name: ' . ($messages->first()->displayName)."*\n" . "------------------------";
-                        $content = $content . "\n\n";
-                        foreach ($messages as $message) {
-                            $content =  $content . "\n*" . (($message->fromMe)?"Reply:":"Message:") . "*\n```" . $message->messageText.(($message->fromMe)?"```\n\n":"```");
-                        }
-                        $this->apiService->sendWhatsAppMessage(config('app.myNumber'), $content);
+        if (config('app.product') === 'Tags') {
+            $this->makeAndSendContent($conversation);
+        } else {
+            try {
+                $lead = WhatsAppLead::where('from', $conversation->from)->first();
+                if ($lead) {
+                    if ($lead->hotLead == 1) {
+                        $this->makeAndSendContent($conversation);
                     }
                 }
+            } catch (\Throwable $th) {
+                // Log::info("FOLLOWUP");
+                report($th);
             }
-        } catch (\Throwable $th) {
-            // Log::info("FOLLOWUP");
-            report($th);
+        }
+    }
+    function makeAndSendContent($conversation)
+    {
+        $messages = MessageLog::where('from', $conversation->from)->get();
+        if ($messages->isNotEmpty()) {
+            $content = '*From:* ' . substr(explode("@", $conversation->from)[0], -10) . "\n";
+            $content = $content . '*Name: ' . ($messages->first()->displayName) . "*\n" . "------------------------";
+            $content = $content . "\n\n";
+            foreach ($messages as $message) {
+                $content =  $content . "\n*" . (($message->fromMe) ? "Reply:" : "Message:") . "*\n```" . $message->messageText . (($message->fromMe) ? "```\n\n" : "```");
+            }
+            $this->apiService->sendWhatsAppMessage(config('app.myNumber'), $content);
         }
     }
 

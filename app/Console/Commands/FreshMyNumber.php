@@ -41,34 +41,35 @@ class FreshMyNumber extends Command
             $total = 0;
             $deleted = WhatsAppMessage::where('from', $number)->delete();
             if ($deleted) $this->info("Deleted " . $deleted . " WhatsAppMessage entries");
-            $total+=$deleted;
+            $total += $deleted;
 
             $deleted = WhatsAppLead::where('from', $number)->delete();
             if ($deleted) $this->info("Deleted " . $deleted . " WhatsAppLead entries");
-            $total+=$deleted;
+            $total += $deleted;
 
             $deleted = OpenAiThread::where('from', $number)->delete();
             if ($deleted) $this->info("Deleted " . $deleted . " OpenAiThread entries");
-            $total+=$deleted;
+            $total += $deleted;
 
             $deleted = MessageLog::where('from', $number)->delete();
             if ($deleted) $this->info("Deleted " . $deleted . " MessageLog entries");
-            $total+=$deleted;
+            $total += $deleted;
 
             $deleted = KillSwitch::where('from', $number)->delete();
             if ($deleted) $this->info("Deleted " . $deleted . " KillSwitch entries");
-            $total+=$deleted;
+            $total += $deleted;
 
             $deleted = Conversation::where('from', $number)->delete();
             if ($deleted) $this->info("Deleted " . $deleted . " Conversation entries");
-            $total+=$deleted;
+            $total += $deleted;
 
-            if($total)
-            {$this->info("Sucessfully freshened up " . $number);}else{
-                $this->info("$argument is already a fresh number.");
+            if ($total) {
+                $this->info("Sucessfully freshened up " . $number);
+            } else {
+                $this->comment("$argument is already a fresh number.");
             }
         } catch (\Throwable $th) {
-            $this->info($th->getMessage());
+            $this->error($th->getMessage());
         }
 
 

@@ -62,9 +62,14 @@ class AboutMyNumber extends Command
             $query = MessageLog::where("from", $number);
             if ($query->exists()) {
                 $count = $query->count();
-                $result = $query->orderBy('counter', 'desc')->first();
-                $this->info("Message log for " . $number . " has " . $count . " message" .( ($count > 1) ? "s" : "") . " and biggest counter is " . $result->counter . " and last message is created at " . Carbon::parse($result->created_at)->format('M d, H:i'));
-                $this->line('');
+                $result = $query->orderBy('counter', 'desc')->get();
+                $this->info("Message log for " . $number . " has " . $count . " message" .( ($count > 1) ? "s" : "") . " and biggest counter is " . $result->first()->counter . " and last message is created at " . Carbon::parse($result->first()->created_at)->format('M d, H:i'));
+                foreach ($result as $key => $value) {
+                    $this->line($value->messageText);
+                    $this->line('------------------------------------------------------');
+                    $this->line('');
+                }
+
             }
 
 

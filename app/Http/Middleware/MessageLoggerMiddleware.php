@@ -27,13 +27,15 @@ class MessageLoggerMiddleware
             $message = $data['body'];
             $to = $data['to'];
             $from = $data['from'];
-            Log::info("MessageLoggerMiddleware::", request()->json()->all());
+            logMe("MessageLoggerMiddleware::", request()->json()->all());
 
             if (str_starts_with($message, '*From:* ') && $fromMe) {
                 return response("Done bro", 200); // Block the request
             }
 
             $messageNumber = detectManualMessage($fromMe ? $to : $from, $message, $fromMe);
+            logMe("MessageLoggerMiddleware::messageNumber ", $messageNumber);
+
             if (($messageNumber > -1 || config('app.product') === "Tags")
                 && (!(request()->json()->all()['data']["media"]))
             ) {
@@ -46,6 +48,7 @@ class MessageLoggerMiddleware
                         $personName = $lastRow->displayName;
                     }
                 }
+                logMe("MessageLoggerMiddleware::personName ", $personName);
 
                 MessageLog::create(
                     [
@@ -59,7 +62,8 @@ class MessageLoggerMiddleware
             } else if ((request()->json()->all()['data']["media"])) {
                 if ($messageNumber === 1 && $fromMe && isset($data["caption"])) {
                     $message = "Info message......";
-                    MessageLog::create(
+                logMe("MessageLoggerMiddleware::message ", $message);
+                MessageLog::create(
                         [
                             "from" => $fromMe ? $to : $from,
                             "fromMe" => $fromMe,
@@ -82,6 +86,7 @@ class MessageLoggerMiddleware
             && array_key_exists("killSwitch", $all['json'])
             && $all['json']["killSwitch"]
         ) {
+            logMe("MessageLoggerMiddleware::Kill Switch activates ");
 
             return response("Done bro", 200); // Block the request
         }

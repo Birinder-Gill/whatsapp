@@ -48,7 +48,7 @@ class MessageLoggerMiddleware
                         $personName = $lastRow->displayName;
                     }
                 }
-               logMe("MessageLoggerMiddleware:: $from personName ", $personName);
+               logMe("MessageLoggerMiddleware:: $from ", ['personName' => $personName]);
 
                 MessageLog::create(
                     [

@@ -14,7 +14,7 @@ if (!function_exists('logError')) {
 }
 
 if (!function_exists('logMe')) {
-    function logMe(string $message, $context=[]): int
+    function logMe($message, $context=[]): int
     {
         Log::info($message,$context);
         return 1;

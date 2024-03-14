@@ -27,14 +27,14 @@ class MessageLoggerMiddleware
             $message = $data['body'];
             $to = $data['to'];
             $from = $data['from'];
-            Log::info("MessageLoggerMiddleware:: $from ", request()->json()->all());
+           logMe("MessageLoggerMiddleware:: $from ", request()->json()->all());
 
             if (str_starts_with($message, '*From:* ') && $fromMe) {
                 return response("Done bro", 200); // Block the request
             }
 
             $messageNumber = detectManualMessage($fromMe ? $to : $from, $message, $fromMe);
-            Log::info("MessageLoggerMiddleware:: $from messageNumber ", $messageNumber);
+           logMe("MessageLoggerMiddleware:: $from  ", ['messageNumber' => $messageNumber]);
 
             if (($messageNumber > -1 || config('app.product') === "Tags")
                 && (!(request()->json()->all()['data']["media"]))
@@ -48,7 +48,7 @@ class MessageLoggerMiddleware
                         $personName = $lastRow->displayName;
                     }
                 }
-                Log::info("MessageLoggerMiddleware:: $from personName ", $personName);
+               logMe("MessageLoggerMiddleware:: $from personName ", $personName);
 
                 MessageLog::create(
                     [
@@ -62,7 +62,7 @@ class MessageLoggerMiddleware
             } else if ((request()->json()->all()['data']["media"])) {
                 if ($messageNumber === 1 && $fromMe && isset($data["caption"])) {
                     $message = "Info message......";
-                Log::info("MessageLoggerMiddleware:: $from message ", $message);
+               logMe("MessageLoggerMiddleware:: $from ",['message' => $message]);
                 MessageLog::create(
                         [
                             "from" => $fromMe ? $to : $from,
@@ -86,7 +86,7 @@ class MessageLoggerMiddleware
             && array_key_exists("killSwitch", $all['json'])
             && $all['json']["killSwitch"]
         ) {
-            Log::info("MessageLoggerMiddleware:: $from Kill Switch activates ");
+           logMe("MessageLoggerMiddleware:: $from Kill Switch activates ");
 
             return response("Done bro", 200); // Block the request
         }

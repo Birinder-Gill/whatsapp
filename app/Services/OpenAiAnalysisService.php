@@ -20,7 +20,7 @@ class OpenAiAnalysisService
     {
         try {
             $data = request()->json()->all()['data']['message']['_data'];
-            Log::info(OpenAiAnalysisService::class,request()->json()->all());
+            logMe(OpenAiAnalysisService::class,request()->json()->all());
             $message = $data['body'];
             $from = $data['from'];
             $fromMe = $data['id']['fromMe'];

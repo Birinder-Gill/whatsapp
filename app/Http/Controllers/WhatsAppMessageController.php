@@ -71,7 +71,7 @@ class WhatsAppMessageController extends Controller
     function messageReceived(Request $request)
     {
         try {
-            Log::info("messageReceived",request()->json()->all());
+            logMe("messageReceived",request()->json()->all());
             $useOpenAi = false;
             $data = request()->json()->all()['data']['message']['_data'];
             $fromMe = $data['id']['fromMe'];
@@ -110,6 +110,7 @@ class WhatsAppMessageController extends Controller
                         $this->msService->sendOpenAiResponse($assistant);
                     } else {
                         $query = $this->aiService->queryDetection($message);
+                        logMe("QUERY BY OPENAI = ",$query);
                         $this->msService->giveQueryResponse($query, $messageNumber == 1);
                     }
                 }

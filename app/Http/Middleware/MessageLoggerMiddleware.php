@@ -46,6 +46,7 @@ class MessageLoggerMiddleware
                         $personName = $lastRow->displayName;
                     }
                 }
+
                 MessageLog::create(
                     [
                         "from" => $fromMe ? $to : $from,

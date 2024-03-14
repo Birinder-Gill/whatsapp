@@ -36,8 +36,12 @@ class FreshMyNumber extends Command
         try {
             $argument = $this->argument('number') ?? '7009154010';
             $number =  '91' . $argument . '@c.us';
+            $this->line('');
+            $this->line('===============================');
             $this->info("Freshing up " . $number);
-            $this->info("..........................................................");
+            $this->line('===============================');
+            $this->line('');
+
             $total = 0;
             $deleted = WhatsAppMessage::where('from', $number)->delete();
             if ($deleted) $this->info("Deleted " . $deleted . " WhatsAppMessage entries");

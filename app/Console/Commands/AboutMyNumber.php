@@ -86,6 +86,8 @@ class AboutMyNumber extends Command
                 $result = $query->first();
                 $this->info("KillSwitch is activated by ".($result->kill_message??"-/-")." at " . Carbon::parse($result->created_at)->format('M d, H:i'));
                 $this->line('');
+            }else{
+                $this->info("Kill switch does not exist.");
             }
 
 

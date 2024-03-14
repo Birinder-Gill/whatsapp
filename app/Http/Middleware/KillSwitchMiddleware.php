@@ -20,11 +20,11 @@ class KillSwitchMiddleware
     {
         $data = request()->json()->all()['data']['message']['_data'];
         $fromMe = $data['id']['fromMe'];
-        Log::info($data);
+        logMe($data);
         $message = $data['body'];
         $to = $data['to'];
         $from = $data['from'];
-        // Log::info("KillSwitchMiddleware::".$message , $data);
+        // logMe("KillSwitchMiddleware::".$message , $data);
 
         if (KillSwitch::where([
             "from" => $fromMe ? $to : $from,
@@ -45,6 +45,7 @@ class KillSwitchMiddleware
     }
 
     function notHappening(Request $request, Closure $next) {
+        logMe("KillSwitchMiddleware:: notHappening");
         if (config('app.product') === "Tags") {
             $requestData = $request->json()->all();
             $requestData['killSwitch'] = true;

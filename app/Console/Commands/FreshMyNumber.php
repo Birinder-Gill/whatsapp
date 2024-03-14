@@ -34,7 +34,7 @@ class FreshMyNumber extends Command
     public function handle()
     {
         try {
-            $argument = $this->argument('argument') ?? '7009154010';
+            $argument = $this->argument('number') ?? '7009154010';
             $number =  '91' . $argument . '@c.us';
             $this->info("Freshing up " . $number);
             $this->info("..........................................................");

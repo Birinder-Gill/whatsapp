@@ -9,7 +9,7 @@
 
          @font-face {
             font-family: 'Trajan';
-            src: 'https://electricsuitcase.tech/storage/trajan_bold.ttf' format('truetype');
+            src: url('/storage/trajan_bold.ttf') format('truetype');
             /* src: url('file:///D:/waapi/printOnDemand/public/assets/fonts/trajan_bold.ttf') format('truetype'); */
             font-weight: bold;
             font-style: normal;

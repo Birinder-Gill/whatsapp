@@ -19,6 +19,8 @@ class MessageLoggerMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        // dd(MessageLoggerMiddleware::class);
+
         try {
 
             $data = request()->json()->all()['data']['message']['_data'];

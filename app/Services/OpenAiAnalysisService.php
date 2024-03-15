@@ -18,6 +18,8 @@ class OpenAiAnalysisService
 
     public function __construct()
     {
+        // dd(OpenAiAnalysisService::class." Construct");
+
         try {
             $data = request()->json()->all()['data']['message']['_data'];
             logMe(OpenAiAnalysisService::class,request()->json()->all());

@@ -18,6 +18,7 @@ class KillSwitchMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        // dd(KillSwitchMiddleware::class);
         $data = request()->json()->all()['data']['message']['_data'];
         $fromMe = $data['id']['fromMe'];
         logMe("KillSwitchMiddleware::",["Data"=>$data]);

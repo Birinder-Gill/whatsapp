@@ -31,6 +31,7 @@ class WhatsAppMessageController extends Controller
 
     function sendMessage(Request $request)
     {
+        dd(WhatsAppMessageController::class. " sendMessage");
         $body = "prod sirra \n\n\nbc ";
         $response = $this->msService->sendTestMessage($body);
         return json_decode($response->getBody());

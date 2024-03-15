@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware([LanguageDetection::class])->group(function () {
     Route::get('/sendMedia', [WhatsAppMessageController::class, 'sendMediaApi']);
     // Route::get('/test', [WhatsAppMessageController::class, 'isAskingForPrice'])->middleware([KillSwitchMiddleware::class,MessageLoggerMiddleware::class]);
-    Route::get('/sendMessage', [WhatsAppMessageController::class, 'sendMessage']);
+    Route::get('/sendMessage', [WhatsAppMessageController::class, 'sendMessage']);//->middleware([MessageLoggerMiddleware::class, KillSwitchMiddleware::class,]);;
     Route::post('/mickeyCalling', [WhatsAppMessageController::class, 'mickeyCalling']);
     Route::post('/orderReceived', [WhatsAppMessageController::class, 'orderReceived']);
     Route::get('/generateImage', [WhatsAppMessageController::class, 'generateImage']);

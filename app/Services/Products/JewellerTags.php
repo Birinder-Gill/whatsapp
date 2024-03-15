@@ -15,7 +15,7 @@ class JewellerTags extends ReplyCreationService
             case UserLanguage::HINGLISH:
                 return match ($query) {
                     "HIGH_IN_GENERAL" => '',
-                    "PRICE" => 'Sir 18rs ki ekk sheet hai Jismein 40 tags nikaljaate hain sir 45 paise ka tag cost karjaataa hai ji',
+                    "PRICE" => "Sir 18rs ki ekk sheet hai Jismein 40 tags nikal jaate hain.\nSir 45 paise ka tag cost karjaataa hai ji.",
                     "DISCOUNT" => '',
                     "ADDRESS" => 'Sir we have 2 branches, one in sector 35, chandigarh & one in pragati maidan, delhi\nसर हमारी 2 ब्रांचेज हैं, एक सेक्टर 35 चंडीगढ़ में और दूसरी प्रगति मैदान दिल्ली में',
                     "DELIVERY_WAY" => 'Sir Via courier aati hai ji delivery.7-10 days mein tags print hojaate hain & 3-4 days mein aapke store pe deliver',
@@ -81,7 +81,7 @@ class JewellerTags extends ReplyCreationService
 
     function getLinkMessage(): string
     {
-        return "Agar interested hain sir Jewellery tags mein ji tohh yehh information share kardijiye ji taaki hum aapka free demo create kar sakein ji\n1.Apne Jewellery store ka name\n2.Aapki Choice ka Design Number\n3.Kis carot mein Jewellery sale karte hain ji?";
+        return "";// "Agar interested hain sir Jewellery tags mein ji tohh yehh information share kardijiye ji taaki hum aapka free demo create kar sakein ji\n1.Apne Jewellery store ka name\n2.Aapki Choice ka Design Number\n3.Kis carot mein Jewellery sale karte hain ji?";
     }
 
     function getFirstMessage($personName): array

@@ -274,6 +274,7 @@
         </div>
         <div class="fixed-div second">
             <div class="titlediv">
+                {{url('/assets/fonts/trajan_bold.ttf')}}
                 <p class="second-title">18 Kt. 750</p>
                 <img src="" alt="">
                 <p class="second-title">Jewellery</p>

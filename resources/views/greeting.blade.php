@@ -9,7 +9,7 @@
 
          @font-face {
             font-family: 'Trajan';
-            src: url('/storage/trajan_bold.ttf') format('truetype');
+            src: url('/storage/fonts/trajan_bold.ttf') format('truetype');
             /* src: url('file:///D:/waapi/printOnDemand/public/assets/fonts/trajan_bold.ttf') format('truetype'); */
             font-weight: bold;
             font-style: normal;

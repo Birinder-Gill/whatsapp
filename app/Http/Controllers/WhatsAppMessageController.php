@@ -105,7 +105,7 @@ class WhatsAppMessageController extends Controller
                     if ($messageNumber === 1) {
                         createHotLead($from);
                     }
-                    if ($useOpenAi) {
+                    if ($useOpenAi) { // ALWAYS FALSE
                         $assistant = $this->aiService->createAndRun($message);
                         $this->msService->sendOpenAiResponse($assistant);
                     } else {

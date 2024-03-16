@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Console\Commands\ContactSaveFollowUp;
 use App\Console\Commands\FollowUpConversations;
+use App\Console\Commands\LeadSystem;
 use App\Console\Commands\SecondFollowUp;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -22,6 +23,9 @@ class Kernel extends ConsoleKernel
         $schedule->command(FollowUpConversations::class)->everyFiveMinutes();
         $schedule->command(SecondFollowUp::class)->daily();
         $schedule->command(ContactSaveFollowUp::class)->daily();
+        if (config('app.product') === "Tags") {
+            $schedule->command(LeadSystem::class)->daily();
+        }
     }
 
     /**
@@ -31,7 +35,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

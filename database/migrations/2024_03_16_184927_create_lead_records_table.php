@@ -13,15 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('message_logs', function (Blueprint $table) {
+        Schema::create('lead_records', function (Blueprint $table) {
             $table->id();
             $table->string("from");
-            $table->string("displayName");
-            $table->integer("counter");
-            $table->text("messageText");
-            $table->boolean("fromMe");
-            $table->boolean("leadSent")->default(false);
-
+            $table->dateTime("last_message_at");
+            $table->boolean("leadSent");
             $table->timestamps();
         });
     }
@@ -33,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('message_logs');
+        Schema::dropIfExists('lead_records');
     }
 };

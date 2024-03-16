@@ -75,73 +75,7 @@ class FollowUpConversations extends Command
 
     function sendFollowUp($conversation)
     {
-        switch (config('app.product')) {
-            case 'Tags':
-                $this->leadSystem($conversation);
-                break;
-            case 'Lens':
-                $this->lensFollowUp($conversation);
-                break;
-            default:
-                # code...
-                break;
-        }
-    }
-
-    function lensFollowUp($conversation)
-    {
         $this->apiService->sendWhatsAppMessage($conversation->from, $this->rcService->getFirstFollowUp());
     }
 
-
-    function leadSystem($conversation)
-    {
-        if (config('app.product') === 'Tags') {
-            $this->makeAndSendContent($conversation);
-        } else {
-            try {
-                $lead = WhatsAppLead::where('from', $conversation->from)->first();
-                if ($lead) {
-                    if ($lead->hotLead == 1) {
-                        $this->makeAndSendContent($conversation);
-                    }
-                }
-            } catch (\Throwable $th) {
-                // Log::info("FOLLOWUP");
-                report($th);
-            }
-        }
-    }
-    function makeAndSendContent($conversation)
-    {
-        $messages = MessageLog::where('from', $conversation->from)->get();
-        if ($messages->isNotEmpty()) {
-            $content = '*From:* ' . substr(explode("@", $conversation->from)[0], -10) . "\n";
-            $content = $content . '*Name: ' . ($messages->first()->displayName) . "*\n" . "------------------------";
-            $content = $content . "\n\n";
-            foreach ($messages as $message) {
-                $content =  $content . "\n*" . (($message->fromMe) ? "Reply:" : "Message:") . "*\n```" . $message->messageText . (($message->fromMe) ? "```\n\n" : "```");
-            }
-            $this->apiService->sendWhatsAppMessage(config('app.myNumber'), $content);
-        }
-    }
-
-    function tagFollowUp($conversation)
-    {
-
-        $lead = WhatsAppLead::where('from', $conversation->from)->first();
-        if ($lead) {
-            if ($lead->hotLead == 0) {
-                //This is the followup only for cold leads
-                $this->apiService->sendWhatsAppMessage($conversation->from, $this->rcService->getFirstFollowUp());
-            } else {
-                $messages = WhatsAppMessage::where('from', $conversation->from)->get();
-                $content = 'From: ' . substr(explode("@", $conversation->from)[0], -10) . "\n\nMessages:\n\n";
-                foreach ($messages as $message) {
-                    $content =  Carbon::parse($message->created_at)->format('Y-m-d H:i:s') . "\n" . $content . $message->messageText . "\n------------\n";
-                }
-                $this->apiService->sendWhatsAppMessage(config('app.myNumber'), $content);
-            }
-        }
-    }
 }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\WhatsAppMessageController;
 use App\Http\Middleware\KillSwitchMiddleware;
 use App\Http\Middleware\LanguageDetection;
+use App\Http\Middleware\LogAllMessagesMiddleware;
 use App\Http\Middleware\MessageLoggerMiddleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,8 +27,10 @@ Route::middleware([LanguageDetection::class])->group(function () {
     Route::post('/mickeyCalling', [WhatsAppMessageController::class, 'mickeyCalling']);
     Route::post('/orderReceived', [WhatsAppMessageController::class, 'orderReceived']);
     Route::get('/generateImage', [WhatsAppMessageController::class, 'generateImage']);
+    Route::get('/makeSubs', [WhatsAppMessageController::class, 'makeSubs']);
+
 });
-Route::post('/messageReceived', [WhatsAppMessageController::class, 'messageReceived'])->middleware([KillSwitchMiddleware::class,MessageLoggerMiddleware::class]);
+Route::post('/messageReceived', [WhatsAppMessageController::class, 'messageReceived'])->middleware([LogAllMessagesMiddleware::class, KillSwitchMiddleware::class,MessageLoggerMiddleware::class]);
 Route::post('/testReceived', [WhatsAppMessageController::class, 'testReceived']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

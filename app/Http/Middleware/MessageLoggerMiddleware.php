@@ -22,76 +22,34 @@ class MessageLoggerMiddleware
         // dd(MessageLoggerMiddleware::class);
 
         try {
-
+            /**
+             *
+             * THIS MIDDLEWARE WILL BE USED TO CREATE Conversation, WhatsappLead and WhatsappMessage.
+             * WhatsappMessage TABLE WILL STORE ONLY INCOMING MESSAGES AND THEIR COUNTER.
+             * HERE fromMe WILL BE ALWAYS FALSE.
+             *
+             *
+             **/
             $data = request()->json()->all()['data']['message']['_data'];
-
-            $fromMe = $data['id']['fromMe'];
             $message = $data['body'];
-            $to = $data['to'];
             $from = $data['from'];
-           logMe("MessageLoggerMiddleware:: $from ", request()->json()->all());
+            $messageNumber = detectManualMessage($from, $message);
 
-            if (str_starts_with($message, '*From:* ') && $fromMe) {
-                return response("Done bro", 200); // Block the request
-            }
-
-            $messageNumber = detectManualMessage($fromMe ? $to : $from, $message, $fromMe);
-            logMe("MessageLoggerMiddleware:: $from  ", ['messageNumber' => $messageNumber]);
-
-            if (($messageNumber > -1 || config('app.product') === "Tags")
-                && (!(request()->json()->all()['data']["media"]))
-            ) {
-                createConvo($fromMe ? $to : $from, $fromMe);
-                if (isset($data['notifyName'])) {
-                    $personName = $data['notifyName'];
-                } else {
-                    $lastRow = getLatestMessage($fromMe ? $to : $from);
-                    if ($lastRow) {
-                        $personName = $lastRow->displayName;
-                    }
+            if (($messageNumber > -1)) {
+                createConvo($from);
+                if ($messageNumber === 0) {
+                    createNewLead($from);
                 }
-               logMe("MessageLoggerMiddleware:: $from ", ['personName' => $personName]);
-
-                MessageLog::create(
-                    [
-                        "from" => $fromMe ? $to : $from,
-                        "fromMe" => $fromMe,
-                        "displayName" => $personName ?? "-/-",
-                        "messageText" => $message,
-                        "counter" => $messageNumber
-                    ]
-                );
-            } else if ((request()->json()->all()['data']["media"])) {
-                if ($messageNumber === 1 && $fromMe && isset($data["caption"])) {
-                    $message = "Info message......";
-               logMe("MessageLoggerMiddleware:: $from ",['message' => $message]);
-                MessageLog::create(
-                        [
-                            "from" => $fromMe ? $to : $from,
-                            "fromMe" => $fromMe,
-                            "displayName" => $personName ?? "-/-",
-                            "messageText" => $message,
-                            "counter" => $messageNumber
-                        ]
-                    );
+                if ($messageNumber === 1) {
+                    createHotLead($from);
                 }
+            } else {
+                return response("Not today bro", 200);
             }
         } catch (\Throwable $th) {
             report($th);
         }
-        if ($fromMe) {
-            return response("Done bro", 200); // Block the request
-        }
-        $all = request()->json()->all();
-        if (
-            array_key_exists("json", $all)
-            && array_key_exists("killSwitch", $all['json'])
-            && $all['json']["killSwitch"]
-        ) {
-           logMe("MessageLoggerMiddleware:: $from Kill Switch activates ");
 
-            return response("Done bro", 200); // Block the request
-        }
         return $next($request);
     }
 }

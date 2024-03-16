@@ -18,20 +18,17 @@ class KillSwitchMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        // dd(KillSwitchMiddleware::class);
         $data = request()->json()->all()['data']['message']['_data'];
         $fromMe = $data['id']['fromMe'];
-        logMe("KillSwitchMiddleware::",["Data"=>$data]);
         $message = $data['body'];
         $to = $data['to'];
         $from = $data['from'];
-        // logMe("KillSwitchMiddleware::".$message , $data);
 
         if (KillSwitch::where([
             "from" => $fromMe ? $to : $from,
             "kill" => true,
         ])->exists()) {
-            return $this->notHappening($request,$next);
+            return $this->notHappening($request, $next);
         }
 
         if (isset($data['author']) && $fromMe) {
@@ -40,19 +37,18 @@ class KillSwitchMiddleware
                 "kill" => true,
                 "kill_message" => $message,
             ]);
-            return $this->notHappening($request,$next);
+            return $this->notHappening($request, $next);
         }
+        //Only messages from the user will go ahead.
+        if ($fromMe) {
+            return $this->notHappening($request, $next);
+        }
+
         return $next($request);
     }
 
-    function notHappening(Request $request, Closure $next) {
-        logMe("KillSwitchMiddleware:: notHappening");
-        if (config('app.product') === "Tags") {
-            $requestData = $request->json()->all();
-            $requestData['killSwitch'] = true;
-            $request->merge(['json' => $requestData]);
-            return $next($request);
-        }
+    function notHappening(Request $request, Closure $next)
+    {
         return response("Bas ho gya", 200); // Block the request
     }
 }

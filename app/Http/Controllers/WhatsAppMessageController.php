@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\MessageSendingService;
 use App\Services\OpenAiAnalysisService;
 use Barryvdh\Snappy\Facades\SnappyImage;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
@@ -31,7 +32,7 @@ class WhatsAppMessageController extends Controller
 
     function sendMessage(Request $request)
     {
-        dd(WhatsAppMessageController::class. " sendMessage");
+        dd(WhatsAppMessageController::class . " sendMessage");
         $body = "prod sirra \n\n\nbc ";
         $response = $this->msService->sendTestMessage($body);
         return json_decode($response->getBody());
@@ -45,7 +46,8 @@ class WhatsAppMessageController extends Controller
         $this->msService->sendOpenAiResponse($assistant);
     }
 
-    function testReceived(Request $request) {
+    function testReceived(Request $request)
+    {
         // try {
         //     $data = request()->json()->all()['data']['message']['_data'];
         //     $message = $data['body'];
@@ -59,7 +61,8 @@ class WhatsAppMessageController extends Controller
 
     }
 
-    public function generateImage(Request $request)  {
+    public function generateImage(Request $request)
+    {
         return view('greeting');
         $pdf = SnappyImage::loadView('greeting')->setOption('width', '920')->setOption('height', '139')->inline();
         $mediaUrl = generateAndStoreImage($pdf);
@@ -68,51 +71,37 @@ class WhatsAppMessageController extends Controller
         return json_decode($response->getBody());
     }
 
-
     function messageReceived(Request $request)
     {
         try {
-            logMe("messageReceived",request()->json()->all());
-            $useOpenAi = false;
             $data = request()->json()->all()['data']['message']['_data'];
-            $fromMe = $data['id']['fromMe'];
             $message = $data['body'];
             $personName = $data['notifyName'];
             $from = $data['from'];
-            $to = $data['to'];
             $hash = $data['id']['_serialized'];
 
-            $messageNumber = detectManualMessage($from, $message, $fromMe);
+            $messageNumber = detectManualMessage($from, $message);
 
-            $logArray = [
-                'from' => $from,
-                'displayName' => $personName,
-                'to' => $data['to'],
-                'counter' => $messageNumber + 1,
-                'messageText' => $message,
-                'messageId' => $data['id']['id'],
-                'messageHash' => $hash,
-                'threadId' => $this->aiService->getThreadId()
-            ];
 
             if ($messageNumber > -1) {
-                createConvo($from);
+                $logArray = [
+                    'from' => $from,
+                    'displayName' => $personName,
+                    'to' => $data['to'],
+                    'counter' => $messageNumber + 1,
+                    'messageText' => $message,
+                    'messageId' => $data['id']['id'],
+                    'messageHash' => $hash,
+                    'threadId' => $this->aiService->getThreadId()
+                ];
                 incrementCounter($logArray);
+
                 if ($messageNumber === 0) {
-                    createNewLead($from);
                     $this->msService->deleteMessage($hash);
                     $this->msService->sendFirstMessage($personName);
                 } else {
-                    if ($messageNumber === 1) {
-                        createHotLead($from);
-                    }
-                    if ($useOpenAi) { // ALWAYS FALSE
-                        $assistant = $this->aiService->createAndRun($message);
-                        $this->msService->sendOpenAiResponse($assistant);
-                    } else {
-                        $query = $this->aiService->queryDetection($message);
-                        $this->msService->giveQueryResponse($query, $messageNumber == 1);
-                    }
+                    $query = $this->aiService->queryDetection($message);
+                    $this->msService->giveQueryResponse($query, $messageNumber == 1);
                 }
             }
         } catch (\Throwable $e) {
@@ -121,6 +110,7 @@ class WhatsAppMessageController extends Controller
 
         }
     }
+
     function runATest($from)
     {
         $message = "https://api.whatsapp.com/send?phone=" . substr($from, 2, 10) . "&text=Hello, How may I help you";
@@ -134,4 +124,54 @@ class WhatsAppMessageController extends Controller
         $response = $this->msService->sendTestMedia($mediaUrl);
         return $response->getBody();
     }
+
+    /**
+     * if ($useOpenAi) {  ALWAYS FALSE
+     * assistant = $this->aiService->createAndRun($message);
+     * this->msService->sendOpenAiResponse($assistant);
+     * else
+     *     function makeSubs(Request $request)
+     *   {
+     *       // Generate and output the SRT content
+     *       $srtContent = $this->generateSRTContent();
+     *       return $srtContent;
+     *   }
+     *
+     *   function generateSRTContent()
+     *   {
+     *       // Set the initial timestamp using Carbon
+     *       $timestamp = Carbon::createFromFormat('Y-m-d H:i:s', '2024-02-18 16:00:24');
+     *       $rt = Carbon::createFromFormat('Y-m-d H:i:s', '2024-02-18 00:00:00');
+     *
+     *       // Generate the SRT content
+     *       $content = "1<br>";
+     *       $content .= $this->formatRT($rt) . " --> " . $this->formatRT($rt->addSeconds(1)) . "<br>";
+     *       $content .= "18 February 2024" . "<br>";
+     *       $content .= $this->formatTime($timestamp->addSeconds(1)) . "<br>";
+     *       $content .= "3715 NB-145, Shediac Bridge, NB E4R 1R9, Canada<br><br>";
+     *
+     *
+     *       // Loop for 10 more seconds
+     *       for ($i = 2; $i <= 3747; $i++) {
+     *           $content .= $i . "<br>";
+     *           $content .= $this->formatRT($rt) . " --> " . $this->formatRT($rt->addSeconds(1)) . "<br>";
+     *           $content .= "18 February 2024" . "<br>";
+     *           $content .= $this->formatTime($timestamp->addSeconds(1)) . "<br>";
+     *           $content .= "3715 NB-145, Shediac Bridge, NB E4R 1R9, Canada<br><br>";
+     *
+     *       }
+     *
+     *       return $content;
+     *   }
+     *
+     *   function formatTime($timestamp)
+     *   {
+     *       return $timestamp->format("g:i:s A");
+     *   }
+     *   function formatRT($timestamp) {
+     *       return $timestamp->format("H:i:s") . ",000";
+     *   }
+     *
+     *
+     */
 }

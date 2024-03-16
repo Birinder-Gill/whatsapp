@@ -16,11 +16,11 @@ return new class extends Migration
         Schema::create('message_logs', function (Blueprint $table) {
             $table->id();
             $table->string("from");
+            $table->string("to");
             $table->string("displayName");
             $table->integer("counter");
             $table->text("messageText");
             $table->boolean("fromMe");
-            $table->boolean("leadSent")->default(false);
 
             $table->timestamps();
         });

@@ -48,7 +48,7 @@ class LeadSystem extends Command
             ->get();
         foreach ($leads as $lead) {
             $this->makeAndSendContent($lead);
-            $lead->followUpCount = 1;
+            $lead->leadSent = true;
             $lead->save();
         }
         return Command::SUCCESS;

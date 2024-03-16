@@ -59,7 +59,7 @@ class AboutMyNumber extends Command
                 $this->line('');
             }
 
-            $query = MessageLog::where("from", $number);
+            $query = MessageLog::where("from", $number)->orWhere('to', $number);
             if ($query->exists()) {
                 $count = $query->count();
                 $result = $query->orderBy('counter', 'desc')->get();

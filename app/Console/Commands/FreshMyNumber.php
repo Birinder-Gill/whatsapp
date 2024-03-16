@@ -55,7 +55,7 @@ class FreshMyNumber extends Command
             if ($deleted) $this->info("Deleted " . $deleted . " OpenAiThread entries");
             $total += $deleted;
 
-            $deleted = MessageLog::where('from', $number)->delete();
+            $deleted = MessageLog::where('from', $number)->orWhere('to', $number)->delete();
             if ($deleted) $this->info("Deleted " . $deleted . " MessageLog entries");
             $total += $deleted;
 

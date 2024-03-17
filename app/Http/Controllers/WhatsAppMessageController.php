@@ -63,8 +63,9 @@ class WhatsAppMessageController extends Controller
 
     public function generateImage(Request $request)
     {
-        return view('greeting');
+        // return view('greeting');
         $pdf = SnappyImage::loadView('greeting')->setOption('width', '920')->setOption('height', '139')->inline();
+        return $pdf;
         $mediaUrl = generateAndStoreImage($pdf);
         $response = $this->msService->sendTestMedia($mediaUrl);
         deleteStoredImage($mediaUrl);
@@ -81,8 +82,6 @@ class WhatsAppMessageController extends Controller
             $hash = $data['id']['_serialized'];
 
             $messageNumber = detectManualMessage($from, $message);
-
-
             if ($messageNumber > -1) {
                 $logArray = [
                     'from' => $from,

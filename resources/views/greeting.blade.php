@@ -6,25 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Greeting</title>
     <style>
+        @font-face {
+            font-family: 'Trajan';
 
-         @font-face {
-             font-family: 'Trajan';
-             src: url("{{ asset('assets/fonts/trajan_bold.ttf') }}") format('truetype');
-             /* src: url('file:///D:/waapi/printOnDemand/public/assets/fonts/trajan_bold.ttf') format('truetype'); */
-             font-weight: bold;
-             font-style: normal;
-         }
+            @if (config('app.env') === 'local')
+                /* Local environment - Windows */
+                src: url('file:///D:/waapi/printOnDemand/public/assets/fonts/trajan_bold.ttf') format('truetype');
+            @else
+                /* Production environment - Linux */
+                src: url("{{ asset('assets/fonts/trajan_bold.ttf') }}") format('truetype');
+            @endif
+            font-weight: bold;
+            font-style: normal;
+        }
 
         body {
             margin: 0px !important;
         }
 
-       .custom-font {
-             font-family: 'Trajan';
-             font-size: 26px;
-             color: #FFD700
-
-         }
+        .custom-font {
+            font-family: 'Trajan';
+            font-size: 26px;
+            color: #FFD700
+        }
 
         .full-container {
             display: -webkit-box;

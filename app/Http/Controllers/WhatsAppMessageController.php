@@ -83,7 +83,7 @@ class WhatsAppMessageController extends Controller
         // );
         // return view('greeting');
         // dd(public_path('storage/temp'));
-        $pdf = SnappyPdf::loadView('greeting')->setOption('width', '920')->setOption('height', '139');
+        $pdf = SnappyPdf::loadView('greeting');
         // dd($pdf);
         // return $pdf->inline();
         $mediaUrl = generateAndStoreImage($pdf);

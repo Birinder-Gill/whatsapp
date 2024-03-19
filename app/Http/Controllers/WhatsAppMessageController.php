@@ -66,30 +66,21 @@ class WhatsAppMessageController extends Controller
 
     public function generateImage(Request $request)
     {
-
-        // $snappy = App::make('snappy.pdf');
-        // //To file
-        // $html = view('greeting', compact('user'))->render();
-        // $snappy->generateFromHtml($html, '/tmp/bill-123.pdf');
-        // $snappy->generate('http://www.github.com', '/tmp/github.pdf');
-        // //Or output:
-        // return new Response(
-        //     $snappy->getOutputFromHtml($html),
-        //     200,
-        //     array(
-        //         'Content-Type'          => 'application/pdf',
-        //         'Content-Disposition'   => 'attachment; filename="file.pdf"'
-        //     )
-        // );
-        // return view('greeting');
-        // dd(public_path('storage/temp'));
         $pdf = SnappyPdf::loadView('greeting');
-        // dd($pdf);
-        // return $pdf->inline();
-        $mediaUrl = generateAndStoreImage($pdf);
-        $response = $this->msService->sendTestMedia($mediaUrl);
-        deleteStoredImage($mediaUrl);
-        return response($mediaUrl,200,["URL"=>$mediaUrl]);
+        $iMedia = generateAndStorePdf($pdf);
+        $this->msService->sendTestMedia($iMedia);
+        deleteStoredFile($iMedia);
+
+        $image = SnappyImage::loadView('greeting');
+        $pMedia = generateAndStoreImage($image);
+        $response = $this->msService->sendTestMedia($pMedia);
+        deleteStoredFile($pMedia);
+
+
+        return response("Image => $iMedia \n Pdf => $pMedia", 200, [
+            "image" => $iMedia,
+            "pdf" => $pMedia
+        ]);
     }
 
     function messageReceived(Request $request)

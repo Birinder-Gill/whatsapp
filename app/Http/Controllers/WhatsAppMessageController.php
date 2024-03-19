@@ -66,10 +66,9 @@ class WhatsAppMessageController extends Controller
 
     public function generateImage(Request $request)
     {
-        $image = SnappyImage::loadView('greeting')->setOption('width', '920')->setOption('height', '139')->inline();
-        return $image;
+        $image = SnappyImage::loadView('greeting')->setOption('width', '920')->setOption('height', '139');
         $pMedia = generateAndStoreImage($image);
-        $response = $this->msService->sendTestMedia($pMedia);
+        $this->msService->sendTestMedia($pMedia);
         deleteStoredFile($pMedia);
 
 

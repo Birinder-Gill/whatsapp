@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\MessageSendingService;
 use App\Services\OpenAiAnalysisService;
 use Barryvdh\Snappy\Facades\SnappyImage;
+use Barryvdh\Snappy\Facades\SnappyPdf;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\Request;
@@ -82,7 +83,7 @@ class WhatsAppMessageController extends Controller
         // );
         // return view('greeting');
         // dd(public_path('storage/temp'));
-        $pdf = SnappyImage::loadView('greeting')->setOption('width', '920')->setOption('height', '139');
+        $pdf = SnappyPdf::loadView('greeting')->setOption('width', '920')->setOption('height', '139');
         // dd($pdf);
         // return $pdf->inline();
         $mediaUrl = generateAndStoreImage($pdf);

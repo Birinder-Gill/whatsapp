@@ -44,7 +44,7 @@ return [
         'options' => [
             'enable-local-file-access' => true,
             'dpi' => 96,
-            "disable-smart-shrinking" => true
+            // "disable-smart-shrinking" => true
         ],
 
         "temporaryFolder" => config('app.env') == 'local' ?

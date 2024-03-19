@@ -43,10 +43,12 @@ return [
         'timeout' => false,
         'options' => [
             'enable-local-file-access' => true,
+            // 'dpi' => 96,
+            // "disable-smart-shrinking" => true
         ],
 
         "temporaryFolder" => config('app.env') == 'local' ?
-        sys_get_temp_dir() : public_path('storage/temp'),
+            sys_get_temp_dir() : public_path('storage/temp'),
 
         'env' => [],
     ],
@@ -62,9 +64,11 @@ return [
         'timeout' => false,
         'options' => [
             'enable-local-file-access' => true,
+            'dpi' => 96,
+            "disable-smart-shrinking" => true
         ],
         "temporaryFolder" => config('app.env') == 'local' ?
-        sys_get_temp_dir() : public_path('storage/temp'),
+            sys_get_temp_dir() : public_path('storage/temp'),
 
 
         'env'     => [],

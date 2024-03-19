@@ -66,10 +66,6 @@ class WhatsAppMessageController extends Controller
 
     public function generateImage(Request $request)
     {
-        return response("Image => le vyi chako flana url <br> Pdf => le vyi chako flana url", 200, [
-            "image" => 'le vyi chako flana url',
-            "pdf" => 'le vyi chako flana url'
-        ]);
 
         $pdf = SnappyPdf::loadView('greeting');
         $iMedia = generateAndStorePdf($pdf);

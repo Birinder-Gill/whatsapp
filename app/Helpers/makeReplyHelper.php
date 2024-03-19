@@ -23,7 +23,7 @@ if (!function_exists('generateAndStoreImage')) {
         $now = Carbon::now("Asia/Kolkata")->timestamp;
         $filename = "dp_$now.jpg";
         // Use loadHtml for flexibility
-        $imagePath = 'images/' . $filename; // Adjust the storage path as needed
+        $imagePath = 'images/' . $filename;
 
        return generateAndStoreFile($image,$imagePath,$disk);
     }

@@ -1,137 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Greeting</title>
     <style>
-
-         @font-face {
-             font-family: 'Trajan';
-             /* src: url("{{ asset('assets/fonts/trajan_bold.ttf') }}") format('truetype'); */
-             src: url('file:///D:/waapi/printOnDemand/public/assets/fonts/trajan_bold.ttf') format('truetype');
-             font-weight: bold;
-             font-style: normal;
-         }
-
-        body {
-            margin: 0px !important;
+        @font-face {
+          font-family: 'Trajan';
+          src: url('assets/fonts/trajan_bold.ttf') format('truetype');
+          font-weight: bold;
+          font-style: normal;
         }
 
-       .custom-font {
-             font-family: 'Trajan';
-             font-size: 26px;
-             color: #FFD700
+        body { margin: 0 !important; }
 
-         }
-
-        .full-container {
-            display: -webkit-box;
-            display: flex;
-            width: 920px;
+        .custom-font {
+          font-family: 'Trajan';
+          font-size: 26px;
+          color: #FFD700;
         }
 
-        .fixed-div {
-            height: 139px;
-            border-radius: 25px;
-        }
+        .full-container { display: flex; width: 920px; }
+
+        .fixed-div { height: 139px; border-radius: 25px; }
 
         .first {
-            width: 292px;
-            max-width: 292px;
-            background-color: #000000;
-            text-align: center;
-            position: relative;
+          width: 292px;
+          background-color: #000;
+          text-align: center;
+          position: relative;
         }
 
         .second {
-            max-width: 292px;
-            width: 292px;
-            background-color: #ffffff;
-            border: 1px solid black;
+          width: 292px;
+          background-color: #fff;
+          border: 1px solid black;
         }
 
-        .second .titlediv {
-            display: -webkit-box;
-            display: flex;
-            width: 100%;
-            font-weight: 600;
-            margin-left: 55px;
+        .titlediv {
+          display: flex;
+          align-items: center; /* More efficient vertical alignment */
+          font-weight: 600;
+          margin-left: 55px;
         }
 
-        .second .titlediv img {
-            height: 25px;
-            width: 40px;
-            margin: 0px 5px;
+        .titlediv img {
+          height: 25px;
+          width: 40px;
+          margin: 0 5px;
         }
 
-        .second .second-title {
-            text-align: center;
-            margin: 0px;
-        }
+        .second-title { text-align: center; margin: 0; }
 
-        .second .title-field {
-            display: -webkit-box;
-            display: flex;
-            align-items: center;
-        }
+        .title-field { display: flex; align-items: center; }
 
         .second .title-field p {
-            margin: 0px;
-            margin-left: 5px;
-            font-weight: 600;
+          margin: 0;
+          margin-left: 5px;
+          font-weight: 600;
         }
 
         .dotted-border {
-            width: 240px;
-            height: 20px;
-            border-bottom: 3px dotted black;
+          width: 240px;
+          height: 20px;
+          border-bottom: 3px dotted black;
         }
 
-        .field-1st {
-            margin-top: 20px;
-            margin-bottom: 30px;
-        }
+        .field-1st { margin: 20px 0 30px; } /* Shorthand for top/bottom */
 
         .third {
-            display: -webkit-box;
-            display: flex;
-            width: 336px;
-            max-width: 336px;
-            background-color: white;
+          display: flex;
+          width: 336px;
+          background-color: white;
         }
 
-        .third .inner-div {
-            border-top: 1px solid black;
-            border-right: 1px solid black;
-            border-bottom: 1px solid black;
-            width: 340px;
-            height: 60px;
-            margin-left: -1px;
-            z-index: 2;
-            margin-top: 40px;
-            border-top-right-radius: 25px;
-            border-bottom-right-radius: 25px;
-            background-color: white;
-        }
-
-        .mt-auto {
-            margin-top: auto;
+        .inner-div {
+          border: 1px solid black; /* Combine borders */
+          width: 338px; /* Adjust for accurate border */
+          height: 60px;
+          margin-left: -1px;
+          z-index: 2;
+          margin-top: 40px;
+          border-radius: 25px; /* Apply to all corners */
+          background-color: white;
         }
 
         .inside-logo {
-            position: absolute;
-            top: 25px;
-            left: 0px;
-            right: 0px;
-            margin-left: 0px;
-            margin-right: 0px;
-            font-size: 43px !important;
+          position: absolute;
+          top: 25px;
+          left: 50%;         /* Center horizontally */
+          transform: translateX(-50%);
+          font-size: 43px !important;
         }
-    </style>
+      </style>
 </head>
-
 <body>
     <div class="full-container">
         <div class="fixed-div first">
@@ -268,35 +230,27 @@
                     </g>
                 </svg>
             </div>
-
             <div class="custom-font inside-logo">BJ</div>
             <div class="custom-font">BHARAT JEWELLERS</div>
         </div>
         <div class="fixed-div second">
             <div class="titlediv">
-                <p class="second-title">18 Kt. 750</p>
-                <img src="" alt="">
-                <p class="second-title">Jewellery</p>
+                <p>18 Kt. 750</p>
+                <!-- Image tag goes here if needed -->
+                <p>Jewellery</p>
             </div>
-
-            <div class="title-field field-1st">
+            <div class="title-field">
                 <p>G.Wt</p>
                 <div class="dotted-border"></div>
             </div>
-
             <div class="title-field">
                 <p>N.Wt</p>
                 <div class="dotted-border"></div>
             </div>
         </div>
         <div class="fixed-div third">
-            <div class="inner-div">
-
-            </div>
+            <!-- Inner div content goes here -->
         </div>
     </div>
-
-
 </body>
-
 </html>

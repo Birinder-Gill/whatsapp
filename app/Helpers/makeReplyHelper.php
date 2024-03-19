@@ -8,7 +8,7 @@ if (!function_exists('generateAndStoreImage')) {
     function generateAndStoreImage($pdf,$disk = 'public')
     {
         $now = Carbon::now("Asia/Kolkata")->timestamp;
-        $filename = "dp_$now.jpg";
+        $filename = "dp_$now.pdf";
         // Use loadHtml for flexibility
         $imagePath = 'images/' . $filename; // Adjust the storage path as needed
 

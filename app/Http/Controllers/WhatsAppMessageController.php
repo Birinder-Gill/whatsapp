@@ -6,7 +6,9 @@ use App\Services\MessageSendingService;
 use App\Services\OpenAiAnalysisService;
 use Barryvdh\Snappy\Facades\SnappyImage;
 use Carbon\Carbon;
+use Illuminate\Http\Client\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 
@@ -63,8 +65,23 @@ class WhatsAppMessageController extends Controller
 
     public function generateImage(Request $request)
     {
+        // $snappy = App::make('snappy.pdf');
+        // //To file
+        // $html = view('greeting', compact('user'))->render();
+        // $snappy->generateFromHtml($html, '/tmp/bill-123.pdf');
+        // $snappy->generate('http://www.github.com', '/tmp/github.pdf');
+        // //Or output:
+        // return new Response(
+        //     $snappy->getOutputFromHtml($html),
+        //     200,
+        //     array(
+        //         'Content-Type'          => 'application/pdf',
+        //         'Content-Disposition'   => 'attachment; filename="file.pdf"'
+        //     )
+        // );
         // return view('greeting');
-        $pdf = SnappyImage::loadView('greeting')->setOption('width', '920')->setOption('height', '139')->inline();
+        $pdf = SnappyImage::loadView('greeting')->setOption('width', '920')->setOption('height', '139');
+        dd($pdf);
         return $pdf;
         $mediaUrl = generateAndStoreImage($pdf);
         $response = $this->msService->sendTestMedia($mediaUrl);

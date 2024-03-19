@@ -57,7 +57,7 @@
             display: flex;
             width: 100%;
             font-weight: 600;
-            margin-left: 55px;
+            margin-left: 15px;
         }
 
         .second .titlediv img {

@@ -83,7 +83,7 @@ class WhatsAppMessageController extends Controller
         // dd(public_path('storage/temp'));
         $pdf = SnappyImage::loadView('greeting')->setOption('width', '920')->setOption('height', '139');
         // dd($pdf);
-        return $pdf->inline();
+        // return $pdf->inline();
         $mediaUrl = generateAndStoreImage($pdf);
         // $response = $this->msService->sendTestMedia($mediaUrl);
         // deleteStoredImage($mediaUrl);

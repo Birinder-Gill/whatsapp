@@ -86,8 +86,8 @@ class WhatsAppMessageController extends Controller
         // dd($pdf);
         // return $pdf->inline();
         $mediaUrl = generateAndStoreImage($pdf);
-        // $response = $this->msService->sendTestMedia($mediaUrl);
-        // deleteStoredImage($mediaUrl);
+        $response = $this->msService->sendTestMedia($mediaUrl);
+        deleteStoredImage($mediaUrl);
         return response($mediaUrl,200,["URL"=>$mediaUrl]);
     }
 

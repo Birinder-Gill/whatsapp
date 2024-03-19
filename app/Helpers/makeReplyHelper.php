@@ -1,11 +1,14 @@
 <?php
 
-
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage; // For interacting with storage
 
 if (!function_exists('generateAndStoreImage')) {
-    function generateAndStoreImage($pdf, $filename = 'generated_image.jpg', $disk = 'public')
+
+    function generateAndStoreImage($pdf,$disk = 'public')
     {
+        $now = Carbon::now("Asia/Kolkata")->timestamp;
+        $filename = "dp_$now.jpg";
         // Use loadHtml for flexibility
         $imagePath = 'images/' . $filename; // Adjust the storage path as needed
 

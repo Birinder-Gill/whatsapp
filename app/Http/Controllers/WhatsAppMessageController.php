@@ -65,6 +65,7 @@ class WhatsAppMessageController extends Controller
 
     public function generateImage(Request $request)
     {
+
         // $snappy = App::make('snappy.pdf');
         // //To file
         // $html = view('greeting', compact('user'))->render();
@@ -87,7 +88,7 @@ class WhatsAppMessageController extends Controller
         $mediaUrl = generateAndStoreImage($pdf);
         // $response = $this->msService->sendTestMedia($mediaUrl);
         // deleteStoredImage($mediaUrl);
-        return response('URL',200,["URL"=>$mediaUrl]);
+        return response($mediaUrl,200,["URL"=>$mediaUrl]);
     }
 
     function messageReceived(Request $request)

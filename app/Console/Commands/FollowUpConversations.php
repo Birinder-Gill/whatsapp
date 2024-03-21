@@ -3,15 +3,10 @@
 namespace App\Console\Commands;
 
 use App\Models\Conversation;
-use App\Models\MessageLog;
-use App\Models\WhatsAppLead;
-use App\Models\WhatsAppMessage;
 use App\Services\ReplyCreationService;
 use App\Services\WhatsAppApiService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
-use PgSql\Lob;
 
 class FollowUpConversations extends Command
 {

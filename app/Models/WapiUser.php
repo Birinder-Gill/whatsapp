@@ -12,6 +12,8 @@ class WapiUser extends Model
         "chatId",
         "isGroup",
         "name",
+        "number",
         "lastMessage",
+        "messagesFetched"
     ];
 }

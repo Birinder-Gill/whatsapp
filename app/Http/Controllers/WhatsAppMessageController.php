@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AllWapiChats;
+use App\Models\WapiUser;
 use App\Services\MessageSendingService;
 use App\Services\OpenAiAnalysisService;
 use Barryvdh\Snappy\Facades\SnappyImage;
@@ -33,9 +35,15 @@ class WhatsAppMessageController extends Controller
         }
     }
 
+    function fetchMessages()
+    {
+        $all = WapiUser::all();
+        $all->each(function ($value, $key) {
+        });
+    }
+
     function sendMessage(Request $request)
     {
-        dd(WhatsAppMessageController::class . " sendMessage");
         $body = "prod sirra \n\n\nbc ";
         $response = $this->msService->sendTestMessage($body);
         return json_decode($response->getBody());
@@ -66,8 +74,8 @@ class WhatsAppMessageController extends Controller
 
     public function generateImage(Request $request)
     {
-        if(!$request->image)
-        return view('greeting');
+        if (!$request->image)
+            return view('greeting');
         $image = SnappyImage::loadView('greeting')->setOption('width', '920')->setOption('height', '139')->inline();
         return $image;
         $pMedia = generateAndStoreImage($image);

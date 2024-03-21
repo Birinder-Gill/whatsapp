@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('all_wapi_chats', function (Blueprint $table) {
             $table->id();
             $table->string("from");
-            $table->string("message");
+            $table->text("message");
+            $table->string("messageId");
             $table->string("type");
             $table->string("to");
             $table->boolean("fromMe");

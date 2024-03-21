@@ -67,4 +67,8 @@ class MessageSendingService
     {
         return $this->waService->sendWhatsappMedia('917009154010@c.us', $mediaUrl, $caption);
     }
+    function callEndpoint($endpoint, $body = []) {
+        return json_decode("".$this->waService->callEndpoint($endpoint,$body));
+
+    }
 }

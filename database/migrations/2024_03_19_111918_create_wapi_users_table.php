@@ -16,9 +16,11 @@ return new class extends Migration
         Schema::create('wapi_users', function (Blueprint $table) {
             $table->id();
             $table->string("chatId");
+            $table->string("number")->default("-/-");
             $table->string("isGroup")->default(false);
             $table->string("name");
-            $table->string("lastMessage")->nullable();
+            $table->text("lastMessage")->nullable();
+            $table->boolean("messagesFetched")->default(false);
             $table->timestamps();
         });
     }

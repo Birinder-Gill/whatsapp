@@ -6,6 +6,25 @@ use Psr\Http\Message\ResponseInterface;
 
 class WhatsAppApiService
 {
+
+    function callEndpoint(string $endpoint, array $body = [])
+    {
+        $apiToken = config('app.waapiKey');
+
+
+        $client = new \GuzzleHttp\Client([
+            'verify' => config('app.env') !== 'local', // Disable SSL verification - only use this for local development
+        ]);
+        $response = $client->request('POST', config('app.waapiBaseUrl') . $endpoint, [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $apiToken,
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ],
+           'body' => json_encode($body),
+        ]);
+        return $response->getBody();
+    }
     function sendWhatsAppMessage($to, $body)
     {
         if ($body == "") {
@@ -14,7 +33,7 @@ class WhatsAppApiService
         $apiToken = config('app.waapiKey');
 
         $client = new \GuzzleHttp\Client([
-            'verify' => false, // Disable SSL verification - only use this for local development
+            'verify' => config('app.env') !== 'local', // Disable SSL verification - only use this for local development
         ]);
         $body = [
             "chatId" => $to,
@@ -39,7 +58,7 @@ class WhatsAppApiService
         $apiToken = config('app.waapiKey');
 
         $client = new \GuzzleHttp\Client([
-            'verify' => false, // Disable SSL verification - only use this for local development
+            'verify' => config('app.env') !== 'local', // Disable SSL verification - only use this for local development
         ]);
         $body = [
             "messageId" => $hash
@@ -59,7 +78,7 @@ class WhatsAppApiService
     {
         $apiToken = config('app.waapiKey');
         $client = new \GuzzleHttp\Client([
-            'verify' => false,
+            'verify' => config('app.env') !== 'local',
         ]);
         $name = explode(" ", config('app.myName'));
         $number = explode("@", config('app.myNumber'))[0];

@@ -10,6 +10,7 @@ class AllWapiChats extends Model
     use HasFactory;
     protected $fillable = [
         'from',
+        "messageId",
         'message',
         "type", // text, document image video bla bla
         "to",

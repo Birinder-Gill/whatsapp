@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
 
 class GainToTrain extends Command
 {
@@ -11,14 +13,14 @@ class GainToTrain extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'wapi:export';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'This command fetches all the messages from AllWapiChats table and store them as assistant training json in storage.';
 
     /**
      * Execute the console command.
@@ -27,6 +29,18 @@ class GainToTrain extends Command
      */
     public function handle()
     {
+        $trainingData = [];
+
         return Command::SUCCESS;
+    }
+
+    function storeDataInStorage(array $trainingData) {
+        $disk = "public";
+        $now = Carbon::now("Asia/Kolkata")->timestamp;
+        $myContact = config('app.myNumber');
+        $filename = "chats_".$myContact."_$now.json";
+        // Use loadHtml for flexibility
+        $filePath = 'exports/' . $filename;
+        Storage::disk($disk)->put($filePath, json_encode($trainingData));
     }
 }

@@ -44,6 +44,7 @@ class GetAllChats extends Command
         try {
             $body = $this->msService->callEndpoint('get-chats');
             $i = 0;
+            $count = count($body->data->data);
             foreach ($body->data->data as $key => $user) {
                 $i++;
                 $number =  $user->id->user;

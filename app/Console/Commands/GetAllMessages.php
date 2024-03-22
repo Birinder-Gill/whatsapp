@@ -93,14 +93,10 @@ class GetAllMessages extends Command
                 $query = AllWapiChats::where('from',  $value->chatId)->orWhere('to',  $value->chatId);
                 if ($query->exists()) {
                     $this->line("Already found " . ($query->count()) . " messages in table.");
-
-                    // $deleted = $query->delete();
-                    // $this->line("Deleted: $deleted messages.");
                 }
 
                 $this->retry(function () use ($value) {
                     $body = $this->msService->callEndpoint("fetch-messages", ["chatId" => $value->chatId]);
-
                     $entries = [];
                     $count = count($body->data->data);
                     foreach ($body->data->data as $key => $message) {

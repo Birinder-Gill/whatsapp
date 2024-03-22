@@ -31,6 +31,7 @@ class MessageLoggerMiddleware
             $messageNumber = detectManualMessage($from, $message);
 
             if (($messageNumber > -1)) {
+
                 $logArray = [
                     'from' => $from,
                     'displayName' => $personName,
@@ -46,6 +47,7 @@ class MessageLoggerMiddleware
                 if ($messageNumber === 0) {
                     createNewLead($from);
                 }
+
                 if ($messageNumber === 1) {
                     createHotLead($from);
                 }

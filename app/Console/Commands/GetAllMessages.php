@@ -117,8 +117,6 @@ class GetAllMessages extends Command
                         }
                     }
 
-
-
                     $updateData = [
                         "messagesAdded" => count($entries)
                     ];
@@ -129,10 +127,10 @@ class GetAllMessages extends Command
                     }
                     WapiUser::where("chatId", $value->chatId)->update($updateData);
 
-                    $info = "Added " . count($entries) . " Api count: $count. Final row count in table: ".(AllWapiChats::where('from',  $value->chatId)->orWhere('to',  $value->chatId)->count());
-                    if($allDone){
+                    $info = "Added " . count($entries) . " Api count: $count. Final row count in table: " . (AllWapiChats::where('from',  $value->chatId)->orWhere('to',  $value->chatId)->count());
+                    if ($allDone) {
                         $this->info($info);
-                    }else{
+                    } else {
                         $this->error($info);
                     }
                     $this->line("");

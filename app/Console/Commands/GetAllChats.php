@@ -48,19 +48,18 @@ class GetAllChats extends Command
             foreach ($body->data->data as $key => $user) {
                 $i++;
                 $number =  $user->id->user;
-                $result = WapiUser::updateOrCreate(
-                    [
-                        "number" => $number,
-                    ],
-                    [
-                        "number" => $number,
-                        "chatId" => $user->id->_serialized,
-                        "isGroup" => $user->isGroup,
-                        "name" => $user->name,
-                        "lastMessage" => $user->lastMessage->body,
-                    ]
-                );
-                $this->line($result->name . " -> " . $result->number);
+                if (!(WapiUser::where("number", $number)->exists())) {
+                    $result = WapiUser::create(
+                        [
+                            "number" => $number,
+                            "chatId" => $user->id->_serialized,
+                            "isGroup" => $user->isGroup,
+                            "name" => $user->name,
+                            "lastMessage" => $user->lastMessage->body,
+                        ]
+                    );
+                    $this->line($result->name . " -> " . $result->number);
+                }
             }
             $this->info("Succesfully added " . $i . " numbers");
             return Command::SUCCESS;

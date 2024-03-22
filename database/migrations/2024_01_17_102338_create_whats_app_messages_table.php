@@ -18,12 +18,10 @@ return new class extends Migration
             $table->string("from");
             $table->string("displayName")->default("");
             $table->string("to");
-            $table->string("threadId");
             $table->integer("counter");
             $table->string("messageText")->default('');
             $table->string("messageId");
             $table->string("messageHash");
-
             $table->timestamps();
         });
     }

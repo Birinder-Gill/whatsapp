@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string("name");
             $table->text("lastMessage")->nullable();
             $table->boolean("messagesFetched")->default(false);
+            $table->integer("messagesAdded")->default(0);
             $table->timestamps();
         });
     }

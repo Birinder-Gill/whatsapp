@@ -17,16 +17,13 @@ class MessageSendingService
         $this->waService = $waService;
     }
 
-    function sendOpenAiResponse(array $toSend)
+    function sendOpenAiResponse(array $toSend, string $to)
     {
-        $to = $this->rcService->getFrom();
         $this->waService->sendWhatsAppMessage($to, $toSend);
     }
 
-    function sendFirstMessage($personName)
+    function sendFirstMessage($personName,string $to)
     {
-
-        $to = $this->rcService->getFrom();
         $toSend = $this->rcService->getFirstMessage($personName);
         logMe("sendFirstMessage", [
             "person name" => $personName,
@@ -44,13 +41,13 @@ class MessageSendingService
         }
     }
 
-    function giveQueryResponse(string $query, $appendLink = false)
+    function giveQueryResponse(string $query,string $to, $appendLink)
     {
         $response = $this->rcService->getQueryResponse($query);
         if ($appendLink && $query !== 'OK') {
             $response = $response . $this->rcService->getLinkMessage();
         }
-        return $this->waService->sendWhatsAppMessage($this->rcService->getFrom(), $response);
+        return $this->waService->sendWhatsAppMessage($to, $response);
     }
 
     function deleteMessage($hash)

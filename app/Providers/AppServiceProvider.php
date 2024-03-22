@@ -20,7 +20,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // dd(AppServiceProvider::class." Register");
         $this->app->bind(OpenAiAnalysisService::class, function ($app) {
             return new OpenAiAnalysisService();
         });

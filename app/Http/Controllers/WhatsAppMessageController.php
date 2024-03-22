@@ -53,23 +53,13 @@ class WhatsAppMessageController extends Controller
     {
         $data = request()->json()->all()['data']['message']['_data'];
         $message = $data['body'];
+        $from = $data['from'];
         $assistant = $this->aiService->createAndRun($message, "asst_sgHG5GtlW0UWg4z2zZqzvC1W");
-        $this->msService->sendOpenAiResponse($assistant);
+        $this->msService->sendOpenAiResponse($assistant, $from);
     }
 
     function testReceived(Request $request)
     {
-        // try {
-        //     $data = request()->json()->all()['data']['message']['_data'];
-        //     $message = $data['body'];
-        //     $assistant = $this->aiService->createAndRun($message,"asst_mHv2bINmV0mvMa3rDBTA2q2t");
-        //     $this->msService->sendOpenAiResponse($assistant);
-        //     // $query = $this->aiService->queryDetection($message,);
-        //     // $this->msService->giveQueryResponse($query);
-        // } catch (\Throwable $th) {
-        //    report($th);
-        // }
-
     }
 
     public function generateImage(Request $request)
@@ -104,32 +94,21 @@ class WhatsAppMessageController extends Controller
             $from = $data['from'];
             $hash = $data['id']['_serialized'];
 
-            $messageNumber = detectManualMessage($from, $message);
-            if ($messageNumber > -1) {
-                $logArray = [
-                    'from' => $from,
-                    'displayName' => $personName,
-                    'to' => $data['to'],
-                    'counter' => $messageNumber + 1,
-                    'messageText' => $message,
-                    'messageId' => $data['id']['id'],
-                    'messageHash' => $hash,
-                    'threadId' => $this->aiService->getThreadId()
-                ];
-                incrementCounter($logArray);
-
-                if ($messageNumber === 0) {
-                    $this->msService->deleteMessage($hash);
-                    $this->msService->sendFirstMessage($personName);
-                } else {
-                    $query = $this->aiService->queryDetection($message);
-                    $this->msService->giveQueryResponse($query, $messageNumber == 1);
+            $gptActive = $this->aiService->initialise($from);
+            if ($gptActive) {
+                $messageNumber = detectManualMessage($from, $message);
+                if ($messageNumber > -1) {
+                    if ($messageNumber === 0) {
+                        $this->msService->deleteMessage($hash);
+                        $this->msService->sendFirstMessage($personName, $from);
+                    } else {
+                        $query = $this->aiService->queryDetection($message);
+                        $this->msService->giveQueryResponse($query, $from, $messageNumber == 1);
+                    }
                 }
             }
         } catch (\Throwable $e) {
             report($e);
-            // $this->msService->sendTestMessage($e->getFile().'-> '.$e->getLine());
-
         }
     }
 

@@ -14,6 +14,7 @@ class WapiUser extends Model
         "name",
         "number",
         "lastMessage",
-        "messagesFetched"
+        "messagesFetched",
+        "messagesAdded"
     ];
 }

@@ -6,7 +6,6 @@ namespace App\Services;
 use App\Models\OpenAiLock;
 use App\Models\OpenAiMessageTrack;
 use App\Models\OpenAiThread;
-use Illuminate\Support\Facades\Log;
 use OpenAI;
 
 class OpenAiAnalysisService
@@ -18,44 +17,37 @@ class OpenAiAnalysisService
 
     public function __construct()
     {
-        // dd(OpenAiAnalysisService::class." Construct");
+    }
 
+    function initialise(string $from): bool
+    {
         try {
-            $data = request()->json()->all()['data']['message']['_data'];
-            logMe(OpenAiAnalysisService::class,request()->json()->all());
-            $message = $data['body'];
-            $from = $data['from'];
-            $fromMe = $data['id']['fromMe'];
-            $messageNumber = detectManualMessage($from, $message, $fromMe);
-            if ($messageNumber > -1) {
-                $openAiKey = config('app.openAiKey');
-                $this->client = OpenAI::client($openAiKey);
-                $from = $data['from'];
-                $query = OpenAiThread::where('from', $from);
-                if ($query->exists()) {
-                    $this->threadId = $query->first()->threadId;
-                } else {
-                    $response = $this->client->threads()->create([]);
-                    $this->threadId = $response->id;
-                    OpenAiThread::create([
-                        'from' => $from,
-                        'threadId' => $this->threadId
-                    ]);
-                }
-            }else{
-                $this->kill = true;
+            $openAiKey = config('app.openAiKey');
+            $this->client = OpenAI::client($openAiKey);
+            $query = OpenAiThread::where('from', $from);
+            if ($query->exists()) {
+                $this->threadId = $query->first()->threadId;
+            } else {
+                $response = $this->client->threads()->create([]);
+                $this->threadId = $response->id;
+                OpenAiThread::create([
+                    'from' => $from,
+                    'threadId' => $this->threadId
+                ]);
             }
-        } catch (\Throwable $e) {
-            report($e);
+            return true;
+        } catch (\Throwable $th) {
+            report($th);
+            return false;
         }
     }
 
-    function queryDetection($message,$asstID=null): string
+    function queryDetection($message, $asstID = null): string
     {
-        if($this->kill){
+        if ($this->kill) {
             return "Killed";
         }
-        $toSend = $this->createAndRun($message,$asstID);
+        $toSend = $this->createAndRun($message, $asstID);
         return explode("-", $toSend)[0];
     }
     function getThreadId(): string
@@ -65,7 +57,7 @@ class OpenAiAnalysisService
 
     function createAndRun($message, $assId = null)
     {
-        if($this->kill){
+        if ($this->kill) {
             return "Killed";
         }
         if ($assId) {
@@ -88,7 +80,7 @@ class OpenAiAnalysisService
     }
     function getAssistantResponse()
     {
-        if($this->kill){
+        if ($this->kill) {
             return "Killed";
         }
         $response = $this->client->threads()->messages()->list($this->threadId, [
@@ -99,7 +91,7 @@ class OpenAiAnalysisService
     }
     function createRun()
     {
-        if($this->kill){
+        if ($this->kill) {
             return "Killed";
         }
         $run =  $this->client->threads()->runs()->create(
@@ -113,7 +105,7 @@ class OpenAiAnalysisService
     }
     function runRetrievePolling($runId)
     {
-        if($this->kill){
+        if ($this->kill) {
             return "Killed";
         }
         OpenAiLock::updateOrCreate(['threadId' => $this->threadId]);
@@ -131,7 +123,7 @@ class OpenAiAnalysisService
     }
     function checkMessageTrack()
     {
-        if($this->kill){
+        if ($this->kill) {
             return "Killed";
         }
         $messages = OpenAiMessageTrack::where('threadId', $this->threadId)->get();
@@ -148,7 +140,7 @@ class OpenAiAnalysisService
     }
     function createMessages(array $messages)
     {
-        if($this->kill){
+        if ($this->kill) {
             return "Killed";
         }
         $response = $this->client->threads()->messages()->create($this->threadId, $messages);

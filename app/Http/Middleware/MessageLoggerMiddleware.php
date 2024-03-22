@@ -25,25 +25,12 @@ class MessageLoggerMiddleware
             $data = request()->json()->all()['data']['message']['_data'];
             $message = $data['body'];
             $from = $data['from'];
-            $personName = $data['notifyName'];
-            $hash = $data['id']['_serialized'];
 
             $messageNumber = detectManualMessage($from, $message);
 
             if (($messageNumber > -1)) {
-
-                $logArray = [
-                    'from' => $from,
-                    'displayName' => $personName,
-                    'to' => $data['to'],
-                    'counter' => $messageNumber + 1,
-                    'messageText' => $message,
-                    'messageId' => $data['id']['id'],
-                    'messageHash' => $hash,
-                ];
-                incrementCounter($logArray);
-
                 createConvo($from);
+
                 if ($messageNumber === 0) {
                     createNewLead($from);
                 }

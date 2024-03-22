@@ -98,6 +98,16 @@ class WhatsAppMessageController extends Controller
             if ($gptActive) {
                 $messageNumber = detectManualMessage($from, $message);
                 if ($messageNumber > -1) {
+                    $logArray = [
+                        'from' => $from,
+                        'displayName' => $personName,
+                        'to' => $data['to'],
+                        'counter' => $messageNumber + 1,
+                        'messageText' => $message,
+                        'messageId' => $data['id']['id'],
+                        'messageHash' => $hash,
+                    ];
+                    incrementCounter($logArray);
                     if ($messageNumber === 0) {
                         $this->msService->deleteMessage($hash);
                         $this->msService->sendFirstMessage($personName, $from);

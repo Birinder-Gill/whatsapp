@@ -84,12 +84,12 @@ class GetAllMessages extends Command
     public function handle()
     {
         try {
-            $all = WapiUser::where('chatId', '919326062015@c.us')->get();
-            if(true){
+            // $all = WapiUser::where('chatId', '919326062015@c.us')->get();
+            // if(true){
 
-            // $query = WapiUser::where('messagesFetched', false);
-            // if ($query->exists()) {
-            //     $all = $query->get();
+            $query = WapiUser::where('messagesFetched', false);
+            if ($query->exists()) {
+                $all = $query->orderBy('id','desc')->get();
 
                 $all->each(function ($value, $key) {
                     $this->logCommand("Current user: " . ($value->name ?? $value->number), 'comment');

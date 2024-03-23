@@ -32,7 +32,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->command(GetAllChats::class, ["--fromScheduler" => "yes"])->dailyAt('23:05');
         $schedule->command(GetAllMessages::class, ["--fromScheduler" => "yes"])->dailyAt('23:00');
-        $schedule->command(GainToTrain::class, ["--fromScheduler" => "yes"])->dailyAt('23:50');
+        $schedule->command(GainToTrain::class, ["--fromScheduler" => "yes"])->dailyAt('00:00');
 
     }
 

@@ -15,7 +15,7 @@ class GetAllChats extends Command
      *
      * @var string
      */
-    protected $signature = 'wapi:users';
+    protected $signature = 'wapi:users {--fromScheduler}';
 
     /**
      * The console command description.
@@ -26,11 +26,18 @@ class GetAllChats extends Command
 
 
     protected MessageSendingService $msService;
+    protected $fromScheduler = false;
+
 
     public function __construct(MessageSendingService $msService)
     {
         parent::__construct();
         $this->msService = $msService;
+        if ($this->option('fromScheduler')) {
+            $this->fromScheduler = true;
+        } else {
+            $this->fromScheduler = false;
+        }
     }
 
     /**
@@ -41,12 +48,11 @@ class GetAllChats extends Command
     public function handle()
     {
         try {
-            $fromScheduler = false;
             $body = $this->msService->callEndpoint('get-chats');
             $i = 0;
             $count = count($body->data->data);
             $inTable = WapiUser::count();
-            $this->logCommand("Wapi gave $count users, We have $inTable users", $fromScheduler);
+            $this->logCommand("Wapi gave $count users, We have $inTable users");
             foreach ($body->data->data as $key => $user) {
                 $i++;
                 $number =  $user->id->user;
@@ -60,18 +66,18 @@ class GetAllChats extends Command
                             "lastMessage" => $user->lastMessage->body,
                         ]
                     );
-                    $this->logCommand($result->name . " -> " . $result->number, $fromScheduler);
+                    $this->logCommand($result->name . " -> " . $result->number);
                 }
             }
-            $this->logCommand("Succesfully added " . $i . " numbers", $fromScheduler, 'info');
+            $this->logCommand("Succesfully added " . $i . " numbers", 'info');
             return Command::SUCCESS;
         } catch (\Throwable $th) {
-            $this->logCommand($th->getMessage(), $fromScheduler, 'error');
+            $this->logCommand($th->getMessage(), 'error');
             return Command::FAILURE;
         }
     }
 
-    private function logCommand(string $message, bool $fromScheduler, string $level = 'line')
+    private function logCommand(string $message, string $level = 'line')
     {
         switch ($level) {
             case 'info':
@@ -93,7 +99,7 @@ class GetAllChats extends Command
         commandLog(
             "GetAllChats",
             $message,
-            $fromScheduler,
+            $this->fromScheduler,
             $level
         );
     }

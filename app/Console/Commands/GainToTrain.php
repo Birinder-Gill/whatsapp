@@ -33,7 +33,9 @@ class GainToTrain extends Command
     {
         $trainingData = [];
 
-        $messages = [];
+
+        // todo: BAREEKI AALE KAM TYPE FILETERING AND REPLY CONVERSATION SETTING.
+        //$messages = GetAllMessages::all();
 
         return Command::SUCCESS;
     }

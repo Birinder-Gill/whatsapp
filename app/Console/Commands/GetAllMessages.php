@@ -26,7 +26,7 @@ class GetAllMessages extends Command
     protected $description = 'Loops through WapiUsers table and fetch and store all the messages in AllWapiChats';
 
     protected MessageSendingService $msService;
-
+    protected $fromScheduler = false;
     public function __construct(MessageSendingService $msService)
     {
         parent::__construct();
@@ -84,64 +84,95 @@ class GetAllMessages extends Command
     public function handle()
     {
         try {
+            $all = WapiUser::where('chatId', '919326062015@c.us')->get();
+            if(true){
 
-            // $all = WapiUser::where('chatId', '919418082504@c.us')->get();
+            // $query = WapiUser::where('messagesFetched', false);
+            // if ($query->exists()) {
+            //     $all = $query->get();
 
-            $all = WapiUser::where('messagesFetched', false)->get();
-            $all->each(function ($value, $key) {
-                $this->comment("Current user: " . ($value->name ?? $value->number));
-                $query = AllWapiChats::where('from',  $value->chatId)->orWhere('to',  $value->chatId);
-                if ($query->exists()) {
-                    $this->line("Already found " . ($query->count()) . " messages in table.");
-                }
+                $all->each(function ($value, $key) {
+                    $this->logCommand("Current user: " . ($value->name ?? $value->number), 'comment');
+                    $query = AllWapiChats::where('from',  $value->chatId)->orWhere('to',  $value->chatId);
+                    if ($query->exists()) {
+                        $this->logCommand("Already found " . ($query->count()) . " messages in table.");
+                    }
 
-                $this->retry(function () use ($value) {
-                    $body = $this->msService->callEndpoint("fetch-messages", ["chatId" => $value->chatId]);
-                    $entries = [];
-                    $count = count($body->data->data);
-                    foreach ($body->data->data as $key => $message) {
-                        $messageId = $message->message->id->_serialized;
-                        $entry = AllWapiChats::updateOrCreate([
-                            "messageId" => $messageId
-                        ], [
-                            "from" => $message->message->from,
-                            "messageId" => $messageId,
-                            "message" => $message->message->type === "chat" ? $message->message->body : $message->message->type,
-                            "type" => $message->message->type,
-                            "to" => $message->message->to,
-                            "fromMe" => $message->message->id->fromMe,
-                            "messageTime" => Carbon::createFromTimestamp($message->message->timestamp, 'Asia/Kolkata'),
-                        ]);
-                        if ($entry) {
-                            $entries[$messageId] = $entry->message;
+                    $this->retry(function () use ($value) {
+                        $body = $this->msService->callEndpoint("fetch-messages", ["chatId" => $value->chatId]);
+                        $entries = [];
+                        $count = count($body->data->data);
+                        foreach ($body->data->data as $key => $message) {
+                            $messageId = $message->message->id->_serialized;
+                            $entry = AllWapiChats::updateOrCreate([
+                                "messageId" => $messageId
+                            ], [
+                                "from" => $message->message->from,
+                                "messageId" => $messageId,
+                                "message" => $message->message->type === "chat" ? $message->message->body : $message->message->type,
+                                "type" => $message->message->type,
+                                "to" => $message->message->to,
+                                "fromMe" => $message->message->id->fromMe,
+                                "messageTime" => Carbon::createFromTimestamp($message->message->timestamp, 'Asia/Kolkata'),
+                            ]);
+                            if ($entry) {
+                                $entries[$messageId] = $entry->message;
+                            }
                         }
-                    }
 
-                    $updateData = [
-                        "messagesAdded" => count($entries)
-                    ];
-                    $allDone = (count($entries) === $count);
+                        $updateData = [
+                            "messagesAdded" => count($entries)
+                        ];
+                        $allDone = (count($entries) === $count);
 
-                    if ($allDone) {
-                        $updateData["messagesFetched"] = true;
-                    }
-                    WapiUser::where("chatId", $value->chatId)->update($updateData);
+                        if ($allDone) {
+                            $updateData["messagesFetched"] = true;
+                        }
+                        WapiUser::where("chatId", $value->chatId)->update($updateData);
 
-                    $info = "Added " . count($entries) . " Api count: $count. Final row count in table: " . (AllWapiChats::where('from',  $value->chatId)->orWhere('to',  $value->chatId)->count());
-                    if ($allDone) {
-                        $this->info($info);
-                    } else {
-                        $this->error($info);
-                    }
-                    $this->line("");
+                        $info = "Added " . count($entries) . "messages. Api count: $count. Final row count in table: " . (AllWapiChats::where('from',  $value->chatId)->orWhere('to',  $value->chatId)->count());
+                        if ($allDone) {
+                            $this->logCommand($info, 'info');
+                        } else {
+                            $this->logCommand($info, 'error');
+                        }
+                        $this->logCommand("");
+                    });
                 });
-            });
-            $this->info("All chats are done.");
+                $this->logCommand("All chats are done.", 'info');
+            }
             return Command::SUCCESS;
         } catch (\Throwable $th) {
-            $this->error($th->getMessage());
+            $this->logCommand($th->getMessage(), 'error');
             return Command::FAILURE;
         }
+    }
+
+    private function logCommand(string $message, string $level = 'info')
+    {
+        switch ($level) {
+            case 'info':
+                $this->info($message);
+                break;
+            case 'line':
+                $this->line($message);
+                break;
+            case 'error':
+                $this->error($message);
+                break;
+            case 'comment':
+                $this->comment($message);
+                break;
+            default:
+                # code...
+                break;
+        }
+        commandLog(
+            "GetAllMessages",
+            $message,
+            $this->fromScheduler,
+            $level
+        );
     }
 
     private function retry($callback, $maxAttempts = 3, $waitMilliseconds = 5000)
@@ -151,7 +182,7 @@ class GetAllMessages extends Command
                 $callback();
             } catch (\Throwable $e) {
                 // Log the error or handle it accordingly
-                $this->error("Error occurred: " . $e->getMessage());
+                $this->logCommand($e->getMessage(), 'error');
                 throw $e; // Rethrow the exception to retry
             }
         }, $waitMilliseconds);

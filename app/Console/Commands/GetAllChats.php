@@ -6,8 +6,7 @@ use App\Models\WapiUser;
 use App\Services\MessageSendingService;
 use Illuminate\Console\Command;
 use App\Services\WhatsAppApiService;
-
-
+use Illuminate\Support\Facades\Log;
 
 class GetAllChats extends Command
 {
@@ -42,9 +41,12 @@ class GetAllChats extends Command
     public function handle()
     {
         try {
+            $fromScheduler = false;
             $body = $this->msService->callEndpoint('get-chats');
             $i = 0;
             $count = count($body->data->data);
+            $inTable = WapiUser::count();
+            $this->logCommand("Wapi gave $count users, We have $inTable users",$fromScheduler);
             foreach ($body->data->data as $key => $user) {
                 $i++;
                 $number =  $user->id->user;
@@ -58,14 +60,38 @@ class GetAllChats extends Command
                             "lastMessage" => $user->lastMessage->body,
                         ]
                     );
-                    $this->line($result->name . " -> " . $result->number);
+                    $this->logCommand($result->name . " -> " . $result->number,$fromScheduler);
                 }
             }
-            $this->info("Succesfully added " . $i . " numbers");
+            $this->logCommand("Succesfully added " . $i . " numbers",$fromScheduler,'info');
             return Command::SUCCESS;
         } catch (\Throwable $th) {
-            $this->error($th->getMessage());
+            $this->logCommand($th->getMessage(),$fromScheduler, 'error');
             return Command::FAILURE;
         }
+    }
+
+   private function logCommand(string $message, bool $fromScheduler, string $level = 'line')
+    {
+        switch ($level) {
+            case 'info':
+                $this->info($message);
+                break;
+            case 'line':
+                $this->line($message);
+                break;
+            case 'error':
+                $this->error($message);
+                break;
+            default:
+                # code...
+                break;
+        }
+        commandLog(
+            "GetAllChats",
+            $message,
+            $fromScheduler,
+            $level
+        );
     }
 }

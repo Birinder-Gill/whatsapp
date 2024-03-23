@@ -4,6 +4,9 @@ namespace App\Console;
 
 use App\Console\Commands\ContactSaveFollowUp;
 use App\Console\Commands\FollowUpConversations;
+use App\Console\Commands\GainToTrain;
+use App\Console\Commands\GetAllChats;
+use App\Console\Commands\GetAllMessages;
 use App\Console\Commands\LeadSystem;
 use App\Console\Commands\SecondFollowUp;
 use Illuminate\Console\Scheduling\Schedule;
@@ -26,6 +29,9 @@ class Kernel extends ConsoleKernel
         if (config('app.product') === "Tags") {
             $schedule->command(LeadSystem::class)->daily();
         }
+        $schedule->command(GetAllChats::class)->dailyAt('22:50');
+        $schedule->command(GetAllMessages::class)->dailyAt('23:00');
+        $schedule->command(GainToTrain::class)->dailyAt('23:50');
     }
 
     /**

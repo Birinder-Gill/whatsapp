@@ -22,6 +22,8 @@ class GainToTrain extends Command
      */
     protected $description = 'This command fetches all the messages from AllWapiChats table and store them as assistant training json in storage.';
 
+    protected $systemContent = 'You are a virtual sales assistant trained to sell Jewelery tags.';
+
     /**
      * Execute the console command.
      *
@@ -30,6 +32,8 @@ class GainToTrain extends Command
     public function handle()
     {
         $trainingData = [];
+
+        $messages = [];
 
         return Command::SUCCESS;
     }

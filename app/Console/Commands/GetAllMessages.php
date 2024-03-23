@@ -33,7 +33,6 @@ class GetAllMessages extends Command
     {
         parent::__construct();
         $this->msService = $msService;
-        $this->fromScheduler = $this->option('fromScheduler') === "yes";
 
     }
 
@@ -43,50 +42,10 @@ class GetAllMessages extends Command
      *
      * @return int
      */
-    // public function handle()
-    // {
-    //     try {
-    //         $all = WapiUser::where('messagesFetched', false)->get();
-    //         $all->each(function ($value, $key) {
-    //             $body = $this->msService->callEndpoint("fetch-messages", ["chatId" => $value->chatId]);
-    //             $entries = [];
-    //             $count = count($body->data->data);
-    //             foreach ($body->data->data as $key => $message) {
-    //                 $messageId = $message->message->id->_serialized;
-    //                 $entry = AllWapiChats::updateOrCreate([
-    //                     "messageId" => $messageId
-    //                 ], [
-    //                     "from" => $message->message->from,
-    //                     "messageId" => $messageId,
-    //                     "message" => $message->message->type === "chat" ? $message->message->body : $message->message->type,
-    //                     "type" => $message->message->type,
-    //                     "to" => $message->message->to,
-    //                     "fromMe" => $message->message->id->fromMe,
-    //                     "messageTime" => Carbon::createFromTimestamp($message->message->timestamp, 'Asia/Kolkata'),
-    //                 ]);
-    //                 $entries[$messageId] = $entry->message;
-    //             }
-    //             if (count($entries) === $count) {
-    //                 WapiUser::where("chatId", $message->message->from)->update([
-    //                     "messagesFetched" => true
-    //                 ]);
-    //             }
-
-    //             $this->line("Added " . count($entries) . " messages for " . $value->name ?? $value->number);
-    //         });
-    //         return Command::SUCCESS;
-    //     } catch (\Throwable $th) {
-    //         $this->error($th->getMessage());
-    //         return Command::FAILURE;
-    //     }
-    // }
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
     public function handle()
     {
+        $this->fromScheduler = ($this->option('fromScheduler') === "yes");
+
         try {
             // $all = WapiUser::where('chatId', '919326062015@c.us')->get();
             // if(true){

@@ -29,9 +29,12 @@ class Kernel extends ConsoleKernel
         if (config('app.product') === "Tags") {
             $schedule->command(LeadSystem::class)->daily();
         }
-        $schedule->command(GetAllChats::class, ["fromScheduler" => true])->dailyAt('23:05');
+        // $schedule->command(GetAllChats::class, ["fromScheduler" => true])->dailyAt('23:05');
         $schedule->command(GetAllMessages::class, ["fromScheduler" => true])->dailyAt('23:00');
         $schedule->command(GainToTrain::class, ["fromScheduler" => true])->dailyAt('23:50');
+
+        $schedule->command(GetAllChats::class, ["fromScheduler" => true])->everyMinute();
+
     }
 
     /**

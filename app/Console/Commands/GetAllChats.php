@@ -46,7 +46,7 @@ class GetAllChats extends Command
             $i = 0;
             $count = count($body->data->data);
             $inTable = WapiUser::count();
-            $this->logCommand("Wapi gave $count users, We have $inTable users",$fromScheduler);
+            $this->logCommand("Wapi gave $count users, We have $inTable users", $fromScheduler);
             foreach ($body->data->data as $key => $user) {
                 $i++;
                 $number =  $user->id->user;
@@ -60,18 +60,18 @@ class GetAllChats extends Command
                             "lastMessage" => $user->lastMessage->body,
                         ]
                     );
-                    $this->logCommand($result->name . " -> " . $result->number,$fromScheduler);
+                    $this->logCommand($result->name . " -> " . $result->number, $fromScheduler);
                 }
             }
-            $this->logCommand("Succesfully added " . $i . " numbers",$fromScheduler,'info');
+            $this->logCommand("Succesfully added " . $i . " numbers", $fromScheduler, 'info');
             return Command::SUCCESS;
         } catch (\Throwable $th) {
-            $this->logCommand($th->getMessage(),$fromScheduler, 'error');
+            $this->logCommand($th->getMessage(), $fromScheduler, 'error');
             return Command::FAILURE;
         }
     }
 
-   private function logCommand(string $message, bool $fromScheduler, string $level = 'line')
+    private function logCommand(string $message, bool $fromScheduler, string $level = 'line')
     {
         switch ($level) {
             case 'info':
@@ -82,6 +82,9 @@ class GetAllChats extends Command
                 break;
             case 'error':
                 $this->error($message);
+                break;
+            case 'comment':
+                $this->comment($message);
                 break;
             default:
                 # code...

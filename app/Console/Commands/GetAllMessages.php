@@ -104,7 +104,7 @@ class GetAllMessages extends Command
                         $count = count($body->data->data);
                         foreach ($body->data->data as $key => $message) {
                             $messageId = $message->message->id->_serialized;
-                                if($message->message->type === "pinned_message"){
+                            if ($message->message->type === "pinned_message") {
                                 $entries[$messageId] = $message->message->type;
                                 continue;
                             }
@@ -145,10 +145,13 @@ class GetAllMessages extends Command
                     });
                 });
                 $this->logCommand("All chats are done.", 'info');
+            } else {
+                if (WapiUser::count() === WapiUser::where('messagesFetched', true)->count())
+                    $this->logCommand('All messages are already fetched','comment');
             }
             return Command::SUCCESS;
         } catch (\Throwable $th) {
-            $this->logCommand($th->getMessage().' at '.$th->getLine(), 'error');
+            $this->logCommand($th->getMessage() . ' at ' . $th->getLine(), 'error');
             return Command::FAILURE;
         }
     }

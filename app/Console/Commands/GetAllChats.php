@@ -42,6 +42,7 @@ class GetAllChats extends Command
      */
     public function handle()
     {
+
         $this->fromScheduler = ($this->option('fromScheduler') === "yes");
         try {
             $body = $this->msService->callEndpoint('get-chats');

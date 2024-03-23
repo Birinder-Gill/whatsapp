@@ -33,9 +33,6 @@ class GetAllChats extends Command
     {
         parent::__construct();
         $this->msService = $msService;
-
-            $this->fromScheduler = $this->option('fromScheduler') === "yes";
-
     }
 
     /**
@@ -45,6 +42,7 @@ class GetAllChats extends Command
      */
     public function handle()
     {
+        $this->fromScheduler = ($this->option('fromScheduler') === "yes");
         try {
             $body = $this->msService->callEndpoint('get-chats');
             $i = 0;

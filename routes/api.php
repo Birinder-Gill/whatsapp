@@ -31,7 +31,7 @@ Route::middleware([LanguageDetection::class])->group(function () {
 
 });
 Route::post('/messageReceived', [WhatsAppMessageController::class, 'messageReceived'])->middleware([LogAllMessagesMiddleware::class, KillSwitchMiddleware::class,MessageLoggerMiddleware::class]);
-Route::post('/testReceived', [WhatsAppMessageController::class, 'testReceived']);
+Route::get('/testReceived', [WhatsAppMessageController::class, 'testReceived']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

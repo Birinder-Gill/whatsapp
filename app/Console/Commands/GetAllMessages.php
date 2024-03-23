@@ -104,6 +104,11 @@ class GetAllMessages extends Command
                         $count = count($body->data->data);
                         foreach ($body->data->data as $key => $message) {
                             $messageId = $message->message->id->_serialized;
+                                if($message->message->type === "pinned_message"){
+                                $entries[$messageId] = $message->message->type;
+                                continue;
+                            }
+
                             $entry = AllWapiChats::updateOrCreate([
                                 "messageId" => $messageId
                             ], [

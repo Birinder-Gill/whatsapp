@@ -16,7 +16,7 @@ class GetAllMessages extends Command
      *
      * @var string
      */
-    protected $signature = 'wapi:messages {--fromScheduler}';
+    protected $signature = 'wapi:messages {--fromScheduler=no}';
 
     /**
      * The console command description.
@@ -33,11 +33,8 @@ class GetAllMessages extends Command
     {
         parent::__construct();
         $this->msService = $msService;
-        if($this->option('fromScheduler')){
-            $this->fromScheduler = true;
-        }else{
-            $this->fromScheduler = false;
-        }
+        $this->fromScheduler = $this->option('fromScheduler') === "yes";
+
     }
 
 

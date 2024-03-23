@@ -30,10 +30,10 @@ class Kernel extends ConsoleKernel
             $schedule->command(LeadSystem::class)->daily();
         }
         // $schedule->command(GetAllChats::class, ["fromScheduler" => true])->dailyAt('23:05');
-        $schedule->command(GetAllMessages::class, ["fromScheduler" => true])->dailyAt('23:00');
-        $schedule->command(GainToTrain::class, ["fromScheduler" => true])->dailyAt('23:50');
+        $schedule->command(GetAllMessages::class, ["fromScheduler" => "yes"])->dailyAt('23:00');
+        $schedule->command(GainToTrain::class, ["fromScheduler" => "yes"])->dailyAt('23:50');
 
-        $schedule->command(GetAllChats::class, ["fromScheduler" => true])->everyMinute();
+        $schedule->command(GetAllChats::class, ["fromScheduler" => "yes"])->everyMinute();
 
     }
 

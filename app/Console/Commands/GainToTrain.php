@@ -13,7 +13,7 @@ class GainToTrain extends Command
      *
      * @var string
      */
-    protected $signature = 'wapi:export';
+    protected $signature = 'wapi:export {--fromScheduler=no}';
 
     /**
      * The console command description.
@@ -23,6 +23,7 @@ class GainToTrain extends Command
     protected $description = 'This command fetches all the messages from AllWapiChats table and store them as assistant training json in storage.';
 
     protected $systemContent = 'You are a virtual sales assistant trained to sell Jewelery tags.';
+    protected $fromScheduler = false;
 
     /**
      * Execute the console command.
@@ -33,6 +34,7 @@ class GainToTrain extends Command
     {
         $trainingData = [];
 
+        $this->fromScheduler = $this->option('fromScheduler') === "yes";
 
         // todo: BAREEKI AALE KAM TYPE FILETERING AND REPLY CONVERSATION SETTING.
         //$messages = GetAllMessages::all();

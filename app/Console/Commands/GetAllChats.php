@@ -15,7 +15,7 @@ class GetAllChats extends Command
      *
      * @var string
      */
-    protected $signature = 'wapi:users {--fromScheduler}';
+    protected $signature = 'wapi:users {--fromScheduler=no}';
 
     /**
      * The console command description.
@@ -33,11 +33,9 @@ class GetAllChats extends Command
     {
         parent::__construct();
         $this->msService = $msService;
-        if ($this->option('fromScheduler')) {
-            $this->fromScheduler = true;
-        } else {
-            $this->fromScheduler = false;
-        }
+
+            $this->fromScheduler = $this->option('fromScheduler') === "yes";
+
     }
 
     /**

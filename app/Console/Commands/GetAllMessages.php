@@ -89,7 +89,7 @@ class GetAllMessages extends Command
 
             $query = WapiUser::where('messagesFetched', false);
             if ($query->exists()) {
-                $all = $query->orderBy('id','desc')->get();
+                $all = $query->orderBy('id', 'desc')->get();
 
                 $all->each(function ($value, $key) {
                     $this->logCommand("Current user: " . ($value->name ?? $value->number), 'comment');
@@ -130,7 +130,7 @@ class GetAllMessages extends Command
                         }
                         WapiUser::where("chatId", $value->chatId)->update($updateData);
 
-                        $info = "Added " . count($entries) . "messages. Api count: $count. Final row count in table: " . (AllWapiChats::where('from',  $value->chatId)->orWhere('to',  $value->chatId)->count());
+                        $info = "Added " . count($entries) . " messages. Api count: $count. Final row count in table: " . (AllWapiChats::where('from',  $value->chatId)->orWhere('to',  $value->chatId)->count());
                         if ($allDone) {
                             $this->logCommand($info, 'info');
                         } else {
@@ -143,7 +143,7 @@ class GetAllMessages extends Command
             }
             return Command::SUCCESS;
         } catch (\Throwable $th) {
-            $this->logCommand($th->getMessage(), 'error');
+            $this->logCommand($th->getMessage().' at '.$th->getLine(), 'error');
             return Command::FAILURE;
         }
     }

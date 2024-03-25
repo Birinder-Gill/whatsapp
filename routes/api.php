@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 //REQUEST GOES TO SERVICE CONSTRUCTOR THAN TO MIDDLEWARE.
 Route::middleware([LanguageDetection::class])->group(function () {
     Route::get('/sendMedia', [WhatsAppMessageController::class, 'sendMediaApi']);
+
     // Route::get('/test', [WhatsAppMessageController::class, 'isAskingForPrice'])->middleware([KillSwitchMiddleware::class,MessageLoggerMiddleware::class]);
     Route::get('/sendMessage', [WhatsAppMessageController::class, 'sendMessage']);//->middleware([MessageLoggerMiddleware::class, KillSwitchMiddleware::class,]);;
     Route::post('/mickeyCalling', [WhatsAppMessageController::class, 'mickeyCalling']);

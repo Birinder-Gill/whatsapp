@@ -46,7 +46,7 @@ class GainToTrain extends Command
             foreach ($value as $key => $message) {
                 array_push($oneConvo, [
                     'role' => $message["fromMe"] ? "assistant" : "user",
-                    "content" => mb_strimwidth($message['message'], 0, 53, '...')
+                    "content" => $message['message'],//mb_strimwidth($message['message'], 0, 53, '...')
                 ]);
             }
             array_push($final, ["messages" => array_values($oneConvo)]);

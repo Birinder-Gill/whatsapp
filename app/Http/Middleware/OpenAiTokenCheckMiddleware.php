@@ -16,7 +16,7 @@ class OpenAiTokenCheckMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $match = base64_encode(config('app.openAiKey') . config('app.waapiKey'));
+        $match = base64_encode("bsgillrandomuniquestring74635uihjncv894");
         $header = $request->header('X-match-Header');
 
         if ($match === $header) {

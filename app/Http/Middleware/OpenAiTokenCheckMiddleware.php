@@ -18,9 +18,10 @@ class OpenAiTokenCheckMiddleware
     {
         $match = base64_encode(config('app.openAiKey') . config('app.waapiKey'));
         $header = $request->header('X-match-Header');
+
         if ($match === $header) {
             return $next($request);
         }
-        return response("Header => $header <br> Match => $match", 403);
+        return response("403 Denied MF", 403);
     }
 }

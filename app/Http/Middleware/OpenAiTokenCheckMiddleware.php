@@ -21,6 +21,6 @@ class OpenAiTokenCheckMiddleware
         if ($match === $header) {
             return $next($request);
         }
-        return response("Denied MF", 403);
+        return response("Header => $header <br> Match => $match", 403);
     }
 }

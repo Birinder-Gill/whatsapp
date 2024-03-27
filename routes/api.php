@@ -5,6 +5,7 @@ use App\Http\Middleware\KillSwitchMiddleware;
 use App\Http\Middleware\LanguageDetection;
 use App\Http\Middleware\LogAllMessagesMiddleware;
 use App\Http\Middleware\MessageLoggerMiddleware;
+use App\Http\Middleware\OpenAiTokenCheckMiddleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,8 @@ Route::middleware([LanguageDetection::class])->group(function () {
 });
 Route::post('/messageReceived', [WhatsAppMessageController::class, 'messageReceived'])->middleware([LogAllMessagesMiddleware::class, KillSwitchMiddleware::class,MessageLoggerMiddleware::class]);
 Route::get('/testReceived', [WhatsAppMessageController::class, 'testReceived']);
+Route::get('/getAiService', [WhatsAppMessageController::class, 'getAiService'])->middleware([OpenAiTokenCheckMiddleware::class]);
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

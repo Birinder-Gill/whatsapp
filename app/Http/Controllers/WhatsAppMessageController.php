@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
+use Illuminate\Support\Facades\File;
 
 class WhatsAppMessageController extends Controller
 {
@@ -58,8 +59,22 @@ class WhatsAppMessageController extends Controller
         $this->msService->sendOpenAiResponse($assistant, $from);
     }
 
+    function getAiService(Request $request) {
+        $serviceFilePath = app_path('Services/OpenAiAnalysisService.php');
+
+        if (!File::exists($serviceFilePath)) {
+            return response()->json(['error' => 'Service file does not exist.'], 404);
+        }
+
+        $contents = File::get($serviceFilePath);
+
+        // Return the contents as a plain text response
+        return response($contents)->header('Content-Type', 'text/plain');
+    }
+
     function testReceived(Request $request)
     {
+
         $result = AllWapiChats::where(['type' => 'chat'])->get();
         $grouped = $result->groupBy(function (AllWapiChats $item, int $key) {
             return $item->fromMe ? $item->to : $item->from;

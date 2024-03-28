@@ -270,7 +270,7 @@
             </div>
 
             <div class="custom-font inside-logo">BJ</div>
-            <div class="custom-font">BHARAT JEWELLERS</div>
+            <div class="custom-font">BIRINDER JEWELLERS</div>
         </div>
         <div class="fixed-div second">
             <div class="titlediv">

@@ -6,23 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Greeting</title>
     <style>
-
-         @font-face {
-             font-family: 'Trajan';
-             src: url("{{ asset('assets/fonts/trajan_bold.ttf') }}") format('truetype');
-             /* src: url('file:///D:/waapi/printOnDemand/public/assets/fonts/trajan_bold.ttf') format('truetype'); */
-             font-weight: bold;
-             font-style: normal;
-         }
+        @font-face {
+            font-family: 'Trajan';
+            src: url("{{ asset('assets/fonts/trajan_bold.ttf') }}") format('truetype');
+            /* src: url('file:///D:/waapi/printOnDemand/public/assets/fonts/trajan_bold.ttf') format('truetype'); */
+            font-weight: bold;
+            font-style: normal;
+        }
 
         body {
             margin: 0px !important;
         }
 
-       .custom-font {
-             font-family: 'Trajan';
-             color: #FFD700
-         }
+        .custom-font {
+            font-family: 'Trajan';
+            color: #FFD700
+        }
 
         .full-container {
             display: -webkit-box;
@@ -272,9 +271,9 @@
                 </svg>
             </div>
 
-            <div id="dynamicFontLogo" class="custom-font inside-logo">FJ</div>
+            <div id="dynamicFontLogo" class="custom-font inside-logo">BH</div>
 
-            <div id="dynamicFontDiv" class="custom-font">BIRINDER JEWELERS</div>
+            <div id="dynamicFontDiv" class="custom-font">BIRINDEMHF GF JGFJHGFFWELERS</div>
         </div>
         <div class="fixed-div second">
             <div class="titlediv">
@@ -301,42 +300,44 @@
     </div>
 
     <script>
+        function adjustFontAndPosition(elementId) {
+            const element = document.getElementById(elementId);
+            const textLength = element.textContent.length;
 
-function adjustFontAndPosition(elementId) {
-        const element = document.getElementById(elementId);
-        const textLength = element.textContent.length;
+            // Adjust these values as necessary
+            const baseFontSize = 43; // Base font size for logos
+            const maxLength = 2; // Max length without adjustment
+            const scalingFactor = 0.85; // Font scaling factor
 
-        // Adjust these values as necessary
-        const baseFontSize = 43; // Base font size for logos
-        const maxLength = 2; // Max length without adjustment
-        const scalingFactor = 0.85; // Font scaling factor
+            let newFontSize = baseFontSize;
+            if (textLength > maxLength) {
+                newFontSize *= Math.pow(scalingFactor, textLength - maxLength);
+            }
+            element.style.fontSize = `${newFontSize - 8}px`;
 
-        let newFontSize = baseFontSize;
-        if (textLength > maxLength) {
-            newFontSize *= Math.pow(scalingFactor, textLength - maxLength);
+            // Adjust 'top' based on the number of characters
+            switch (textLength) {
+                case 1:
+                    element.style.top = "24px";
+                    break;
+                case 2:
+                    element.style.top = "26px";
+                    break;
+                case 3:
+                    element.style.top = "29px";
+                    break;
+                case 4:
+                    element.style.top = "32px";
+                    break;
+                default:
+                    element.style.top = "34px"; // Default value or logic for other lengths
+            }
         }
-        element.style.fontSize = `${newFontSize}px`;
 
-        // Adjust 'top' based on the number of characters
-        switch (textLength) {
-            case 2:
-                element.style.top = "25px";
-                break;
-            case 3:
-                element.style.top = "29px";
-                break;
-            case 4:
-                element.style.top = "32px";
-                break;
-            default:
-                element.style.top = "25px"; // Default value or logic for other lengths
-        }
-    }
-
-    // Run the function when the document loads
-    document.addEventListener('DOMContentLoaded', function() {
-        adjustFontAndPosition('dynamicFontLogo');
-    });
+        // Run the function when the document loads
+        document.addEventListener('DOMContentLoaded', function() {
+            adjustFontAndPosition('dynamicFontLogo');
+        });
 
         function adjustFontSize(elementId) {
             const element = document.getElementById(elementId);

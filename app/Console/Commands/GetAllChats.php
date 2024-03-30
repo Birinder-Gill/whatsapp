@@ -5,8 +5,7 @@ namespace App\Console\Commands;
 use App\Models\WapiUser;
 use App\Services\MessageSendingService;
 use Illuminate\Console\Command;
-use App\Services\WhatsAppApiService;
-use Illuminate\Support\Facades\Log;
+
 
 class GetAllChats extends Command
 {

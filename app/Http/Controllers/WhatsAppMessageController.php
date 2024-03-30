@@ -102,8 +102,6 @@ class WhatsAppMessageController extends Controller
         $this->msService->sendTestMedia($pMedia);
         deleteStoredFile($pMedia);
 
-
-
         $pdf = SnappyPdf::loadView('greeting');
         $iMedia = generateAndStorePdf($pdf);
         $this->msService->sendTestMedia($iMedia);

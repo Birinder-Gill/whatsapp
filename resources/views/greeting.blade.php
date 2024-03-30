@@ -21,9 +21,7 @@
 
        .custom-font {
              font-family: 'Trajan';
-             font-size: 26px;
              color: #FFD700
-
          }
 
         .full-container {
@@ -122,12 +120,17 @@
 
         .inside-logo {
             position: absolute;
-            top: 25px;
             left: 0px;
             right: 0px;
             margin-left: 0px;
             margin-right: 0px;
-            font-size: 43px !important;
+            position: absolute;
+            top: 32px;
+            left: 0;
+            right: 0;
+            margin-left: auto;
+            margin-right: auto;
+
         }
     </style>
 </head>
@@ -269,8 +272,9 @@
                 </svg>
             </div>
 
-            <div class="custom-font inside-logo">BJ</div>
-            <div class="custom-font">BIRINDER JEWELLERS</div>
+            <div id="dynamicFontLogo" class="custom-font inside-logo">FJ</div>
+
+            <div id="dynamicFontDiv" class="custom-font">BIRINDER JEWELERS</div>
         </div>
         <div class="fixed-div second">
             <div class="titlediv">
@@ -296,7 +300,66 @@
         </div>
     </div>
 
+    <script>
 
+function adjustFontAndPosition(elementId) {
+        const element = document.getElementById(elementId);
+        const textLength = element.textContent.length;
+
+        // Adjust these values as necessary
+        const baseFontSize = 43; // Base font size for logos
+        const maxLength = 2; // Max length without adjustment
+        const scalingFactor = 0.85; // Font scaling factor
+
+        let newFontSize = baseFontSize;
+        if (textLength > maxLength) {
+            newFontSize *= Math.pow(scalingFactor, textLength - maxLength);
+        }
+        element.style.fontSize = `${newFontSize}px`;
+
+        // Adjust 'top' based on the number of characters
+        switch (textLength) {
+            case 2:
+                element.style.top = "25px";
+                break;
+            case 3:
+                element.style.top = "29px";
+                break;
+            case 4:
+                element.style.top = "32px";
+                break;
+            default:
+                element.style.top = "25px"; // Default value or logic for other lengths
+        }
+    }
+
+    // Run the function when the document loads
+    document.addEventListener('DOMContentLoaded', function() {
+        adjustFontAndPosition('dynamicFontLogo');
+    });
+
+        function adjustFontSize(elementId) {
+            const element = document.getElementById(elementId);
+            const textLength = element.textContent.length;
+
+            // Base font size and scaling factor may need adjustment
+            const baseFontSize = 23; // Your base font size
+            const maxLength = 15; // Adjust based on your average or max expected length before breaking
+            const scalingFactor = 0.95; // Adjust scaling factor based on testing
+
+            let newFontSize = baseFontSize;
+            if (textLength > maxLength) {
+                newFontSize *= Math.pow(scalingFactor, textLength - maxLength);
+            }
+
+            element.style.fontSize = `${newFontSize+3}px`;
+        }
+
+        // Adjust the font size of the div on document load
+        document.addEventListener('DOMContentLoaded', function() {
+            adjustFontSize('dynamicFontDiv');
+        });
+    </script>
 </body>
 
 </html>

@@ -13,7 +13,6 @@ class OpenAiAnalysisService
     protected $threadId;
     protected  $client;
     protected  $assId;
-    protected $kill = false;
 
     public function __construct()
     {
@@ -44,9 +43,7 @@ class OpenAiAnalysisService
 
     function queryDetection($message, $asstID = null): string
     {
-        if ($this->kill) {
-            return "Killed";
-        }
+
         $toSend = $this->createAndRun($message, $asstID);
         return explode("-", $toSend)[0];
     }
@@ -57,9 +54,7 @@ class OpenAiAnalysisService
 
     function createAndRun($message, $assId = null)
     {
-        if ($this->kill) {
-            return "Killed";
-        }
+
         if ($assId) {
             $this->assId = $assId;
         }
@@ -80,9 +75,7 @@ class OpenAiAnalysisService
     }
     function getAssistantResponse()
     {
-        if ($this->kill) {
-            return "Killed";
-        }
+
         $response = $this->client->threads()->messages()->list($this->threadId, [
             'limit' => 1,
         ]);
@@ -91,9 +84,7 @@ class OpenAiAnalysisService
     }
     function createRun()
     {
-        if ($this->kill) {
-            return "Killed";
-        }
+
         $run =  $this->client->threads()->runs()->create(
             threadId: $this->threadId,
             parameters: [
@@ -105,9 +96,7 @@ class OpenAiAnalysisService
     }
     function runRetrievePolling($runId)
     {
-        if ($this->kill) {
-            return "Killed";
-        }
+
         OpenAiLock::updateOrCreate(['threadId' => $this->threadId]);
         while (true) {
             sleep(.5);
@@ -123,9 +112,7 @@ class OpenAiAnalysisService
     }
     function checkMessageTrack()
     {
-        if ($this->kill) {
-            return "Killed";
-        }
+
         $messages = OpenAiMessageTrack::where('threadId', $this->threadId)->get();
         if ($messages->count()) {
             $mappedMessages = $messages->map(function ($mapMessage) {
@@ -140,9 +127,7 @@ class OpenAiAnalysisService
     }
     function createMessages(array $messages)
     {
-        if ($this->kill) {
-            return "Killed";
-        }
+
         $response = $this->client->threads()->messages()->create($this->threadId, $messages);
         return $this->createRun();
     }

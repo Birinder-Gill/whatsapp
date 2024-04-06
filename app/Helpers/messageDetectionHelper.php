@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Conversation;
+use App\Models\OkUnknownSent;
 use App\Models\WhatsAppLead;
 use App\Models\WhatsAppMessage;
 use Carbon\Carbon;
@@ -27,7 +28,7 @@ if (!function_exists('getLatestMessage')) {
 }
 
 if (!function_exists('createConvo')) {
-    function createConvo($from, $fromMe=false, $status = 'active')
+    function createConvo($from, $fromMe = false, $status = 'active')
     {
         Conversation::updateOrCreate(['from' => $from], [
             'from' => $from,
@@ -53,6 +54,21 @@ if (!function_exists('incrementCounter')) {
         ], $logArray);
     }
 }
+
+if (!function_exists('shouldSendOkUnknown')) {
+    function shouldSendOkUnknown($keyWord, $from)
+    {
+        if ($keyWord == "OK" || $keyWord == "UNKNOWN") {
+            $query = OkUnknownSent::where(['from' => $from]);
+            if ($query->exists()) {
+                return false;
+            }
+            OkUnknownSent::create(['from' => $from]);
+        }
+        return true;
+    }
+}
+
 if (!function_exists('formatPhoneNumber')) {
     function formatPhoneNumber($phoneNumber)
     {

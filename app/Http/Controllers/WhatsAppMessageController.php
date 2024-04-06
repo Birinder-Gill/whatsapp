@@ -141,7 +141,9 @@ class WhatsAppMessageController extends Controller
                         $this->msService->sendFirstMessage($personName, $from);
                     } else {
                         $query = $this->aiService->queryDetection($message);
-                        $this->msService->giveQueryResponse($query, $from, $messageNumber == 1);
+                        if(shouldSendOkUnknown($query, $from)){
+                            $this->msService->giveQueryResponse($query, $from, $messageNumber == 1);
+                        }
                     }
                 }
             }

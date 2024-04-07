@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\Products\DigitalCard;
 use App\Services\MessageSendingService;
 use App\Services\ReplyCreationService;
 use App\Services\WhatsAppApiService;
@@ -23,12 +24,17 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(OpenAiAnalysisService::class, function ($app) {
             return new OpenAiAnalysisService();
         });
+
+
         $this->app->bind(ReplyCreationService::class, function ($app) {
             $productType = config('app.product');
 
             switch ($productType) {
                 case 'Lens': return new MagnifierLens($this->app->make(Request::class));
                 case 'Tags': return new JewellerTags($this->app->make(Request::class));
+				case 'DigitalCard': return new DigitalCard($this->app->make(Request::class));
+
+
                 default: throw new \Exception("Invalid product type");
             }
 

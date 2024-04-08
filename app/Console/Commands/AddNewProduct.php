@@ -28,7 +28,7 @@ class AddNewProduct extends Command
      */
     public function handle()
     {
-        $productName = 'digitalCard'; // $this->ask('What is the product name?');
+        $productName =  $this->ask('What is the product name?');
 
         // $this->createServiceProduct($productName);
         $this->registerProduct($productName);

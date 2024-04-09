@@ -8,6 +8,7 @@ use App\Services\ReplyCreationService;
 use App\Services\WhatsAppApiService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Monolog\Handler\PushoverHandler;
 
 class FollowUpConversations extends Command
 {

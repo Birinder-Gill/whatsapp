@@ -33,7 +33,7 @@ class DigitalCard extends ReplyCreationService
 
     function getLinkMessage(): string
     {
-        return 'Agar aap Digital card banvana chahte hain to apne business ki sari information hamein send kar dijiye, apka card ready krke apko bhej dia jayega.';
+        return "Sir aap ye dummy card check kar ssakte hain. Apka card is tarah se banega. Isme aap koi bhi modifications kra sakte hain.\n\n\nhttps://followmysite.com/demo-jeweler";
     }
 
     function getFirstMessage($personName): array

@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Conversation;
+use App\Models\KillSwitch;
 use App\Services\ReplyCreationService;
 use App\Services\WhatsAppApiService;
 use Carbon\Carbon;
@@ -70,6 +71,11 @@ class FollowUpConversations extends Command
 
     function sendFollowUp($conversation)
     {
+        if (KillSwitch::where([
+            "from" =>$conversation->from,
+            "kill" => true,
+        ])->exists()) return;
+
         $this->apiService->sendWhatsAppMessage($conversation->from, $this->rcService->getFirstFollowUp());
     }
 

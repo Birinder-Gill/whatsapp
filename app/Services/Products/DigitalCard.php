@@ -10,7 +10,7 @@ class DigitalCard extends ReplyCreationService
 {
     function getQueryResponse(string $query): string
     {
-        return $query;// IN THIS CASE THE CHATGPT IS KHULLA SHADDEYA HOYA TO SEE WHAT KIND OF QUERIES COME.
+        return $query; // IN THIS CASE THE CHATGPT IS KHULLA SHADDEYA HOYA TO SEE WHAT KIND OF QUERIES COME.
 
         $language = UserLanguage::HINGLISH;
         switch ($language) {
@@ -18,14 +18,14 @@ class DigitalCard extends ReplyCreationService
                 return match ($query) {
                     "UNKNOWN" => '',
                 };
-            #region Other languages
+                #region Other languages
             case UserLanguage::HINDI:
                 return match ($query) {
                 };
             case UserLanguage::ENGLISH:
                 return match ($query) {
                 };
-            #endregion
+                #endregion
         }
 
         return '';
@@ -38,6 +38,7 @@ class DigitalCard extends ReplyCreationService
 
     function getFirstMessage($personName): array
     {
+        #region Other languages
         $firstMessage = "🌟 Hello $personName Ji, welcome to the new era of digital business cards. 🌟
 
         A digital version of traditional paper visiting cards. Contains all the contact information information about your business including product gallery, store location and social media profiles. Easily shared through smartphones, email, or QR codes and stays with your customers forever.
@@ -74,6 +75,29 @@ class DigitalCard extends ReplyCreationService
 
         💰 कीमत: सिर्फ 700 रुपए।";
 
+        #endregion
+
+        $firstMessage = "👋🌟 *Hello $personName Ji, welcome to the new era of digital business cards*. 🌟
+
+        Namaste! Aaiye, seedhe point pe aate hain.
+
+            🔄 *QR Code*: Ek scan se sab kuch share karein. Aasaan hai.
+            📱 *Har Zaroori* Info: Sab kuch ek jagah - contact, gallery, links.
+            🕰️ *Hamesha ke Liye*: Ye card na khoega, na purana hoga.
+            ✨ *Jaldi Update*: Naye products? Bas ek message se update.
+            🌱 *Paryavaran Dost*: Paper bachao, digital apnao.
+
+        QR Card ke Baare Mein:
+
+            🔍 Bas Ek Tap: UPI ki tarah, customer ne scan kiya, and apki sari contact information unke phone me, hamesha ke liye.
+
+        Aage Kya?
+
+        Reply kijiye aur aaj hi apko milega apka digital business card. Simple.
+
+        Dhanyavaad,
+        Digi card Team";
+
         return [
             'message' => $firstMessage,
             'media' =>  config('app.video')
@@ -82,7 +106,11 @@ class DigitalCard extends ReplyCreationService
 
     function getFirstMedias(): array
     {
-        return [];
+        return [
+            config('app.picOne'),
+            config('app.picTwo'),
+            config('app.picThree')
+        ];
     }
 
     function getFirstFollowUp(): string
@@ -93,6 +121,5 @@ class DigitalCard extends ReplyCreationService
     function getContactSaveFollowUp(): string
     {
         return 'Namaste, kripya hamara contact save kar lein. Aisa karne se aap wo products aur offers, jo apke business me apki help kar sakte hain, seedhe WhatsApp stories me dekh sakte hain aur WhatsApp se hi order karke apne address par product pa sakte hain.';
-
     }
 }

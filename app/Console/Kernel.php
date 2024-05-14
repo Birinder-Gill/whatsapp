@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(SecondFollowUp::class)->daily();
         $schedule->command(ContactSaveFollowUp::class)->daily();
         if (config('app.product') === "Tags") {
-            $schedule->command(LeadSystem::class)->daily();
+            $schedule->command(LeadSystem::class)->everyFiveMinutes();
         }
 
         $schedule->command(GetAllChats::class, ["--fromScheduler" => "yes"])->dailyAt('23:05');

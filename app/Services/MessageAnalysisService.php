@@ -3,12 +3,25 @@
 namespace App\Services;
 
 use App\Enums\GeneralQuery;
-use App\Enums\PriceQuery;
-
+//DEPRECATED
 class MessageAnalysisService
 {
+    protected OpenAiAnalysisService $aiService;
+    protected $useOpenAi;
+    public function __construct(OpenAiAnalysisService $aiService)
+    {
+        $this->aiService = $aiService;
+        $this->useOpenAi = config('app.useOpenAi');
+    }
+
     function askingForPrice($message): bool
     {
+        if($this->useOpenAi){
+           $res= $this->aiService->createAndRun($message);
+           $toSend = $res['data'][0]['content'][0]['text']['value'];
+           return explode('-',$toSend)[0] == 'PRICE';
+
+        }
         // Common root forms of 'price' and 'rate'
         $keywords = [
             'price', 'prac', 'rate', 'ret', 'cost', 'how much', 'kitna',
@@ -19,8 +32,21 @@ class MessageAnalysisService
         return detectMessageMeaning($message, $keywords);
     }
 
-    function discussingPrice($message): PriceQuery
+    function discussingPrice($message): GeneralQuery
     {
+
+        if($this->useOpenAi){
+            $res= $this->aiService->createAndRun($message);
+            $toSend = $res['data'][0]['content'][0]['text']['value'];
+            match ($toSend) {
+                "HIGH_AS_COMPARED" => GeneralQuery::HIGH_AS_COMPARED,
+                "HIGH_IN_GENERAL" => GeneralQuery::HIGH_IN_GENERAL,
+                "WHOLESALE" => GeneralQuery::WHOLESALE,
+                default => GeneralQuery::UNKNOWN,
+            };
+
+        }
+
         // Common keywords or root forms indicating high prices
         $highPriceKeywords = ['expensive', 'costly', 'high', 'too much', 'zada', 'mahanga', 'jyada', 'mehega', 'mehanga'];
 
@@ -28,11 +54,11 @@ class MessageAnalysisService
         $phrases = ['price is too high', 'too costly', 'bahut zada', 'bahut mahanga'];
 
         if (detectMessageMeaning($message, $highPriceKeywords, $phrases)) {
-            return PriceQuery::HIGH_IN_GENERAL;
+            return GeneralQuery::HIGH_IN_GENERAL;
         }
 
-        if ($this->isAskingForWholesaleOrBulk($message)) return PriceQuery::WHOLESALE;
-        return PriceQuery::UNKNOWN;
+        if ($this->isAskingForWholesaleOrBulk($message)) return GeneralQuery::WHOLESALE;
+        return GeneralQuery::UNKNOWN;
     }
 
     function isAskingForWholesaleOrBulk($message)
@@ -50,9 +76,10 @@ class MessageAnalysisService
 
         return detectMessageMeaning($message, $orderConfirmationKeywords, $phrases, 0);
     }
+
     function queryDetection($message): GeneralQuery
     {
-        if($this->askingForPrice($message)) return GeneralQuery::PRICE;
+        if ($this->askingForPrice($message)) return GeneralQuery::PRICE;
         $addressKeywords = ['address', 'location', 'where', 'office', 'store', 'shop', 'pata', 'sthan', 'kaha', 'kahan'];
         $addressPhrases = [
             'where are you located',

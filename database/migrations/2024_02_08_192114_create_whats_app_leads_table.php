@@ -13,17 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('whats_app_messages', function (Blueprint $table) {
+        Schema::create('whats_app_leads', function (Blueprint $table) {
             $table->id();
             $table->string("from");
-            $table->string("displayName")->default("");
-            $table->string("to");
-            $table->string("threadId");
-            $table->integer("counter");
-            $table->string("messageText")->default('');
-            $table->string("messageId");
-            $table->string("messageHash");
-
+            $table->integer("hotLead")->default(0);
+            $table->integer("infoSent")->default(0);
             $table->timestamps();
         });
     }
@@ -35,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('whats_app_messages');
+        Schema::dropIfExists('whats_app_leads');
     }
 };

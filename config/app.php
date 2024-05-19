@@ -212,4 +212,17 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+
+    "openAiKey" => env("OPEN_AI_KEY"),
+    "waapiKey" => env('WAAPI_KEY'),
+    "assistantId" => env("ASSISTANT_ID"),
+    "video" => env("VIDEO"),
+    "picOne" => env("PIC_ONE"),
+    "picTwo" => env("PIC_TWO"),
+    "picThree" => env("PIC_THREE"),
+    'waapiBaseUrl' => env("WAAPI_URL"),
+    'waapiKey' => env('WAAPI_KEY'),
+    'useOpenAi' => env('USE_OPEN_AI'),
+    'myNumber' => env("MY_NUMBER"),
+    "product" => env("PRODUCT")
 ];

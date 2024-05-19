@@ -2,10 +2,7 @@
 
 namespace App\Services;
 
-use App\Enums\GeneralQuery;
-use App\Enums\PriceQuery;
-use App\Models\PriceLog;
-use Psr\Http\Message\ResponseInterface;
+use App\Models\WhatsAppLead;
 
 class MessageSendingService
 {
@@ -19,56 +16,39 @@ class MessageSendingService
         $this->waService = $waService;
     }
 
+    function sendOpenAiResponse(array $toSend)
+    {
+        $to = $this->rcService->getFrom();
+        $this->waService->sendWhatsAppMessage($to, $toSend);
+    }
+
     function sendFirstMessage($personName)
     {
         $to = $this->rcService->getFrom();
         $toSend = $this->rcService->getFirstMessage($personName);
-        $this->waService->sendWhatsAppMedia($to, 'https://electricsuitcase.tech/storage/bVideo.mp4', $toSend);
-        $this->waService->sendWhatsAppMedia($to, 'https://electricsuitcase.tech/storage/b1.jpeg');
-        $this->waService->sendWhatsAppMedia($to, 'https://electricsuitcase.tech/storage/b2.jpeg');
-        return $this->waService->sendWhatsAppMedia($to, 'https://electricsuitcase.tech/storage/b3.jpeg');
-    }
 
-    function giveQueryResponse(GeneralQuery $query)
-    {
-        if ($query == GeneralQuery::PRICE) return $this->sendDiscountedPriceMessage();
-        $response = $this->rcService->getQueryResponse($query);
-        if ($query == GeneralQuery::ADDRESS) {
-            if (PriceLog::where(['to' => $this->rcService->getFrom(), 'address' => 1])->exists()) return;
-            PriceLog::updateOrCreate(
-                ['to' => $this->rcService->getFrom()],
-                [
-                    'address' => 1
-                ]
-            );
+        $response = $this->waService->sendWhatsAppMedia($to, config('app.url') . $toSend['media'], $toSend['message']);
+        if (json_decode($response->getBody())->data->status === 'success') {
+            WhatsAppLead::where('from', $to)->update(['infoSent' => 1]);
         }
-        $this->waService->sendWhatsAppMessage($this->rcService->getFrom(), $response);
+        $medias = $this->rcService->getFirstMedias();
+        foreach ($medias as $media) {
+            $this->waService->sendWhatsAppMedia($to, config('app.url') . $media);
+        }
     }
 
-
-    function answerPriceDiscussion(PriceQuery $priceQuery)
+    function giveQueryResponse(string $query, $appendLink = false)
     {
-        $response = $this->rcService->getPriceDiscussion($priceQuery);
+        $response = $this->rcService->getQueryResponse($query);
+        if ($appendLink && $query !== 'OK') {
+            $response = $response . $this->rcService->getLinkMessage();
+        }
         return $this->waService->sendWhatsAppMessage($this->rcService->getFrom(), $response);
     }
 
-    function sendOrderConfirmation()
+    function deleteMessage($hash)
     {
-        $message = $this->rcService->createOrderConfirmation();
-        return $this->waService->sendWhatsAppMessage($this->rcService->getFrom(), $message);
-    }
-
-    function sendDiscountedPriceMessage()
-    {
-        if (PriceLog::where(['to' => $this->rcService->getFrom(), 'price' => 1])->exists()) return;
-        PriceLog::updateOrCreate(
-            ['to' => $this->rcService->getFrom()],
-            [
-                'price' => 1
-            ]
-        );
-        $message = $this->rcService->getDiscountedPriceMessage();
-        return $this->waService->sendWhatsAppMessage($this->rcService->getFrom(), $message);
+        $this->waService->deleteWhatsAppMessage($hash);
     }
 
     function sendTestMessage($message)

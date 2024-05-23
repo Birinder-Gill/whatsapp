@@ -22,7 +22,7 @@ class JewellerTags extends ReplyCreationService
                     "DELIVERY_TIME" => 'Sir 7-10 days mein tags ready hojaate hain ji & 3-4 days mein aapke store pe deliver',
                     "PINCODE_AVAILABILITY" => '',
                     "FOLLOW_UP_GIVEN_BY_USER" => '',
-                    "OK" => 'Thanks for the response sir.For more information Kindly contact 9872900575',
+                    "OK" => 'Thanks for the response sir. Our sales representative will contact you soon.',
                     "MINIMUM_QUANTITY" => 'Sir Minimum order 150 sheets ka hojaata hai ji',
                     "TOTAL_PRICE" => '',
                     "Size" => '',

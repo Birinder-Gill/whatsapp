@@ -57,7 +57,7 @@ class MagnifierLens extends ReplyCreationService
 
     function getLinkMessage(): string
     {
-        return " Aap niche diye gye link se order kar sakte hain.\n\nhttps://7639cd.myshopify.com/products/jarlink-2-pack-jewelry-loupes";
+        return " Aap niche diye gye link se order kar sakte hain.\n\nhttps://dcfe3d-15.myshopify.com/products/gem-craft-jewelry-loupe";
     }
 
     function getFirstMessage($personName): array
@@ -117,7 +117,7 @@ We specialize in stunning Jewelry Equipment! Our Eye Loupe Magnifier Lens for Je
 
     function getFirstFollowUp(): string
     {
-        return 'Agar aap order karna chahte hain to aap niche diye gye link se order kar sakte hain sirf *Rs.899*/- mein.\n\n(*Full cash on delivery*)\n\nhttps://7639cd.myshopify.com/products/jarlink-2-pack-jewelry-loupes';
+        return 'Agar aap order karna chahte hain to aap niche diye gye link se order kar sakte hain sirf *Rs.899*/- mein.\n\n(*Full cash on delivery*)\n\nhttps://dcfe3d-15.myshopify.com/products/gem-craft-jewelry-loupe';
     }
     function getContactSaveFollowUp(): string
     {

@@ -30,7 +30,7 @@ class AddNewProduct extends Command
     {
         $productName =  $this->ask('What is the product name?');
 
-        // $this->createServiceProduct($productName);
+        $this->createServiceProduct($productName);
         $this->registerProduct($productName);
     }
 

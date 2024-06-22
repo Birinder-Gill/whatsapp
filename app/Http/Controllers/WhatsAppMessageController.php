@@ -50,7 +50,7 @@ class WhatsAppMessageController extends Controller
 
     }
     function sendOfficialMessage(Request $request) {
-        Whatsapp::send('7009154010',TextMessage::create("This is from official api"));
+        Whatsapp::send('917009154010',TextMessage::create("This is from official api"));
     }
 
     function officialMessageVerification(Request $request) {

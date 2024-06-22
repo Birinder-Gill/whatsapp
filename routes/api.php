@@ -32,6 +32,7 @@ Route::middleware([LanguageDetection::class])->group(function () {
     Route::get('/makeSubs', [WhatsAppMessageController::class, 'makeSubs']);
 
 });
+Route::get('/sendOfficialMessage', [WhatsAppMessageController::class, 'sendOfficialMessage']);
 
 Route::post('/officialMessageRecieved', [WhatsAppMessageController::class, 'officialMessageRecieved']);//->name('wofficial');//->middleware([LogAllMessagesMiddleware::class, KillSwitchMiddleware::class,MessageLoggerMiddleware::class]);
 Route::get('/officialMessageRecieved', [WhatsAppMessageController::class, 'officialMessageVerification'])->name('wofficial');//->middleware([LogAllMessagesMiddleware::class, KillSwitchMiddleware::class,MessageLoggerMiddleware::class]);

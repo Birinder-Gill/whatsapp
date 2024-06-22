@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use Illuminate\Support\Facades\File;
+use MissaelAnda\Whatsapp\Facade\Whatsapp;
+use MissaelAnda\Whatsapp\Messages\TextMessage;
 
 class WhatsAppMessageController extends Controller
 {
@@ -46,6 +48,9 @@ class WhatsAppMessageController extends Controller
     function officialMessageRecieved(Request $request) {
       logMe("SUBSCRIPTION",$request->all());
 
+    }
+    function sendOfficialMessage(Request $request) {
+        Whatsapp::send('7009154010',TextMessage::create("This is from official api"));
     }
 
     function officialMessageVerification(Request $request) {

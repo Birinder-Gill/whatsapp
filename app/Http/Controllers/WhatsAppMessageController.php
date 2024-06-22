@@ -43,6 +43,14 @@ class WhatsAppMessageController extends Controller
         });
     }
 
+    function officialMessageRecieved(Request $request) {
+
+    }
+
+    function officialMessageVerification(Request $request) {
+
+    }
+
     function sendMessage(Request $request)
     {
         $body = "prod sirra \n\n\nbc ";

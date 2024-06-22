@@ -48,7 +48,8 @@ class WhatsAppMessageController extends Controller
     }
 
     function officialMessageVerification(Request $request) {
-
+        // dd($request->all());
+        return response(json_encode($request->all()));
     }
 
     function sendMessage(Request $request)

@@ -44,6 +44,7 @@ class WhatsAppMessageController extends Controller
     }
 
     function officialMessageRecieved(Request $request) {
+      logMe("SUBSCRIPTION",$request->all());
 
     }
 

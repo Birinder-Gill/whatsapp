@@ -33,8 +33,8 @@ Route::middleware([LanguageDetection::class])->group(function () {
 
 });
 
-Route::post('/officialMessageRecieved', [WhatsAppMessageController::class, 'officialMessageRecieved']);//->middleware([LogAllMessagesMiddleware::class, KillSwitchMiddleware::class,MessageLoggerMiddleware::class]);
-Route::get('/officialMessageRecieved', [WhatsAppMessageController::class, 'officialMessageVerification']);//->middleware([LogAllMessagesMiddleware::class, KillSwitchMiddleware::class,MessageLoggerMiddleware::class]);
+Route::post('/officialMessageRecieved', [WhatsAppMessageController::class, 'officialMessageRecieved'])->name('wofficial');//->middleware([LogAllMessagesMiddleware::class, KillSwitchMiddleware::class,MessageLoggerMiddleware::class]);
+Route::get('/officialMessageRecieved', [WhatsAppMessageController::class, 'officialMessageVerification'])->name('wofficial');//->middleware([LogAllMessagesMiddleware::class, KillSwitchMiddleware::class,MessageLoggerMiddleware::class]);
 Route::post('/messageReceived', [WhatsAppMessageController::class, 'messageReceived'])->middleware([LogAllMessagesMiddleware::class, KillSwitchMiddleware::class,MessageLoggerMiddleware::class]);
 Route::get('/testReceived', [WhatsAppMessageController::class, 'testReceived']);
 Route::get('/getAiService', [WhatsAppMessageController::class, 'getAiService'])->middleware([OpenAiTokenCheckMiddleware::class]);

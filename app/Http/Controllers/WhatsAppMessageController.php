@@ -46,8 +46,20 @@ class WhatsAppMessageController extends Controller
     }
 
     function officialMessageRecieved(Request $request) {
-      logMe("SUBSCRIPTION",$request->all());
+      logMe("SUBSCRIPTION",$this->flattenArray($request->all()));
 
+    }
+    function flattenArray($array, $prefix = '') {
+        $result = [];
+        foreach ($array as $key => $value) {
+            $new_key = $prefix === '' ? $key : $prefix . '.' . $key;
+            if (is_array($value)) {
+                $result = array_merge($result, $this->flattenArray($value, $new_key));
+            } else {
+                $result[$new_key] = $value;
+            }
+        }
+        return $result;
     }
     function sendOfficialMessage(Request $request) {
         Whatsapp::send('917009154010',TextMessage::create("This is from official api"));

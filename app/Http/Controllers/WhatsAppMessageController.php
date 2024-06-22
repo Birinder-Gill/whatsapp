@@ -49,7 +49,7 @@ class WhatsAppMessageController extends Controller
 
     function officialMessageVerification(Request $request) {
       logMe("VERIFICATION",$request->all());
-        return response(json_encode($request->all()));
+        return response($request->hub_challenge);
     }
 
     function sendMessage(Request $request)

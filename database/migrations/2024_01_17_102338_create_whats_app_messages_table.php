@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string("displayName")->default("");
             $table->string("to");
             $table->integer("counter");
-            $table->string("messageText")->default('');
+            $table->text("messageText")->default('');
             $table->string("messageId");
             $table->string("messageHash");
             $table->timestamps();

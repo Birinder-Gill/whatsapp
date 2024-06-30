@@ -108,7 +108,7 @@ Web OS
         return [
             config('app.picOne'),
             config('app.picTwo'),
-            config('app.picThree')
+            // config('app.picThree')
         ];
     }
 

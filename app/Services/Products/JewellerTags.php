@@ -9,7 +9,6 @@ class JewellerTags extends ReplyCreationService
 {
     function getQueryResponse(string $query): string
     {
-
         $language = UserLanguage::HINGLISH;
         switch ($language) {
             case UserLanguage::HINGLISH:

@@ -234,7 +234,9 @@ class WhatsAppMessageController extends Controller
                         'messageHash' => $hash,
                     ];
                     incrementCounter($logArray);
+
                     if ($messageNumber === 0) {
+                        logMe("Message Recieved -> ".$hash,$request->all());
                         $this->msService->deleteMessage($hash);
                         $this->msService->sendFirstMessage($personName, $from);
                     } else {

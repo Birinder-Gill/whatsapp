@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ShipRocketController;
 use App\Http\Controllers\WhatsAppMessageController;
 use App\Http\Middleware\KillSwitchMiddleware;
 use App\Http\Middleware\LanguageDetection;
@@ -30,10 +31,13 @@ Route::middleware([LanguageDetection::class])->group(function () {
     Route::post('/orderReceived', [WhatsAppMessageController::class, 'orderReceived']);
     Route::get('/generateImage', [WhatsAppMessageController::class, 'generateImage']);
     Route::get('/makeSubs', [WhatsAppMessageController::class, 'makeSubs']);
-
 });
-Route::get('/sendOfficialMessage', [WhatsAppMessageController::class, 'sendOfficialMessage']);
 
+
+Route::get('/shipRocket', [ShipRocketController::class, 'initShipRocket']);
+Route::post('/wpOrderCreated', [ShipRocketController::class, 'wpOrderCreated']);
+Route::get('/sendOfficialMessage', [WhatsAppMessageController::class, 'sendOfficialMessage']);
+Route::post('/testOpenAi',[WhatsAppMessageController::class, 'testOpenAi']);
 Route::post('/officialMessageRecieved', [WhatsAppMessageController::class, 'officialMessageRecieved']);//->name('wofficial');//->middleware([LogAllMessagesMiddleware::class, KillSwitchMiddleware::class,MessageLoggerMiddleware::class]);
 Route::get('/officialMessageRecieved', [WhatsAppMessageController::class, 'officialMessageVerification'])->name('wofficial');//->middleware([LogAllMessagesMiddleware::class, KillSwitchMiddleware::class,MessageLoggerMiddleware::class]);
 Route::post('/messageReceived', [WhatsAppMessageController::class, 'messageReceived'])->middleware([LogAllMessagesMiddleware::class, KillSwitchMiddleware::class,MessageLoggerMiddleware::class]);

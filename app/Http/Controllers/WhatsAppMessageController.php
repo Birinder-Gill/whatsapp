@@ -6,6 +6,12 @@ use App\Models\AllWapiChats;
 use App\Models\WapiUser;
 use App\Services\MessageSendingService;
 use App\Services\OpenAiAnalysisService;
+use App\Services\Products\DigitalCard;
+use App\Services\Products\JewellerTags;
+use App\Services\Products\MagnifierLens;
+use App\Services\Products\TV;
+use App\Services\Products\Watch;
+use App\Services\ReplyCreationService;
 use Barryvdh\Snappy\Facades\SnappyImage;
 use Barryvdh\Snappy\Facades\SnappyPdf;
 use Carbon\Carbon;
@@ -45,11 +51,13 @@ class WhatsAppMessageController extends Controller
         });
     }
 
-    function officialMessageRecieved(Request $request) {
-      logMe("SUBSCRIPTION",$this->flattenArray($request->all()));
-
+    function officialMessageRecieved(Request $request)
+    {
+        logMe("SUBSCRIPTION", $this->flattenArray($request->all()));
     }
-    function flattenArray($array, $prefix = '') {
+
+    function flattenArray($array, $prefix = '')
+    {
         $result = [];
         foreach ($array as $key => $value) {
             $new_key = $prefix === '' ? $key : $prefix . '.' . $key;
@@ -61,12 +69,74 @@ class WhatsAppMessageController extends Controller
         }
         return $result;
     }
-    function sendOfficialMessage(Request $request) {
-        Whatsapp::send('917009154010',TextMessage::create("This is from official api"));
+
+    function sendOfficialMessage(Request $request)
+    {
+        Whatsapp::send('917009154010', TextMessage::create("This is from official api"));
     }
 
-    function officialMessageVerification(Request $request) {
-      logMe("VERIFICATION",$request->all());
+    function testOpenAi(Request $request)
+    {
+        $message = $request->message;
+        $productType = $request->productType;
+        $gptActive = $this->aiService->initialise('919888880001');
+        if ($gptActive) {
+            $asstId = '';
+            switch ($productType) {
+                case 'Lens': {
+                        $asstId = 'asst_MBS4nr9jD9Enj5xrz6tl4rnT';
+                        break;
+                    }
+                case 'Tags': {
+                        $asstId = 'asst_A9Lz9qSXdiJRTPFLFSXtzWqF';
+                        break;
+                    }
+                case 'DigitalCard': {
+                        $asstId = 'asst_Fbq13DfesA9n8bpEycl0RctE';
+                        break;
+                    }
+                case 'TV': {
+                        $asstId = 'asst_opRWaxJBh8sqpXXlnXuuDdU4';
+                        break;
+                    }
+                case 'Watch': {
+                        $asstId = '';
+                        break;
+                    }
+                default:
+                    throw new \Exception("Invalid product type");
+            }
+            $query = $this->aiService->queryDetection($message, $asstId);
+            $product = $this->getProduct($productType);
+            $response = $product->getQueryResponse($query);
+          
+        } else {
+            return response("Not done bro", 200);
+        }
+    }
+
+    function getProduct($productType): ReplyCreationService
+    {
+        switch ($productType) {
+            case 'Lens':
+                return new MagnifierLens();
+            case 'Tags':
+                return new JewellerTags();
+            case 'DigitalCard':
+                return new DigitalCard();
+            case 'TV':
+                return new TV();
+            case 'Watch':
+                return new Watch();
+
+            default:
+                throw new \Exception("Invalid product type");
+        }
+    }
+
+    function officialMessageVerification(Request $request)
+    {
+        logMe("VERIFICATION", $request->all());
         return response($request->hub_challenge);
     }
 
@@ -86,7 +156,8 @@ class WhatsAppMessageController extends Controller
         $this->msService->sendOpenAiResponse($assistant, $from);
     }
 
-    function getAiService(Request $request) {
+    function getAiService(Request $request)
+    {
         $serviceFilePath = app_path('Services/OpenAiAnalysisService.php');
 
         if (!File::exists($serviceFilePath)) {
@@ -168,7 +239,7 @@ class WhatsAppMessageController extends Controller
                         $this->msService->sendFirstMessage($personName, $from);
                     } else {
                         $query = $this->aiService->queryDetection($message);
-                        if(shouldSendOkUnknown($query, $from)){
+                        if (shouldSendOkUnknown($query, $from)) {
                             $this->msService->giveQueryResponse($query, $from, $messageNumber == 1);
                         }
                     }

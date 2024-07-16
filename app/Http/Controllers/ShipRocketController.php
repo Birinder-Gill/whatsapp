@@ -21,6 +21,7 @@ class ShipRocketController extends Controller
 
     function wpOrderCreated(Request $request)
     {
+        
         logMe("wpOrderCreated", $request->all());
         return response("Success", 200);
     }

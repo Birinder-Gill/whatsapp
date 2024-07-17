@@ -33,47 +33,14 @@ class JewellerTags extends ReplyCreationService
                 #region Other languages
             case UserLanguage::HINDI:
                 return match ($query) {
-                    // "HIGH_IN_GENERAL" => '',
-                    // "PRICE" => '',
-                    // "DISCOUNT" => '',
-                    // "ADDRESS" => '',
-                    // "DELIVERY_WAY" => '',
-                    // "DELIVERY_TIME" => '',
-                    // "PINCODE_AVAILABILITY" => '',
-                    // "FOLLOW_UP_GIVEN_BY_USER" => '',
-                    // "OK" => '',
-                    // "MINIMUM_QUANTITY" => '',
-                    // "TOTAL_PRICE" => '',
-                    // "Size" => '',
-                    // "CASH_ON_DELIVERY" => '',
-                    // "PAYMENT_METHOD" => '',
-                    // "QUANTITY_OBJECTION" => '',
-                    // "UNKNOWN" => '',
+                
                 };
             case UserLanguage::ENGLISH:
                 return match ($query) {
-                    // "HIGH_IN_GENERAL" => '',
-                    // "PRICE" => '',
-                    // "DISCOUNT" => '',
-                    // "ADDRESS" => '',
-                    // "DELIVERY_WAY" => '',
-                    // "DELIVERY_TIME" => '',
-                    // "PINCODE_AVAILABILITY" => '',
-                    // "FOLLOW_UP_GIVEN_BY_USER" => '',
-                    // "OK" => '',
-                    // "MINIMUM_QUANTITY" => '',
-                    // "TOTAL_PRICE" => '',
-                    // "Size" => '',
-                    // "CASH_ON_DELIVERY" => '',
-                    // "PAYMENT_METHOD" => '',
-                    // "QUANTITY_OBJECTION" => '',
-                    // "UNKNOWN" => '',
+                  
                 };
                 #endregion
         }
-
-
-
 
         return '';
     }

@@ -141,7 +141,7 @@ class V2Service
     private function retrieveRun($threadId, $runId)
     {
         $response = Http::withToken($this->apiKey)->get("https://api.openai.com/v1/threads/{$threadId}/runs/{$runId}");
-        logMe($response);
+        logMe("retrieveRun",$response);
         return $response->json();
     }
 
@@ -156,7 +156,8 @@ class V2Service
     {
         try {
             $response = $this->retrieveRun($this->threadId, $runId);
-            return $response;
+        logMe("tryToRetrieve",$response);
+        return $response;
         } catch (\Throwable $th) {
             report($th);
             return false;

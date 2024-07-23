@@ -79,6 +79,7 @@ class V2Service
         $run = $this->createRunRequest($this->threadId, [
             'assistant_id' => $this->assId ?? config('app.assistantId'),
         ]);
+        logMe("RUN",$run);
         $this->runRetrievePolling($run['id']);
         return $this->getAssistantResponse();
     }

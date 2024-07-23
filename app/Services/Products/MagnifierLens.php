@@ -11,6 +11,7 @@ class MagnifierLens extends ReplyCreationService
     function getQueryResponse(string $query): string
     {
         $language = UserLanguage::HINGLISH;
+        $query = explode("-", $query)[0];
         switch ($language) {
             case UserLanguage::HINGLISH:
                 return match ($query) {

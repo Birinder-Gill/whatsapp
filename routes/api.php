@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ShipRocketController;
 use App\Http\Controllers\WhatsAppMessageController;
+use App\Http\Middleware\CheckCallMiddleware;
 use App\Http\Middleware\KillSwitchMiddleware;
 use App\Http\Middleware\LanguageDetection;
 use App\Http\Middleware\LogAllMessagesMiddleware;
@@ -40,7 +41,7 @@ Route::get('/sendOfficialMessage', [WhatsAppMessageController::class, 'sendOffic
 Route::post('/testOpenAi',[WhatsAppMessageController::class, 'testOpenAi']);
 Route::post('/officialMessageRecieved', [WhatsAppMessageController::class, 'officialMessageRecieved']);//->name('wofficial');//->middleware([LogAllMessagesMiddleware::class, KillSwitchMiddleware::class,MessageLoggerMiddleware::class]);
 Route::get('/officialMessageRecieved', [WhatsAppMessageController::class, 'officialMessageVerification'])->name('wofficial');//->middleware([LogAllMessagesMiddleware::class, KillSwitchMiddleware::class,MessageLoggerMiddleware::class]);
-Route::post('/messageReceived', [WhatsAppMessageController::class, 'messageReceived'])->middleware([LogAllMessagesMiddleware::class, KillSwitchMiddleware::class,MessageLoggerMiddleware::class]);
+Route::post('/messageReceived', [WhatsAppMessageController::class, 'messageReceived'])->middleware([CheckCallMiddleware::class,LogAllMessagesMiddleware::class, KillSwitchMiddleware::class,MessageLoggerMiddleware::class]);
 Route::get('/testReceived', [WhatsAppMessageController::class, 'testReceived']);
 Route::get('/getAiService', [WhatsAppMessageController::class, 'getAiService'])->middleware([OpenAiTokenCheckMiddleware::class]);
 

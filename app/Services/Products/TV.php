@@ -29,13 +29,11 @@ class TV extends ReplyCreationService
             $result = ['type' => $type];
             $output = $this->processMediaRequest($query);
             if (isset($output['mediaNumber'])) {
-                $result['media'] = config('app.url').'/storage/large_quality.mp4';
+                $result['media'] = config('app.url') . '/storage/large_quality.mp4';
             }
             if (isset($output['remainingMessage']) && $output['remainingMessage'] !== '') {
                 $result['remainingMessage'] = $output['remainingMessage'];
-            } else {
-                $result['remainingMessage'] = "Order confirm karne ke liye shukriya. You'll get a call from our sales associate.";
-            }
+            } 
             return $result;
         }
         return $query;

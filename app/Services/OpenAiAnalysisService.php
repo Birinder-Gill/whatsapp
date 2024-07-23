@@ -25,7 +25,7 @@ class OpenAiAnalysisService
             $this->client = OpenAI::factory()
             ->withApiKey($openAiKey)
             ->withHttpHeader('OpenAI-Beta', 'assistants=v2')
-            ->withBaseUri('api.openai.com/v2')
+            // ->withBaseUri('api.openai.com/v2')
             ->make();
             // $this->client = OpenAI::client($openAiKey);
             $query = OpenAiThread::where('from', $from);

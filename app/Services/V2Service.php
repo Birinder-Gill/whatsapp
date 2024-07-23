@@ -121,6 +121,7 @@ class V2Service
     private function createThread()
     {
         $response = Http::withToken($this->apiKey)->post('https://api.openai.com/v1/threads');
+        logMe("RESPONSE",$response);
         return $response->json();
     }
 

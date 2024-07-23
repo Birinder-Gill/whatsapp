@@ -25,19 +25,23 @@ class OpenAiAnalysisService
             $this->client = OpenAI::factory()
             ->withApiKey($openAiKey)
             ->withHttpHeader('OpenAI-Beta', 'assistants=v2')
-            // ->withBaseUri('api.openai.com/v2')
+            ->withBaseUri('api.openai.com/v2')
             ->make();
             // $this->client = OpenAI::client($openAiKey);
             $query = OpenAiThread::where('from', $from);
             if ($query->exists()) {
                 $this->threadId = $query->first()->threadId;
             } else {
-                $response = $this->client->threads()->create([]);
+                try {
+                    $response = $this->client->threads()->create([]);
                 $this->threadId = $response->id;
                 OpenAiThread::create([
                     'from' => $from,
                     'threadId' => $this->threadId
                 ]);
+                } catch (\Throwable $th) {
+                   logMe("ERROR",$th->getMessage());
+                }
             }
             return true;
         } catch (\Throwable $th) {

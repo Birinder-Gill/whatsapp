@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\OpenAiLock;
 use App\Models\OpenAiMessageTrack;
 use App\Models\OpenAiThread;
+use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 
 class V2Service
@@ -120,14 +121,14 @@ class V2Service
 
     private function createThread()
     {
-        $response = Http::withToken($this->apiKey)->post('https://api.openai.com/v1/threads');
+        $response = $this->guzzleClient()->post('https://api.openai.com/v1/threads');
         logMe("RESPONSE",$response);
         return $response->json();
     }
 
     private function listMessages($threadId, $limit)
     {
-        $response = Http::withToken($this->apiKey)->get("https://api.openai.com/v1/threads/{$threadId}/messages", [
+        $response = $this->guzzleClient()->get("https://api.openai.com/v1/threads/{$threadId}/messages", [
             'limit' => $limit,
         ]);
         return $response->json();
@@ -135,20 +136,23 @@ class V2Service
 
     private function createRunRequest($threadId, $parameters)
     {
-        $response = Http::withToken($this->apiKey)->withHeaders(["OpenAI-Beta"=> "assistants=v2"])->post("https://api.openai.com/v1/threads/{$threadId}/runs", $parameters);
+        $response = $this->guzzleClient()->post("https://api.openai.com/v1/threads/{$threadId}/runs", $parameters);
         return $response->json();
     }
+    function guzzleClient(): PendingRequest {
+        return Http::withToken($this->apiKey)->withHeaders(["OpenAI-Beta"=> "assistants=v2"]);
 
+    }
     private function retrieveRun($threadId, $runId)
     {
-        $response = Http::withToken($this->apiKey)->get("https://api.openai.com/v1/threads/{$threadId}/runs/{$runId}");
+        $response = $this->guzzleClient()->get("https://api.openai.com/v1/threads/{$threadId}/runs/{$runId}");
         logMe("retrieveRun",$response);
         return $response->json();
     }
 
     private function sendMessageRequest($threadId, $messages)
     {
-        Http::withToken($this->apiKey)->post("https://api.openai.com/v1/threads/{$threadId}/messages", [
+        $this->guzzleClient()->post("https://api.openai.com/v1/threads/{$threadId}/messages", [
             'messages' => $messages
         ]);
     }

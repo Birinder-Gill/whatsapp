@@ -112,7 +112,6 @@ class OpenAiAnalysisService
     }
     function checkMessageTrack()
     {
-
         $messages = OpenAiMessageTrack::where('threadId', $this->threadId)->get();
         if ($messages->count()) {
             $mappedMessages = $messages->map(function ($mapMessage) {

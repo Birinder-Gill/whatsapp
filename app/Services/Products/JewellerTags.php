@@ -67,7 +67,7 @@ class JewellerTags extends ReplyCreationService
 
         How to order:
         - Send your store name for free customization!
-
+  
         Perfect for showcasing weight details and adding a professional edge to your jewelry. Any questions or ready to order? Reach out! 😊
 
         Custom Print में आपका स्वागत है, ज्वेलरी टैग्स के एक माहिर! हमारे टैग्स ये विशेषताएँ प्रदान करते हैं:

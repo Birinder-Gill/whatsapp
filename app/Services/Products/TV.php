@@ -10,24 +10,8 @@ class TV extends ReplyCreationService
 {
     function getQueryResponse(string $query): string
     {
+            
         return $query;
-        $language = UserLanguage::HINGLISH;
-        switch ($language) {
-            case UserLanguage::HINGLISH:
-                return match ($query) {
-                    "UNKNOWN" => '',
-                };
-            #region Other languages
-            case UserLanguage::HINDI:
-                return match ($query) {
-                };
-            case UserLanguage::ENGLISH:
-                return match ($query) {
-                };
-            #endregion
-        }
-
-        return '';
     }
 
     function getLinkMessage(): string
@@ -43,7 +27,7 @@ Best Imported TVs for Your Home!
 
 *Choose Your Size:*
 
-40 inch & 43 inch: 1080p 📺
+32 inch 40 inch & 43 inch: 1080p 📺
 50 inch, 55 inch & 65 inch: 4K 📺
 *TV Versions:*
 
@@ -56,7 +40,11 @@ Magic Remote 🪄
 Voice Command 🎤
 *Prices:*
 
+24 inch: ₹5500
+32 inch: ₹8500
+40 inch: ₹13000
 43 inch: ₹17,000
+43 inch 4k: ₹19500
 50 inch: ₹25,000
 55 inch: ₹32,000
 65 inch: ₹52,000
@@ -74,7 +62,7 @@ MKM Enterprise में आपका स्वागत है! 🎉
 
 आकार चुनें:
 
-40 इंच और 43 इंच: 1080p 📺
+32 इंच, 40 इंच और 43 इंच: 1080p 📺
 50 इंच, 55 इंच और 65 इंच: 4K 📺
 टीवी वर्शन:
 
@@ -87,7 +75,11 @@ Web OS
 वॉइस कमांड 🎤
 कीमतें:
 
+24 इंच: ₹5500
+32 इंच: ₹8500
+40 इंच: ₹13000
 43 इंच: ₹17,000
+43 इंच 4k: ₹19500
 50 इंच: ₹25,000
 55 इंच: ₹32,000
 65 इंच: ₹52,000

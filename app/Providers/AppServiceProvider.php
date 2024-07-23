@@ -15,6 +15,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Services\OpenAiAnalysisService;
 use App\Services\Products\JewellerTags;
 use App\Services\Products\MagnifierLens;
+use App\Services\V2Service;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,8 +26,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(OpenAiAnalysisService::class, function ($app) {
-            return new OpenAiAnalysisService();
+        // $this->app->bind(OpenAiAnalysisService::class, function ($app) {
+        //     return new OpenAiAnalysisService();
+        // });
+
+        $this->app->bind(V2Service::class, function ($app) {
+            return new V2Service();
         });
 
 

@@ -6,7 +6,6 @@ use App\Models\AllWapiChats;
 use App\Models\WapiUser;
 use App\Services\MessageSendingService;
 use App\Services\OpenAiAnalysisService;
-use App\Services\V2Service;
 use App\Services\Products\DigitalCard;
 use App\Services\Products\JewellerTags;
 use App\Services\Products\MagnifierLens;
@@ -29,9 +28,9 @@ class WhatsAppMessageController extends Controller
 {
     protected $to = '917009154010@c.us';
     protected MessageSendingService $msService;
-    protected V2Service $aiService;
+    protected OpenAiAnalysisService $aiService;
 
-    public function __construct(MessageSendingService $msService, V2Service $aiService)
+    public function __construct(MessageSendingService $msService, OpenAiAnalysisService $aiService)
     {
         $this->msService = $msService;
         $this->aiService = $aiService;

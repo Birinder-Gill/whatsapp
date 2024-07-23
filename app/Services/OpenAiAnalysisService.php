@@ -22,7 +22,12 @@ class OpenAiAnalysisService
     {
         try {
             $openAiKey = config('app.openAiKey');
-            $this->client = OpenAI::client($openAiKey);
+            $this->client = OpenAI::factory()
+            ->withApiKey($openAiKey)
+            ->withHttpHeader('OpenAI-Beta', 'assistants=v2')
+            ->withBaseUri('api.openai.com/v2')
+            ->make();
+            // $this->client = OpenAI::client($openAiKey);
             $query = OpenAiThread::where('from', $from);
             if ($query->exists()) {
                 $this->threadId = $query->first()->threadId;

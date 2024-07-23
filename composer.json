@@ -16,6 +16,7 @@
         "missael-anda/laravel-whatsapp": "^0.8.4",
         "opcodesio/log-viewer": "^3.5",
         "openai-php/client": "^0.8.2",
+        "openai-php/laravel": "^0.8.1",
         "seshac/laravel-shiprocket-api": "^2.0"
     },
     "require-dev": {

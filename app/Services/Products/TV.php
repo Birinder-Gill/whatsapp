@@ -10,13 +10,47 @@ class TV extends ReplyCreationService
 {
     function getQueryResponse(string $query): string
     {
+        if (str_contains($query, "ADDRESS_DETECTED")) {
+            $output = $this->processString($query);
+            if (isset($output['address'])) {
+                $address = $output['address'];
+            }
+            if (isset($output['remainingMessage'])) {
+                return $output['remainingMessage'];
+            } else {
+                return "Order confirm karne ke liye shukriya. You'll get a call from our sales associate.";
+            }
+        }
+        if (str_contains($query, "MEDIA_REQUESTED")) {
             
+        }
         return $query;
     }
+    /**
+     * Function to process the input string and extract address and remaining message.
+     *
+     * @param string $input
+     * @return array
+     */
+    function processString($input)
+    {
+        $pattern = '/ADDRESS_DETECTED \[([^\]]+)\]\. ?(.*)/';
+        preg_match($pattern, $input, $matches);
 
+        if (count($matches) >= 2) {
+            $address = $matches[1];
+            $remainingMessage = isset($matches[2]) ? $matches[2] : '';
+            return [
+                'address' => $address,
+                'remainingMessage' => $remainingMessage
+            ];
+        }
+
+        return [];
+    }
     function getLinkMessage(): string
     {
-       return "";
+        return "";
     }
 
     function getFirstMessage($personName): array

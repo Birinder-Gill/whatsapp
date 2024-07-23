@@ -58,7 +58,7 @@ class MessageSendingService
                             return $this->waService->sendWhatsAppMedia($to, $response['media'], isset($response['remainingMessage']) ? $response['remainingMessage'] : '');
                         }
                         if (isset($response['remainingMessage'])) {
-                            return $this->waService->sendWhatsAppMessage($to, $response);
+                            return $this->waService->sendWhatsAppMessage($to, $response['remainingMessage']);
                         }
                         break;
 

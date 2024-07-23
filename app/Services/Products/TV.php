@@ -33,7 +33,7 @@ class TV extends ReplyCreationService
             }
             if (isset($output['remainingMessage']) && $output['remainingMessage'] !== '') {
                 $result['remainingMessage'] = $output['remainingMessage'];
-            } 
+            }
             return $result;
         }
         return $query;
@@ -66,7 +66,7 @@ class TV extends ReplyCreationService
      */
     function processString($input)
     {
-        $pattern = '/ADDRESS_DETECTED \[([^\]]+)\]\. ?(.*)/';
+        $pattern = '/ADDRESS_DETECTED \[([^\]]+)\](.*)/s';
         preg_match($pattern, $input, $matches);
 
         if (count($matches) >= 2) {

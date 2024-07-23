@@ -8,7 +8,7 @@ abstract class ReplyCreationService
 {
     abstract function getContactSaveFollowUp(): string;
 
-    abstract function getQueryResponse(string $query): string;
+    abstract function getQueryResponse(string $query): string|array;
 
     abstract  function getLinkMessage(): string;
 

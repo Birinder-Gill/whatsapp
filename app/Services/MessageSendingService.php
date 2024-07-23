@@ -22,7 +22,7 @@ class MessageSendingService
         $this->waService->sendWhatsAppMessage($to, $toSend);
     }
 
-    function sendFirstMessage($personName,string $to)
+    function sendFirstMessage($personName, string $to)
     {
         $toSend = $this->rcService->getFirstMessage($personName);
         logMe("sendFirstMessage", [
@@ -41,13 +41,40 @@ class MessageSendingService
         }
     }
 
-    function giveQueryResponse(string $query,string $to, $appendLink)
+    function giveQueryResponse(string $query, string $to, $appendLink)
     {
         $response = $this->rcService->getQueryResponse($query);
-        if ($appendLink && $query !== 'OK') {
-            $response = $response . $this->rcService->getLinkMessage();
+        if (is_array($response)) {
+            if (isset($response['type'])) {
+                switch ($response['type']) {
+                    case 'TV':
+                        if (isset($response['address'])) {
+                            $content =  "*CONFIRM ORDER*\n------------------------";
+                            $content = '*Number:* ' . substr(explode("@", $to)[0], -10) . "\n";
+                            $content = $content . '*Address: ' . ($response['address']) . "*\n" . "------------------------";
+                             $this->waService->sendWhatsAppMessage('917009154010@c.us', $content);
+                        }
+                        if (isset($response['media'])) {
+                            return $this->waService->sendWhatsAppMedia($to, $response['media'], isset($response['remainingMessage']) ? $response['remainingMessage'] : '');
+                        }
+                        if (isset($response['remainingMessage'])) {
+                            return $this->waService->sendWhatsAppMessage($to, $response);
+                        }
+                        break;
+
+                    default:
+                        # code...
+                        break;
+                }
+            }
         }
-        return $this->waService->sendWhatsAppMessage($to, $response);
+
+        if (is_string($response)) {
+            if ($appendLink && $query !== 'OK') {
+                $response = $response . $this->rcService->getLinkMessage();
+            }
+            return $this->waService->sendWhatsAppMessage($to, $response);
+        }
     }
 
     function deleteMessage($hash)
@@ -64,8 +91,8 @@ class MessageSendingService
     {
         return $this->waService->sendWhatsappMedia('917009154010@c.us', $mediaUrl, $caption);
     }
-    function callEndpoint($endpoint, $body = []) {
-        return json_decode("".$this->waService->callEndpoint($endpoint,$body));
-
+    function callEndpoint($endpoint, $body = [])
+    {
+        return json_decode("" . $this->waService->callEndpoint($endpoint, $body));
     }
 }

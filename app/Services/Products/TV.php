@@ -8,24 +8,58 @@ use Nette\NotImplementedException;
 
 class TV extends ReplyCreationService
 {
-    function getQueryResponse(string $query): string
+    function getQueryResponse(string $query): string|array
     {
         if (str_contains($query, "ADDRESS_DETECTED")) {
+            $type = "TV";
+            $result = ['type' => $type];
             $output = $this->processString($query);
             if (isset($output['address'])) {
-                $address = $output['address'];
+                $result['address'] = $output['address'];
             }
-            if (isset($output['remainingMessage'])) {
-                return $output['remainingMessage'];
+            if (isset($output['remainingMessage']) && $output['remainingMessage'] !== '') {
+                $result['remainingMessage'] = $output['remainingMessage'];
             } else {
-                return "Order confirm karne ke liye shukriya. You'll get a call from our sales associate.";
+                $result['remainingMessage'] = "Order confirm karne ke liye shukriya. You'll get a call from our sales associate.";
             }
+            return $result;
         }
         if (str_contains($query, "MEDIA_REQUESTED")) {
-            
+            $type = "TV";
+            $result = ['type' => $type];
+            $output = $this->processMediaRequest($query);
+            if (isset($output['mediaNumber'])) {
+                $result['media'] = config('app.url').'/storage/large_quality.mp4';
+            }
+            if (isset($output['remainingMessage']) && $output['remainingMessage'] !== '') {
+                $result['remainingMessage'] = $output['remainingMessage'];
+            } else {
+                $result['remainingMessage'] = "Order confirm karne ke liye shukriya. You'll get a call from our sales associate.";
+            }
+            return $result;
         }
         return $query;
     }
+
+
+    function processMediaRequest($input)
+    {
+        $pattern = '/MEDIA_REQUESTED_(\d+)(.*)/';
+        preg_match($pattern, $input, $matches);
+
+        if (count($matches) >= 2) {
+            $mediaNumber = $matches[1];
+            $remainingMessage = isset($matches[2]) ? trim($matches[2]) : '';
+
+            return [
+                'mediaNumber' => $mediaNumber,
+                'remainingMessage' => $remainingMessage
+            ];
+        }
+
+        return [];
+    }
+
     /**
      * Function to process the input string and extract address and remaining message.
      *

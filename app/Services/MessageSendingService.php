@@ -52,7 +52,7 @@ class MessageSendingService
                             $content =  "*CONFIRM ORDER*\n------------------------";
                             $content = $content.'*Number:* ' . substr(explode("@", $to)[0], -10) . "\n";
                             $content = $content . '*Address: ' . ($response['address']) . "*\n";
-                             $this->waService->sendWhatsAppMessage('917009154010@c.us', $content);
+                             $this->waService->sendWhatsAppMessage('120363318263831708@g.us', $content);
                         }
                         if (isset($response['media'])) {
                             return $this->waService->sendWhatsAppMedia($to, $response['media'], isset($response['remainingMessage']) ? $response['remainingMessage'] : '');

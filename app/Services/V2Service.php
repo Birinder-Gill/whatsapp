@@ -121,14 +121,14 @@ class V2Service
 
     private function createThread()
     {
-        $response = $this->guzzleClient()->post('https://api.openai.com/v1/threads');
+        $response = $this->guzzleClient()->post('https://api.openai.com/V2/threads');
         logMe("RESPONSE",$response);
         return $response->json();
     }
 
     private function listMessages($threadId, $limit)
     {
-        $response = $this->guzzleClient()->get("https://api.openai.com/v1/threads/{$threadId}/messages", [
+        $response = $this->guzzleClient()->get("https://api.openai.com/V2/threads/{$threadId}/messages", [
             'limit' => $limit,
         ]);
         return $response->json();
@@ -136,7 +136,7 @@ class V2Service
 
     private function createRunRequest($threadId, $parameters)
     {
-        $response = $this->guzzleClient()->post("https://api.openai.com/v1/threads/{$threadId}/runs", $parameters);
+        $response = $this->guzzleClient()->post("https://api.openai.com/V2/threads/{$threadId}/runs", $parameters);
         return $response->json();
     }
     function guzzleClient(): PendingRequest {
@@ -145,14 +145,14 @@ class V2Service
     }
     private function retrieveRun($threadId, $runId)
     {
-        $response = $this->guzzleClient()->get("https://api.openai.com/v1/threads/{$threadId}/runs/{$runId}");
+        $response = $this->guzzleClient()->get("https://api.openai.com/V2/threads/{$threadId}/runs/{$runId}");
         logMe("retrieveRun",$response);
         return $response->json();
     }
 
     private function sendMessageRequest($threadId, $messages)
     {
-        $this->guzzleClient()->post("https://api.openai.com/v1/threads/{$threadId}/messages", [
+        $this->guzzleClient()->post("https://api.openai.com/V2/threads/{$threadId}/messages", [
             'messages' => $messages
         ]);
     }

@@ -50,8 +50,8 @@ class MessageSendingService
                     case 'TV':
                         if (isset($response['address'])) {
                             $content =  "*CONFIRM ORDER*\n------------------------";
-                            $content = '*Number:* ' . substr(explode("@", $to)[0], -10) . "\n";
-                            $content = $content . '*Address: ' . ($response['address']) . "*\n" . "------------------------";
+                            $content = $content.'*Number:* ' . substr(explode("@", $to)[0], -10) . "\n";
+                            $content = $content . '*Address: ' . ($response['address']) . "*\n";
                              $this->waService->sendWhatsAppMessage('917009154010@c.us', $content);
                         }
                         if (isset($response['media'])) {

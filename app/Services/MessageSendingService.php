@@ -49,7 +49,7 @@ class MessageSendingService
                 switch ($response['type']) {
                     case 'TV':
                         if (isset($response['address'])) {
-                            $content =  "*CONFIRM ORDER*\n------------------------";
+                            $content =  "*CONFIRM ORDER*\n------------------------\n";
                             $content = $content.'*Number:* ' . substr(explode("@", $to)[0], -10) . "\n";
                             $content = $content . '*Address: ' . ($response['address']) . "*\n";
                              $this->waService->sendWhatsAppMessage('120363318263831708@g.us', $content);

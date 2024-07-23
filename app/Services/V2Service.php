@@ -134,7 +134,7 @@ class V2Service
 
     private function createRunRequest($threadId, $parameters)
     {
-        $response = Http::withToken($this->apiKey)->post("https://api.openai.com/v1/threads/{$threadId}/runs", $parameters);
+        $response = Http::withToken($this->apiKey)->withHeaders(["OpenAI-Bet"=> "assistants=v2"])->post("https://api.openai.com/v1/threads/{$threadId}/runs", $parameters);
         return $response->json();
     }
 

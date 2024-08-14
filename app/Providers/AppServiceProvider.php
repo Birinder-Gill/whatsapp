@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\Products\Optical;
+
 use App\Services\Products\Watch;
 
 use App\Services\Products\TV;
@@ -39,6 +41,8 @@ class AppServiceProvider extends ServiceProvider
 				case 'DigitalCard': return new DigitalCard($this->app->make(Request::class));
 				case 'TV': return new TV($this->app->make(Request::class));
 				case 'Watch': return new Watch($this->app->make(Request::class));
+				case 'Optical': return new Optical($this->app->make(Request::class));
+
 
                 default: throw new \Exception("Invalid product type");
             }

@@ -16,14 +16,14 @@ class Optical extends ReplyCreationService
                 return match ($query) {
                     "UNKNOWN" => '',
                 };
-            #region Other languages
+                #region Other languages
             case UserLanguage::HINDI:
                 return match ($query) {
                 };
             case UserLanguage::ENGLISH:
                 return match ($query) {
                 };
-            #endregion
+                #endregion
         }
 
         return '';
@@ -71,7 +71,11 @@ Looking forward to helping you enhance your store's organization!
 
     function getFirstMedias(): array
     {
-        return [];
+        return [
+            config('app.picOne'),
+            config('app.picTwo'),
+            config('app.picThree')
+        ];
     }
 
     function getFirstFollowUp(): string

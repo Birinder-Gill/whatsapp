@@ -16,7 +16,7 @@ class JewellerTags extends ReplyCreationService
             case UserLanguage::HINGLISH:
                 return match ($query) {
                     "HIGH_IN_GENERAL" => '',
-                    "PRICE" => "Sir 20rs ki ekk sheet hai Jismein 40 tags nikal jaate hain.\nSir 50 paise ka tag cost karjaataa hai ji.",
+                    "PRICE" => "Sir 20 rs ki ekk sheet hai Jismein 40 tags nikal jaate hain.\nSir 50  paise ka tag cost karjaataa hai ji.",
                     "DISCOUNT" => '',
                     "ADDRESS" => 'Sir we have 2 branches, one in sector 35, chandigarh & one in pragati maidan, delhi\nसर हमारी 2 ब्रांचेज हैं, एक सेक्टर 35 चंडीगढ़ में और दूसरी प्रगति मैदान दिल्ली में',
                     "DELIVERY_WAY" => 'Sir Via courier aati hai ji delivery.7-10 days mein tags print hojaate hain & 3-4 days mein aapke store pe deliver',
@@ -62,7 +62,7 @@ class JewellerTags extends ReplyCreationService
         - Durable plastic-coated material for long-lasting elegance. ✨💎
 
         Price
-        Price Per Sheet:-20Rs
+        Price Per Sheet:-20 Rs
         Tags‎ Per‎ Sheet:-‎ 40 Tags
         Price Per‎ Tag:-50 Paise
         Minimum‎‎ Order:-150‎ Sheets
@@ -80,9 +80,9 @@ class JewellerTags extends ReplyCreationService
         - लांग टर्म सौंदर्य के लिए टिकाऊ प्लास्टिक-कोटेड मैटेरियल . ✨💎
 
         मूल्य:
-        रेट:– 20/–‎ प्रति‎ शीत
+        रेट:– 20 /–‎ प्रति‎ शीत
         प्रत्येक टैग‎ एक‎ शीट‎ में:- 40 टैग्स
-        रेट प्रति‎ टैग:-‎ 50 पैसे
+        रेट प्रति‎ टैग:-‎ 50  पैसे
         कम‎‎ से‎ कम‎‎ ऑर्डर:–‎‎ 150‎ शीट्स";
 
         return [

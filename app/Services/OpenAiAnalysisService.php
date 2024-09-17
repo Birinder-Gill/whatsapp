@@ -46,7 +46,7 @@ class OpenAiAnalysisService
         }
     }
 
-    function queryDetection($message, $asstID = null): string
+    function queryDetection($message, $asstID = null)
     {
         $toSend = $this->createAndRun($message, $asstID);
         return $toSend;

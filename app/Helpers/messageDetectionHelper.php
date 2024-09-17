@@ -20,6 +20,17 @@ if (!function_exists('detectManualMessage')) {
     }
 }
 
+
+if (!function_exists('incrementCounter')) {
+    function incrementCounter($logArray)
+    {
+        WhatsAppMessage::updateOrCreate([
+            'messageId' => $logArray['messageId']
+        ], $logArray);
+    }
+}
+
+
 if (!function_exists('getLatestMessage')) {
     function getLatestMessage($senderId)
     {
@@ -45,15 +56,6 @@ if (!function_exists('updateStatus')) {
     }
 }
 
-
-if (!function_exists('incrementCounter')) {
-    function incrementCounter($logArray)
-    {
-        WhatsAppMessage::updateOrCreate([
-            'messageId' => $logArray['messageId']
-        ], $logArray);
-    }
-}
 
 if (!function_exists('shouldSendOkUnknown')) {
     function shouldSendOkUnknown($keyWord, $from)
